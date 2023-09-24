@@ -30,9 +30,9 @@ class UserListAdapter (private val context: Context, private val data: List<User
         userName = convertView.findViewById(R.id.user_name)
         userPosition = convertView.findViewById(R.id.user_position)
         userScore = convertView.findViewById(R.id.user_score)
-        userName.text = "Diego"
-        userPosition.text = "Defensor"
-        userScore.text = "Malo"
+        userName.text = data[position].Name;
+        userPosition.text = data[position].Position
+        userScore.text = data[position].Clasification
         return convertView
     }
 
