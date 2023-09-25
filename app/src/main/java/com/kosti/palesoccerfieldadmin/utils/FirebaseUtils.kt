@@ -23,7 +23,7 @@ class FirebaseUtils {
 
 
     fun createDocument(collectionName: String, document: HashMap<String, Any>){
-        db.collection("cities")
+        db.collection(collectionName)
             .add(document)
             .addOnSuccessListener { documentReference ->
                 println( "DocumentSnapshot written with ID: ${documentReference.id}")
