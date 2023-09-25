@@ -31,10 +31,10 @@
     Josue Santos
     </string>
     <string name="backButtonDescription">
-    Volver atrás.
+    Go back.
     </string>
     <string name="peopleButtonDescription">
-    Usuarios bloqueados.
+    Obliqued users.
     </string>
     <string name="attributeBackgroundDesc">
     Background container for player attributes
@@ -51,5 +51,14 @@
     <string name="classEditBtn">
     Edit edit classification
     </string>
+
+    <!--Aprove Users-->
+    <string name="acceptBtnDesc">
+        Accept user
+    </string>
+    <string name="rejectBtnDesc">
+        Reject user
+    </string>
+
 
 </resources>
