@@ -6,9 +6,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import com.google.android.material.snackbar.Snackbar
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 /*
 * datos de un usuario
@@ -30,10 +34,13 @@ class UserList : AppCompatActivity() {
     private lateinit var userList: MutableList<UserListDataModel>
     private lateinit var adapter: UserListAdapter
     private lateinit var filteredList: MutableList<UserListDataModel>
+    private lateinit var userListProgressBar: ProgressBar
     private var ratesList = listOf<String>("Todos","Malo", "Bueno", "Regular")
     private var positionList = listOf<String>("Todos","Atacante", "Defensor")
     private var selectedRate = "Todos"
     private var selectedPosition = "Todos"
+
+    private val playersNameCollection = "jugadores"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +48,39 @@ class UserList : AppCompatActivity() {
 
         //  variables
         userListView = findViewById(R.id.users_list)
-        userList = mutableListOf(
-            UserListDataModel("Diego", "Bueno", "Defensor", "Kosti"),
-            UserListDataModel("Mariana", "Malo", "Atacante", "Nana"),
-            UserListDataModel("Felipe", "Regular", "Defensor", "Pipe"),
-        )
+        userListProgressBar = findViewById(R.id.userListProgressBar)
         filteredList = mutableListOf()
+        userList = mutableListOf()
+        fetchDataFromFirebase()
 
-        adapter = UserListAdapter(this, userList)
-        userListView.adapter = adapter
         initSearchWidget()
         setupSpinners()
 
+    }
+
+    private fun fetchDataFromFirebase() {
+        Snackbar.make(userListView, "Buscando la informacion de los jugadores", Snackbar.LENGTH_LONG)
+            .show()
+        userListProgressBar.visibility = View.VISIBLE
+        FirebaseUtils().readCollection(playersNameCollection) { result ->
+            result.onSuccess {
+                for (user in it){
+                    userList.add(UserListDataModel(
+                        user["nombre"].toString(),
+                        user["clasificacion"].toString(),
+                        user["posiciones"].toString(),
+                        user["apodo"].toString())
+                    )
+                }
+                adapter = UserListAdapter(this, userList)
+                userListView.adapter = adapter
+                userListProgressBar.visibility = View.GONE
+            }
+            result.onFailure {
+                Snackbar.make(userListView, "Error al cargar los datos", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
     private fun setupSpinners() {
