@@ -43,9 +43,9 @@ class UserList : AppCompatActivity() {
         //  variables
         userListView = findViewById(R.id.users_list)
         userList = mutableListOf(
-            UserListDataModel("Diego", "Bueno", "Defensor"),
-            UserListDataModel("Mariana", "Malo", "Atacante"),
-            UserListDataModel("Felipe", "Regular", "Defensor"),
+            UserListDataModel("Diego", "Bueno", "Defensor", "Kosti"),
+            UserListDataModel("Mariana", "Malo", "Atacante", "Nana"),
+            UserListDataModel("Felipe", "Regular", "Defensor", "Pipe"),
         )
         filteredList = mutableListOf()
 
@@ -71,6 +71,7 @@ class UserList : AppCompatActivity() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedRate = ratesList[p2]
                 filterList()
+
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -130,7 +131,7 @@ class UserList : AppCompatActivity() {
                 if(selectedRate != "Todos" || selectedPosition != "Todos"){
                     for (user in filteredList){
                         if (p0 != null) {
-                            if(user.Name.toLowerCase().contains(p0.toLowerCase(), ignoreCase = true)){
+                            if(user.Name.toLowerCase().contains(p0.toLowerCase(), ignoreCase = true) || user.Nickname.toLowerCase().contains(p0.toLowerCase(), ignoreCase = true) ){
                                 filteredUsers.add(user)
                             }
                         }
@@ -140,7 +141,7 @@ class UserList : AppCompatActivity() {
                 }
                 for(user in userList){
                     if (p0 != null) {
-                        if(user.Name.toLowerCase().contains(p0.toLowerCase(), ignoreCase = true)){
+                        if(user.Name.toLowerCase().contains(p0.toLowerCase(), ignoreCase = true) || user.Nickname.toLowerCase().contains(p0.toLowerCase(), ignoreCase = true) ){
                             filteredUsers.add(user)
                         }
                     }
