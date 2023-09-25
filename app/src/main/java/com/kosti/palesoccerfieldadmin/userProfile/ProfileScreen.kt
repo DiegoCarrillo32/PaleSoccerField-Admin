@@ -1,4 +1,4 @@
-package com.kosti.palesoccerfieldadmin
+package com.kosti.palesoccerfieldadmin.userProfile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import com.kosti.palesoccerfieldadmin.R
 
 
 // TODO: Rename parameter arguments, choose names that match
