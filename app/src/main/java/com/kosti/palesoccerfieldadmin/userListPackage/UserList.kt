@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
@@ -38,6 +39,7 @@ class UserList : AppCompatActivity() {
     private lateinit var adapter: UserListAdapter
     private lateinit var filteredList: MutableList<UserListDataModel>
     private lateinit var userListProgressBar: ProgressBar
+    private lateinit var toolbar: Toolbar
     private var ratesList = listOf<String>("Todos","Malo", "Bueno", "Regular")
     private var positionList = listOf<String>("Todos","Atacante", "Defensor")
     private var selectedRate = "Todos"
@@ -52,12 +54,15 @@ class UserList : AppCompatActivity() {
         //  variables
         userListView = findViewById(R.id.users_list)
         userListProgressBar = findViewById(R.id.userListProgressBar)
+        toolbar = findViewById(R.id.toolbarUserList)
         filteredList = mutableListOf()
         userList = mutableListOf()
         fetchDataFromFirebase()
 
         initSearchWidget()
         setupSpinners()
+
+        toolbar.setNavigationOnClickListener { onBackPressed() }
 
         userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -85,6 +90,7 @@ class UserList : AppCompatActivity() {
         FirebaseUtils().readCollection(playersNameCollection) { result ->
             result.onSuccess {
                 for (user in it){
+
                    /* UserListDataModel(
                         user["nombre"].toString(),
                         user["clasificacion"].toString(),
