@@ -18,10 +18,10 @@
             android:name=".userListPackage.UserList"
             android:exported="false" />
         <activity
-            android:name="com.registro.Register"
+            android:name=".registro.Register"
             android:exported="false" />
         <activity
-            android:name="com.login.Login"
+            android:name=".login.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

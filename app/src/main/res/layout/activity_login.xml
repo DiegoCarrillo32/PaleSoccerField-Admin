@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context="com.login.Login">
+    tools:context=".login.Login">
 
     <ImageView
         android:id="@+id/backgroundImageView"

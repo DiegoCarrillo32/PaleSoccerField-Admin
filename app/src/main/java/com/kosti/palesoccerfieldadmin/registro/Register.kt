@@ -1,4 +1,4 @@
-package com.registro
+package com.kosti.palesoccerfieldadmin.registro
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.R
-import com.login.Login
+import com.kosti.palesoccerfieldadmin.login.Login
 
 class Register : AppCompatActivity() {
 

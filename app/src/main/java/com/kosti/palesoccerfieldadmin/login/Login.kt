@@ -1,4 +1,4 @@
-package com.login
+package com.kosti.palesoccerfieldadmin.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
-import com.registro.Register
+import com.kosti.palesoccerfieldadmin.registro.Register
 import kotlinx.coroutines.awaitAll
 
 class Login : AppCompatActivity() {
@@ -118,7 +118,7 @@ class Login : AppCompatActivity() {
 
     fun toMain() {
         progressBar.visibility = View.GONE
-        val intent = Intent(this, Register::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
