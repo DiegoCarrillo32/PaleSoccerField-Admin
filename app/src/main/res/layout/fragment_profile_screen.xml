@@ -49,7 +49,7 @@
         app:shapeAppearanceOverlay="@style/circular"
         app:strokeColor="#FFF"
         app:strokeWidth="3dp"
-        app:strokerWidth="50dp" />
+       />
 
     <TextView
         android:id="@+id/playerName"
