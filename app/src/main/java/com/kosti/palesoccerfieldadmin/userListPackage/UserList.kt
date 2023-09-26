@@ -6,9 +6,16 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.userProfile.ProfileScreen
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import java.util.Date
 
 /*
 * datos de un usuario
@@ -30,10 +37,13 @@ class UserList : AppCompatActivity() {
     private lateinit var userList: MutableList<UserListDataModel>
     private lateinit var adapter: UserListAdapter
     private lateinit var filteredList: MutableList<UserListDataModel>
+    private lateinit var userListProgressBar: ProgressBar
     private var ratesList = listOf<String>("Todos","Malo", "Bueno", "Regular")
     private var positionList = listOf<String>("Todos","Atacante", "Defensor")
     private var selectedRate = "Todos"
     private var selectedPosition = "Todos"
+
+    private val playersNameCollection = "jugadores"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +51,73 @@ class UserList : AppCompatActivity() {
 
         //  variables
         userListView = findViewById(R.id.users_list)
-        userList = mutableListOf(
-            UserListDataModel("Diego", "Bueno", "Defensor", "Kosti"),
-            UserListDataModel("Mariana", "Malo", "Atacante", "Nana"),
-            UserListDataModel("Felipe", "Regular", "Defensor", "Pipe"),
-        )
+        userListProgressBar = findViewById(R.id.userListProgressBar)
         filteredList = mutableListOf()
+        userList = mutableListOf()
+        fetchDataFromFirebase()
 
-        adapter = UserListAdapter(this, userList)
-        userListView.adapter = adapter
         initSearchWidget()
         setupSpinners()
 
+        userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Toast.makeText(applicationContext, "Seleccionaste a ${userList[p2].Name}", Toast.LENGTH_LONG).show()
+                var data = Bundle()
+                data.putString("name", userList[p2].Name)
+                data.putString("classification", userList[p2].Clasification)
+                // Calculate age from Timestamp
+                data.putString("age", ((Date().time - userList[p2].Age.toDate().time) / (1000 * 60 * 60 * 24 * 365)).toInt().toString())
+                data.putString("phone", userList[p2].Phone)
+                data.putStringArrayList("positions", userList[p2].Positions as ArrayList<String>)
+                var fragmentProfileScreen = ProfileScreen()
+                fragmentProfileScreen.arguments = data
+                fragmentProfileScreen.show(supportFragmentManager, "ProfileScreen")
+            }
+
+        }
+
+    }
+
+    private fun fetchDataFromFirebase() {
+        Snackbar.make(userListView, "Buscando la informacion de los jugadores", Snackbar.LENGTH_LONG)
+            .show()
+        userListProgressBar.visibility = View.VISIBLE
+        FirebaseUtils().readCollection(playersNameCollection) { result ->
+            result.onSuccess {
+                for (user in it){
+                   /* UserListDataModel(
+                        user["nombre"].toString(),
+                        user["clasificacion"].toString(),
+                        user["posiciones"] as MutableList<String>,
+                        user["apodo"].toString(),
+                        user["telefono"].toString(),
+                        user["fecha_nacimiento"] as Timestamp,
+                    ) to HashMap<String, Any>()*/
+
+                    userList.add(UserListDataModel(
+                        user["nombre"].toString(),
+                        user["clasificacion"].toString(),
+                        user["posiciones"] as MutableList<String>,
+                        user["apodo"].toString(),
+                        user["telefono"].toString(),
+                        user["fecha_nacimiento"] as Timestamp,
+                    )
+
+
+                    )
+                }
+                for (user in userList){
+                    Toast.makeText(applicationContext, (Date().time - user.Age.toDate().time).toString(), Toast.LENGTH_LONG).show()
+                }
+                adapter = UserListAdapter(this, userList)
+                userListView.adapter = adapter
+                userListProgressBar.visibility = View.GONE
+            }
+            result.onFailure {
+                Snackbar.make(userListView, "Error al cargar los datos", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
     private fun setupSpinners() {
@@ -100,7 +165,7 @@ class UserList : AppCompatActivity() {
         }
         if(selectedRate == "Todos"){
             filteredList = userList
-                .filter { it.Position == selectedPosition } as MutableList<UserListDataModel>
+                .filter { it.Positions.contains(selectedPosition)  } as MutableList<UserListDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
             return
         }
@@ -112,7 +177,7 @@ class UserList : AppCompatActivity() {
         }
         filteredList = userList
             .filter { it.Clasification == selectedRate }
-            .filter { it.Position == selectedPosition } as MutableList<UserListDataModel>
+            .filter { it.Positions.contains(selectedPosition)  } as MutableList<UserListDataModel>
         userListView.adapter = UserListAdapter(applicationContext, filteredList);
     }
 
