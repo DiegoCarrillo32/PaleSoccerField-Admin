@@ -4,64 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_register_bg"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.login.Login"
     android:padding="20dp"
-    >
-    
-    <TextView
-        android:text="@string/login"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        />
+    tools:context="com.login.Login">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <ImageView
+        android:id="@+id/backgroundImageView"
+        android:layout_width="201dp"
+        android:layout_height="191dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/pales_logo"
+        android:layout_marginTop="70dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
         >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
-            android:hint="@string/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"    >
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            android:hint="@string/contrasenia"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword">
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="@string/login"
+            android:textSize="27sp"
+            android:textStyle="bold"
+            android:textColor="@color/principal"
+            />
 
-    <ProgressBar
-        android:id="@+id/progress_bar_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contrasenia"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:visibility="gone" />
+    </LinearLayout>
 
     <Button
+        style="@style/Widget.Material3.Button.ElevatedButton"
         android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:textStyle="bold"
-        android:backgroundTint="@color/principal"
-        android:textSize="19sp"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="110dp"
         android:layout_marginTop="10dp"
-        android:padding="8sp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/aceptar"
+        android:textColor="@color/principal"
+        android:textSize="21sp"
+        android:textStyle="bold"
+
         />
+
+
 </LinearLayout>

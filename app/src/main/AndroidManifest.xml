@@ -12,14 +12,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PaleSoccerFieldAdmin"
+        android:theme="@style/Base.Theme.PaleSoccerFieldAdmin"
         tools:targetApi="s">
         <activity
             android:name=".userListPackage.UserList"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:name="com.registro.registro"
+            android:name="com.registro.Register"
             android:exported="false" />
         <activity
             android:name="com.login.Login"
