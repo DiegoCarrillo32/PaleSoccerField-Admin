@@ -1,7 +1,6 @@
-package com.kosti.palesoccerfieldadmin.userListPackage
+package com.kosti.palesoccerfieldadmin.models
 
 import com.google.firebase.Timestamp
-import java.util.Date
 
 
 /*
@@ -19,7 +18,7 @@ import java.util.Date
 * rol
 * telefono
 * */
-public class UserListDataModel(name: String, clasf:String, pos: MutableList<String>, nick: String, phone: String, date: Timestamp) {
+public class JugadoresDataModel(name: String, clasf:String, pos: MutableList<String>, nick: String, phone: String, date: Timestamp) {
     var Name:String = name
     var Nickname: String = nick
     var Clasification: String = clasf;

@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.userProfile.ProfileScreen
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
@@ -34,9 +35,9 @@ import java.util.Date
 * */
 class UserList : AppCompatActivity() {
     private lateinit var userListView:ListView
-    private lateinit var userList: MutableList<UserListDataModel>
+    private lateinit var userList: MutableList<JugadoresDataModel>
     private lateinit var adapter: UserListAdapter
-    private lateinit var filteredList: MutableList<UserListDataModel>
+    private lateinit var filteredList: MutableList<JugadoresDataModel>
     private lateinit var userListProgressBar: ProgressBar
     private var ratesList = listOf<String>("Todos","Malo", "Bueno", "Regular")
     private var positionList = listOf<String>("Todos","Atacante", "Defensor")
@@ -94,7 +95,8 @@ class UserList : AppCompatActivity() {
                         user["fecha_nacimiento"] as Timestamp,
                     ) to HashMap<String, Any>()*/
 
-                    userList.add(UserListDataModel(
+                    userList.add(
+                        JugadoresDataModel(
                         user["nombre"].toString(),
                         user["clasificacion"].toString(),
                         user["posiciones"] as MutableList<String>,
@@ -165,19 +167,19 @@ class UserList : AppCompatActivity() {
         }
         if(selectedRate == "Todos"){
             filteredList = userList
-                .filter { it.Positions.contains(selectedPosition)  } as MutableList<UserListDataModel>
+                .filter { it.Positions.contains(selectedPosition)  } as MutableList<JugadoresDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
             return
         }
         if(selectedPosition == "Todos"){
             filteredList = userList
-                .filter { it.Clasification == selectedRate } as MutableList<UserListDataModel>
+                .filter { it.Clasification == selectedRate } as MutableList<JugadoresDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
             return
         }
         filteredList = userList
             .filter { it.Clasification == selectedRate }
-            .filter { it.Positions.contains(selectedPosition)  } as MutableList<UserListDataModel>
+            .filter { it.Positions.contains(selectedPosition)  } as MutableList<JugadoresDataModel>
         userListView.adapter = UserListAdapter(applicationContext, filteredList);
     }
 
@@ -191,7 +193,7 @@ class UserList : AppCompatActivity() {
             override fun onQueryTextChange(p0: String?): Boolean {
 
 
-                val filteredUsers = mutableListOf<UserListDataModel>()
+                val filteredUsers = mutableListOf<JugadoresDataModel>()
                 if(selectedRate != "Todos" || selectedPosition != "Todos"){
                     for (user in filteredList){
                         if (p0 != null) {
