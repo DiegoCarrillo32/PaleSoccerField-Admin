@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
 
 
@@ -27,7 +29,7 @@ private const val ARG_PARAM5 = "positions"
  * create an instance of this fragment.
  */
 
-class ProfileScreen : Fragment() {
+class ProfileScreen : BottomSheetDialogFragment() {
 
     // TODO: Rename and change types of parameters
     private var name: String? = null
@@ -35,6 +37,7 @@ class ProfileScreen : Fragment() {
     private var phone: String? = null
     private var classification: String? = null
     private lateinit var positions: MutableList<String>
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +75,18 @@ class ProfileScreen : Fragment() {
         plyrNTV.text = name
         phoneTV.text = phone
         classTV.text = classification
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(dialog != null){
+            var bottomSheet: View = dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+
+        }
     }
 
     private fun spinnerPositions(view: View){
