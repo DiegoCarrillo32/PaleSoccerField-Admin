@@ -41,8 +41,8 @@ class UserList : AppCompatActivity() {
     private lateinit var filteredList: MutableList<JugadoresDataModel>
     private lateinit var userListProgressBar: ProgressBar
     private lateinit var toolbar: Toolbar
-    private var ratesList = listOf<String>("Todos","Malo", "Bueno", "Regular")
-    private var positionList = listOf<String>("Todos","Atacante", "Defensor")
+    private var ratesList = listOf<String>("Todos", "Malo", "Bueno", "Regular")
+    private var positionList = listOf<String>("Todos","Defensa", "Arquero", "Medio campista", "Delantero")
     private var selectedRate = "Todos"
     private var selectedPosition = "Todos"
 
@@ -100,12 +100,20 @@ class UserList : AppCompatActivity() {
                         user["telefono"].toString(),
                         user["fecha_nacimiento"] as Timestamp,
                     ) to HashMap<String, Any>()*/
-
+                    if(user["posiciones"] == null ||
+                        user["nombre"] == null ||
+                        user["clasificacion"] == null ||
+                        user["apodo"] == null ||
+                        user["telefono"] == null ||
+                        user["fecha_nacimiento"] == null){
+                        Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
+                        continue
+                    }
                     userList.add(
                         JugadoresDataModel(
-                        user["nombre"].toString(),
+                            user["nombre"].toString(),
                         user["clasificacion"].toString(),
-                        user["posiciones"] as MutableList<String>,
+                        user["posiciones"] as MutableList<String> ,
                         user["apodo"].toString(),
                         user["telefono"].toString(),
                         user["fecha_nacimiento"] as Timestamp,
@@ -179,12 +187,12 @@ class UserList : AppCompatActivity() {
         }
         if(selectedPosition == "Todos"){
             filteredList = userList
-                .filter { it.Clasification == selectedRate } as MutableList<JugadoresDataModel>
+                .filter { it.Clasification.toLowerCase() == selectedRate.toLowerCase() } as MutableList<JugadoresDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
             return
         }
         filteredList = userList
-            .filter { it.Clasification == selectedRate }
+            .filter { it.Clasification.toLowerCase() == selectedRate.toLowerCase() }
             .filter { it.Positions.contains(selectedPosition)  } as MutableList<JugadoresDataModel>
         userListView.adapter = UserListAdapter(applicationContext, filteredList);
     }
