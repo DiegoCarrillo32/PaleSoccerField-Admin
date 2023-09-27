@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        var btnNavegar = findViewById<Button>(R.id.btnNavegar)
+        var btnNavegar = findViewById<Button>(R.id.btnBuscarUsuarios)
         btnNavegar.setOnClickListener {
             val intent = Intent(this, UserList::class.java)
             startActivity(intent)

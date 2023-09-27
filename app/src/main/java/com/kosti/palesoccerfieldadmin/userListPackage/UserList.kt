@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
@@ -39,8 +40,9 @@ class UserList : AppCompatActivity() {
     private lateinit var adapter: UserListAdapter
     private lateinit var filteredList: MutableList<JugadoresDataModel>
     private lateinit var userListProgressBar: ProgressBar
-    private var ratesList = listOf<String>("Todos","Malo", "Bueno", "Regular")
-    private var positionList = listOf<String>("Todos","Atacante", "Defensor")
+    private lateinit var toolbar: Toolbar
+    private var ratesList = listOf<String>("Todos", "Malo", "Bueno", "Regular")
+    private var positionList = listOf<String>("Todos","Defensa", "Arquero", "Medio campista", "Delantero")
     private var selectedRate = "Todos"
     private var selectedPosition = "Todos"
 
@@ -53,12 +55,15 @@ class UserList : AppCompatActivity() {
         //  variables
         userListView = findViewById(R.id.users_list)
         userListProgressBar = findViewById(R.id.userListProgressBar)
+        toolbar = findViewById(R.id.toolbarUserList)
         filteredList = mutableListOf()
         userList = mutableListOf()
         fetchDataFromFirebase()
 
         initSearchWidget()
         setupSpinners()
+
+        toolbar.setNavigationOnClickListener { onBackPressed() }
 
         userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -86,6 +91,7 @@ class UserList : AppCompatActivity() {
         FirebaseUtils().readCollection(playersNameCollection) { result ->
             result.onSuccess {
                 for (user in it){
+
                    /* UserListDataModel(
                         user["nombre"].toString(),
                         user["clasificacion"].toString(),
@@ -94,12 +100,20 @@ class UserList : AppCompatActivity() {
                         user["telefono"].toString(),
                         user["fecha_nacimiento"] as Timestamp,
                     ) to HashMap<String, Any>()*/
-
+                    if(user["posiciones"] == null ||
+                        user["nombre"] == null ||
+                        user["clasificacion"] == null ||
+                        user["apodo"] == null ||
+                        user["telefono"] == null ||
+                        user["fecha_nacimiento"] == null){
+                        Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
+                        continue
+                    }
                     userList.add(
                         JugadoresDataModel(
-                        user["nombre"].toString(),
+                            user["nombre"].toString(),
                         user["clasificacion"].toString(),
-                        user["posiciones"] as MutableList<String>,
+                        user["posiciones"] as MutableList<String> ,
                         user["apodo"].toString(),
                         user["telefono"].toString(),
                         user["fecha_nacimiento"] as Timestamp,
@@ -173,12 +187,12 @@ class UserList : AppCompatActivity() {
         }
         if(selectedPosition == "Todos"){
             filteredList = userList
-                .filter { it.Clasification == selectedRate } as MutableList<JugadoresDataModel>
+                .filter { it.Clasification.toLowerCase() == selectedRate.toLowerCase() } as MutableList<JugadoresDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
             return
         }
         filteredList = userList
-            .filter { it.Clasification == selectedRate }
+            .filter { it.Clasification.toLowerCase() == selectedRate.toLowerCase() }
             .filter { it.Positions.contains(selectedPosition)  } as MutableList<JugadoresDataModel>
         userListView.adapter = UserListAdapter(applicationContext, filteredList);
     }

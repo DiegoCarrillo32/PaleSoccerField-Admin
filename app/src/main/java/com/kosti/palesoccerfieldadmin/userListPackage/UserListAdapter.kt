@@ -32,8 +32,8 @@ class UserListAdapter (private val context: Context, private val data: List<Juga
         userPosition = convertView.findViewById(R.id.user_position)
         userScore = convertView.findViewById(R.id.user_score)
         userName.text = data[position].Name;
-        userPosition.text = data[position].Positions[0]
-        userScore.text = data[position].Clasification
+        userPosition.text = data[position].Positions[0].capitalize()
+        userScore.text = data[position].Clasification.capitalize()
         return convertView
     }
 
