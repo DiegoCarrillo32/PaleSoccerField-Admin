@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.userListPackage.UserListDataModel
+import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 
-class AproveUserListAdapter (private val context: Context, private val data: List<UserListDataModel>): BaseAdapter() {
+class AproveUserListAdapter (private val context: Context, private val data: List<JugadoresDataModel>): BaseAdapter() {
     private lateinit var userName: TextView
     private lateinit var userPosition: TextView
     private lateinit var userScore: TextView

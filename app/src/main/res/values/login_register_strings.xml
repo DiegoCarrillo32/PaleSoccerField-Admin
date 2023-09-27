@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Inicio de Sesion</string>
+    <string name="email">Email</string>
+    <string name="contrasenia">Contraseña</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="registro">Registrarse</string>
+    <string name="nombre">Nombre</string>
+</resources>
