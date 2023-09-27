@@ -22,6 +22,7 @@ private const val ARG_PARAM2 = "age"
 private const val ARG_PARAM3 = "phone"
 private const val ARG_PARAM4 = "classification"
 private const val ARG_PARAM5 = "positions"
+private const val ARG_PARAM6 = "nickname"
 
 /**
  * A simple [Fragment] subclass.
@@ -36,7 +37,9 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var age: Int? = null
     private var phone: String? = null
     private var classification: String? = null
+    private var nickname: String? = null
     private lateinit var positions: MutableList<String>
+
 
 
 
@@ -48,6 +51,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
             phone = it.getString(ARG_PARAM3)
             classification= it.getString(ARG_PARAM4)
             positions= it.getStringArrayList(ARG_PARAM5)!!
+            nickname = it.getString(ARG_PARAM6)
 
         }
     }
@@ -71,10 +75,12 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val ageTV : TextView = view.findViewById(R.id.edadText)
         val phoneTV : TextView = view.findViewById(R.id.telefonoText)
         val classTV : TextView = view.findViewById(R.id.clasificacionText)
+        val nicknameTV : TextView = view.findViewById(R.id.nicknameText)
         ageTV.text = age.toString()
         plyrNTV.text = name
         phoneTV.text = phone
         classTV.text = classification
+        nicknameTV.text = nickname
 
 
     }
@@ -94,29 +100,15 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
         val spinner: Spinner = view.findViewById(R.id.spinnerPositions)
 
-        // Crea un ArrayAdapter usando los elementos y el diseño predeterminado para el spinner
+        // Creates an ArrayAdapter using the default elements and layout for the spinner
         val adapter =
             this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, elementos) }
 
-        // Especifica el diseño que se usará cuando se desplieguen las opciones
+        // Specifies the layout to be used when the options are displayed.
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        // Une el ArrayAdapter al Spinner
+        // Attach the ArrayAdapter to the Spinner
         spinner.adapter = adapter
-
-        // Opcionalmente, puedes configurar un escuchador para detectar la selección del usuario
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val itemSeleccionado = elementos[position]
-                // Realiza alguna acción con el elemento seleccionado
-                Toast.makeText(view?.context, "Seleccionaste: $itemSeleccionado", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Se llama cuando no se ha seleccionado nada en el Spinner (opcional)
-                Toast.makeText(view.context, "Nada", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
 

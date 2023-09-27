@@ -71,6 +71,7 @@ class UserList : AppCompatActivity() {
                 var data = Bundle()
                 data.putString("name", userList[p2].Name)
                 data.putString("classification", userList[p2].Clasification)
+                data.putString("nickname", userList[p2].Nickname)
                 // Calculate age from Timestamp
                 data.putString("age", ((Date().time - userList[p2].Age.toDate().time) / (1000 * 60 * 60 * 24 * 365)).toInt().toString())
                 data.putString("phone", userList[p2].Phone)
