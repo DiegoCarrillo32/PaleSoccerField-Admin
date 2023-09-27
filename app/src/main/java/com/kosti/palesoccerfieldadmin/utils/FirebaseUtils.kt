@@ -42,7 +42,7 @@ class FirebaseUtils {
     }
 
     fun filterBy(collectionName: String, fieldName: String, fieldValue: String,
-                 callback: (Result<MutableList<HashMap<String, Any>>>)-> Unit){
+                 callback: (Result<MutableList<HashMap<String, Any>>>)-> Unit) {
         val documets = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName).whereEqualTo(fieldName, fieldValue)
             .limit(1).get()
@@ -58,4 +58,5 @@ class FirebaseUtils {
                 callback(Result.failure(exception))
             }
     }
+
 }
