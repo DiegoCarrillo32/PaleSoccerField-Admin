@@ -50,7 +50,9 @@ class FirebaseUtils {
             .limit(1).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    documets.add(document.data as HashMap<String, Any>)
+                    val documentData = document.data as HashMap<String, Any>
+                    documentData["id"] = document.id
+                    documets.add(documentData)
                     Log.d(TAG, "${document.id} => ${document.data}")
                 }
                 callback(Result.success(documets))
