@@ -239,8 +239,8 @@
                     android:layout_weight="1"
                     style="@style/profileAttributes" />
 
-                <TextView
-                    android:id="@+id/clasificacionText"
+                <Spinner
+                    android:id="@+id/clasificacionSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

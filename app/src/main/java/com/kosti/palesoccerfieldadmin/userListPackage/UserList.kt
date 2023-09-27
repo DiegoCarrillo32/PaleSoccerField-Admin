@@ -123,9 +123,6 @@ class UserList : AppCompatActivity() {
 
                     )
                 }
-                for (user in userList){
-                    Toast.makeText(applicationContext, (Date().time - user.Age.toDate().time).toString(), Toast.LENGTH_LONG).show()
-                }
                 adapter = UserListAdapter(this, userList)
                 userListView.adapter = adapter
                 userListProgressBar.visibility = View.GONE

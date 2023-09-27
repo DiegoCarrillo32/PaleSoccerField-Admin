@@ -1,6 +1,7 @@
 package com.kosti.palesoccerfieldadmin.userProfile
 
 import android.os.Bundle
+import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +9,15 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,6 +42,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var age: Int? = null
     private var phone: String? = null
     private var classification: String? = null
+    private var isEditingClassification: Boolean = false
     private var nickname: String? = null
     private lateinit var positions: MutableList<String>
 
@@ -53,7 +59,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
             positions= it.getStringArrayList(ARG_PARAM5)!!
             nickname = it.getString(ARG_PARAM6)
 
-        }
     }
 
     override fun onCreateView(
@@ -81,6 +86,21 @@ class ProfileScreen : BottomSheetDialogFragment() {
         phoneTV.text = phone
         classTV.text = classification
         nicknameTV.text = nickname
+
+        editClasiBtn.setOnClickListener {
+            if(isEditingClassification){
+                classTV.isEnabled = false
+                classTV.isClickable = false
+                isEditingClassification = false
+                // Enviar la data a firebase
+
+            }else{
+                classTV.isEnabled = true
+                classTV.isClickable = true
+                isEditingClassification = true
+
+            }
+        }
 
 
     }

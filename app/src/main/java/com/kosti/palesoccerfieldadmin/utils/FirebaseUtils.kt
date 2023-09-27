@@ -13,6 +13,7 @@ class FirebaseUtils {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
+
                     documets.add(document.data as HashMap<String, Any>)
                 }
                 callback(Result.success(documets))
