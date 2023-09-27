@@ -8,14 +8,16 @@ class FirebaseUtils {
     private val db = Firebase.firestore
 
     fun readCollection(collectionName: String, callback: (Result<MutableList<HashMap<String, Any>>> ) -> Unit) {
-        val documets = mutableListOf<HashMap<String, Any>>()
+        val documents = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    documets.add(document.data as HashMap<String, Any>)
+                    val documentData = document.data as HashMap<String, Any>
+                    documentData["id"] = document.id
+                    documents.add(documentData)
                 }
-                callback(Result.success(documets))
+                callback(Result.success(documents))
             }
             .addOnFailureListener { exception ->
                 Log.w("Error getting documents.", exception)
