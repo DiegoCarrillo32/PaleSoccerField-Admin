@@ -42,19 +42,19 @@ class Register : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_bar_register)
         textViewToLogin = findViewById(R.id.textViewToLogin)
 
+        auth = Firebase.auth
+
+        textViewToLogin.setOnClickListener {
+            toLogin()
+        }
+
         btnRegister.setOnClickListener {
 
             progressBar.visibility = View.VISIBLE
             val nombre: String = editTextNombre.text.toString()
             val email: String = editTextEmail.text.toString()
-
             val password: String = editTextPassword.text.toString()
 
-            auth = Firebase.auth
-
-            textViewToLogin.setOnClickListener {
-                toLogin()
-            }
             if (TextUtils.isEmpty(nombre)) {
                 editTextNombre.error = "Ingrese su nombre"
                 progressBar.visibility = View.GONE
