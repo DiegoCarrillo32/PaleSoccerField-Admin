@@ -109,7 +109,7 @@
                      />
 
                 <TextView
-                    android:id="@+id/apodoText"
+                    android:id="@+id/nicknameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -117,15 +117,6 @@
                     android:layout_weight="1"
                     android:textAppearance="@style/profileAttributesText"
                     />
-                <ImageButton
-                    android:id="@+id/editNickBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@null"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/nickEditBtn"
-                    android:src="@drawable/edit_icon" />
-
             </LinearLayout>
 
         </FrameLayout>
@@ -170,14 +161,7 @@
                     android:layout_weight="1"
                     android:textAppearance="@style/profileAttributesText"
                     />
-                <ImageButton
-                    android:id="@+id/editPhoneBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@null"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/phoneEditBtn"
-                    android:src="@drawable/edit_icon" />
+
 
             </LinearLayout>
 
@@ -220,14 +204,7 @@
                     android:layout_weight="1"
                     android:text="@string/ageText"
                     android:textAppearance="@style/profileAttributesText" />
-                <ImageButton
-                    android:id="@+id/editAgeBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@null"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/ageEditBtn"
-                    android:src="@drawable/edit_icon" />
+
 
             </LinearLayout>
 
