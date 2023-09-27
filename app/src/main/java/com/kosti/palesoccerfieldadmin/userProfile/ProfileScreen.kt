@@ -45,6 +45,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var isEditingClassification: Boolean = false
     private var nickname: String? = null
     private lateinit var positions: MutableList<String>
+    private var ratesList = listOf("Malo", "Bueno", "Regular")
+
 
 
 
@@ -55,81 +57,97 @@ class ProfileScreen : BottomSheetDialogFragment() {
             name = it.getString(ARG_PARAM1)
             age = it.getInt(ARG_PARAM2)
             phone = it.getString(ARG_PARAM3)
-            classification= it.getString(ARG_PARAM4)
-            positions= it.getStringArrayList(ARG_PARAM5)!!
+            classification = it.getString(ARG_PARAM4)
+            positions = it.getStringArrayList(ARG_PARAM5)!!
             nickname = it.getString(ARG_PARAM6)
 
+        }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_profile_screen, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            // Inflate the layout for this fragment
+            val view = inflater.inflate(R.layout.fragment_profile_screen, container, false)
 
-        spinnerPositions(view, )
+            spinnerPositions(view,)
 
-        return view
-    }
+            return view
+        }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
 
-        val plyrNTV : TextView = view.findViewById(R.id.playerName)
-        val ageTV : TextView = view.findViewById(R.id.edadText)
-        val phoneTV : TextView = view.findViewById(R.id.telefonoText)
-        val classTV : TextView = view.findViewById(R.id.clasificacionText)
-        val nicknameTV : TextView = view.findViewById(R.id.nicknameText)
-        ageTV.text = age.toString()
-        plyrNTV.text = name
-        phoneTV.text = phone
-        classTV.text = classification
-        nicknameTV.text = nickname
+            val plyrNTV: TextView = view.findViewById(R.id.playerName)
+            val ageTV: TextView = view.findViewById(R.id.edadText)
+            val phoneTV: TextView = view.findViewById(R.id.telefonoText)
+            val classTV: Spinner = view.findViewById(R.id.clasificacionSpinner)
+            val nicknameTV: TextView = view.findViewById(R.id.nicknameText)
+            val editClasiBtn: ImageButton = view.findViewById(R.id.editClassBtn)
+            val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
+            rateAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+            )
 
-        editClasiBtn.setOnClickListener {
-            if(isEditingClassification){
-                classTV.isEnabled = false
-                classTV.isClickable = false
-                isEditingClassification = false
-                // Enviar la data a firebase
+            ageTV.text = age.toString()
+            plyrNTV.text = name
+            phoneTV.text = phone
+            nicknameTV.text = nickname
+            classTV.isEnabled = false
+            classTV.isClickable = false
 
-            }else{
-                classTV.isEnabled = true
-                classTV.isClickable = true
-                isEditingClassification = true
+            editClasiBtn.setOnClickListener {
+                if (isEditingClassification) {
+                    classTV.isEnabled = false
+                    classTV.isClickable = false
+                    isEditingClassification = false
+                    // Enviar la data a firebase
+
+                } else {
+                    classTV.isEnabled = true
+                    classTV.isClickable = true
+                    isEditingClassification = true
+
+                }
+            }
+            classTV.adapter = rateAdapter
+
+
+        }
+
+        override fun onStart() {
+            super.onStart()
+            if (dialog != null) {
+                var bottomSheet: View =
+                    dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+                bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
 
             }
         }
 
+        private fun spinnerPositions(view: View) {
+            val elementos = positions
 
-    }
+            val spinner: Spinner = view.findViewById(R.id.spinnerPositions)
 
-    override fun onStart() {
-        super.onStart()
-        if(dialog != null){
-            var bottomSheet: View = dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            // Creates an ArrayAdapter using the default elements and layout for the spinner
+            val adapter =
+                this.context?.let {
+                    ArrayAdapter(
+                        it,
+                        android.R.layout.simple_spinner_item,
+                        elementos
+                    )
+                }
 
+            // Specifies the layout to be used when the options are displayed.
+            adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
+            // Attach the ArrayAdapter to the Spinner
+            spinner.adapter = adapter
         }
-    }
-
-    private fun spinnerPositions(view: View){
-        val elementos = positions
-
-        val spinner: Spinner = view.findViewById(R.id.spinnerPositions)
-
-        // Creates an ArrayAdapter using the default elements and layout for the spinner
-        val adapter =
-            this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, elementos) }
-
-        // Specifies the layout to be used when the options are displayed.
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Attach the ArrayAdapter to the Spinner
-        spinner.adapter = adapter
-    }
 
 
 //    companion object {

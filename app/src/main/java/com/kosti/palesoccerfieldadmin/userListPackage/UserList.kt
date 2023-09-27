@@ -67,7 +67,7 @@ class UserList : AppCompatActivity() {
 
         userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Toast.makeText(applicationContext, "Seleccionaste a ${userList[p2].Name}", Toast.LENGTH_LONG).show()
+
                 var data = Bundle()
                 data.putString("name", userList[p2].Name)
                 data.putString("classification", userList[p2].Clasification)
