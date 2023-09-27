@@ -1,4 +1,4 @@
-package com.kosti.palesoccerfieldadmin.userListPackage
+package com.kosti.palesoccerfieldadmin.aproveUsers
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,10 +9,11 @@ import android.widget.TextView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 
-class UserListAdapter (private val context: Context, private val data: List<JugadoresDataModel>): BaseAdapter() {
+class AproveUserListAdapter (private val context: Context, private val data: List<JugadoresDataModel>): BaseAdapter() {
     private lateinit var userName: TextView
     private lateinit var userPosition: TextView
     private lateinit var userScore: TextView
+
     override fun getCount(): Int {
         return data.size
     }
@@ -36,7 +37,4 @@ class UserListAdapter (private val context: Context, private val data: List<Juga
         userScore.text = data[position].Clasification
         return convertView
     }
-
-
-
 }
