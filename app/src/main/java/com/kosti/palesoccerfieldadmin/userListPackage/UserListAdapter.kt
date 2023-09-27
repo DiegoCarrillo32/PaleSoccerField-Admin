@@ -32,7 +32,9 @@ class UserListAdapter (private val context: Context, private val data: List<Juga
         userPosition = convertView.findViewById(R.id.user_position)
         userScore = convertView.findViewById(R.id.user_score)
         userName.text = data[position].Name;
-        userPosition.text = data[position].Positions[0].capitalize()
+        // Make the user position shown and in case there are no items in the list, show a default value
+        userPosition.text = if (data[position].Positions.size > 0) data[position].Positions[0] else "Sin posición"
+        
         userScore.text = data[position].Clasification.capitalize()
         return convertView
     }
