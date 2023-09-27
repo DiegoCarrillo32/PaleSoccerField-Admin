@@ -26,5 +26,4 @@ public class JugadoresDataModel(name: String, clasf:String, pos: MutableList<Str
     var Phone: String = phone
     var Age: Timestamp = date
 
-
 }
