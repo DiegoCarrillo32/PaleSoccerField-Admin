@@ -1,5 +1,7 @@
 package com.kosti.palesoccerfieldadmin.models
 
+import kotlin.properties.Delegates
+
 /*
     Datos de una reserva
 
@@ -10,19 +12,29 @@ package com.kosti.palesoccerfieldadmin.models
     - retadores -> opponents
     - tipo -> Type (publica / privada)
  */
-public class ReservasDataModel(
-    manager: String,
-    team: Boolean,
-    status: Boolean,
-    scheduleID: String,
-    opponents: Array<Int>,
-    type: Boolean
-) {
+class ReservasDataModel() {
 
-    var Manager: String = manager
-    var Team: Boolean = team
-    var Status: Boolean = status
-    var ScheduleID: String = scheduleID
-    var Opponents: Array<Int> = opponents
-    var Type: Boolean = type
+    lateinit var Manager: String
+    var Team: Boolean by Delegates.notNull()
+    var Status: Boolean by Delegates.notNull()
+    lateinit var ScheduleID: String
+    lateinit var Opponents: Array<Int>
+    var Type: Boolean by Delegates.notNull()
+    constructor(
+        manager: String,
+        team: Boolean,
+        status: Boolean,
+        scheduleID: String,
+        opponents: Array<Int>,
+        type: Boolean
+    ) : this(){
+        Manager= manager
+        Team = team
+        Status = status
+        ScheduleID= scheduleID
+        Opponents = opponents
+        Type = type
+    }
+
+
 }
