@@ -33,6 +33,7 @@ public class JugadoresDataModel() {
     lateinit var Positions: MutableList<String>
     lateinit var Role: String
     lateinit var Phone: String
+    lateinit var Id: String
 
     constructor(nick: String,
                 bannedList: MutableList<String>,
@@ -44,7 +45,9 @@ public class JugadoresDataModel() {
                 pos: MutableList<String>,
                 role: String,
                 phone: String,
-                date: Timestamp): this () {
+                date: Timestamp,
+                id: String
+    ): this () {
 
          Nickname = nick
          BannedList = bannedList
@@ -57,6 +60,7 @@ public class JugadoresDataModel() {
          Positions = pos
          Role = role
          Phone = phone
+         Id = id
     }
 
     constructor(name: String,
@@ -64,7 +68,8 @@ public class JugadoresDataModel() {
                 pos: MutableList<String>,
                 nick: String,
                 phone: String,
-                date: Timestamp
+                date: Timestamp,
+                id: String
                 ): this () {
 
          Nickname  = nick
@@ -73,5 +78,6 @@ public class JugadoresDataModel() {
          Name= name
          Positions = pos
          Phone = phone
+         Id = id
     }
 }

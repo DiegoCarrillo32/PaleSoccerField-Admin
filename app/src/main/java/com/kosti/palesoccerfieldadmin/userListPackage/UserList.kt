@@ -76,6 +76,7 @@ class UserList : AppCompatActivity() {
                 data.putString("age", ((Date().time - userList[p2].Age.toDate().time) / (1000 * 60 * 60 * 24 * 365)).toInt().toString())
                 data.putString("phone", userList[p2].Phone)
                 data.putStringArrayList("positions", userList[p2].Positions as ArrayList<String>)
+                data.putString("id", userList[p2].Id)
                 var fragmentProfileScreen = ProfileScreen()
                 fragmentProfileScreen.arguments = data
                 fragmentProfileScreen.show(supportFragmentManager, "ProfileScreen")
@@ -92,20 +93,12 @@ class UserList : AppCompatActivity() {
         FirebaseUtils().readCollection(playersNameCollection) { result ->
             result.onSuccess {
                 for (user in it){
-
-                   /* UserListDataModel(
-                        user["nombre"].toString(),
-                        user["clasificacion"].toString(),
-                        user["posiciones"] as MutableList<String>,
-                        user["apodo"].toString(),
-                        user["telefono"].toString(),
-                        user["fecha_nacimiento"] as Timestamp,
-                    ) to HashMap<String, Any>()*/
                     if(user["posiciones"] == null ||
                         user["nombre"] == null ||
                         user["clasificacion"] == null ||
                         user["apodo"] == null ||
                         user["telefono"] == null ||
+                        user["id"] == null ||
                         user["fecha_nacimiento"] == null){
                         Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
                         continue
@@ -118,6 +111,7 @@ class UserList : AppCompatActivity() {
                         user["apodo"].toString(),
                         user["telefono"].toString(),
                         user["fecha_nacimiento"] as Timestamp,
+                        user["id"].toString()
                     )
 
 
