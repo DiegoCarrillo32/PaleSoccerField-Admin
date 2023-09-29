@@ -44,13 +44,9 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var nickname: String? = null
     private var id: String? = null
     private lateinit var positions: MutableList<String>
-    private var ratesList = listOf("malo", "bueno", "regular")
+    private var ratesList = listOf("malo", "regular", "bueno")
     private var onDismissListener: OnDismissListener? = null
     private var didEditClassification: Boolean = false
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
