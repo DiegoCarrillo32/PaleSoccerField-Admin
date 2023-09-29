@@ -62,6 +62,21 @@ class FirebaseUtils {
             }
     }
 
+    // This function is used to update a document in a collection by id
+    fun updateDocument(collectionName: String, idCollection: String, document: HashMap<String, Any>){
+        db.collection(collectionName).document(idCollection)
+            .update(document)
+            .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> println("Error updating document: ${e.toString()}") }
+    }
+
+    fun updateProperty(collectionName: String, idCollection: String, property: String, value: Any){
+        db.collection(collectionName).document(idCollection)
+            .update(property, value)
+            .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> println("Error updating document: ${e.toString()}") }
+    }
+
     fun filterBy(collectionName: String, fieldName: String, fieldValue: String,
                  callback: (Result<MutableList<HashMap<String, Any>>>)-> Unit) {
         val documets = mutableListOf<HashMap<String, Any>>()

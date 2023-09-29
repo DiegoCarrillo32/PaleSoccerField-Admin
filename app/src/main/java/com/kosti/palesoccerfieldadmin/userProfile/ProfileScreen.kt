@@ -28,6 +28,9 @@ private const val ARG_PARAM3 = "phone"
 private const val ARG_PARAM4 = "classification"
 private const val ARG_PARAM5 = "positions"
 private const val ARG_PARAM6 = "nickname"
+private const val ARG_PARAM7 = "id"
+private const val COLLECTION_NAME = "jugadores"
+private const val CLASIFICATION_FIELD = "clasificacion"
 
 /**
  * A simple [Fragment] subclass.
@@ -44,6 +47,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var classification: String? = null
     private var isEditingClassification: Boolean = false
     private var nickname: String? = null
+    private var id: String? = null
     private lateinit var positions: MutableList<String>
     private var ratesList = listOf("malo", "bueno", "regular")
 
@@ -60,6 +64,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
             classification = it.getString(ARG_PARAM4)
             positions = it.getStringArrayList(ARG_PARAM5)!!
             nickname = it.getString(ARG_PARAM6)
+            id = it.getString(ARG_PARAM7)
 
         }
     }
@@ -94,9 +99,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
             plyrNTV.text = name
             phoneTV.text = phone
             nicknameTV.text = nickname
-            Toast.makeText(requireContext(), classification, Toast.LENGTH_LONG).show()
-
-
             classTV.isEnabled = false
             classTV.isClickable = false
 
@@ -107,6 +109,9 @@ class ProfileScreen : BottomSheetDialogFragment() {
                     classTV.isClickable = false
                     isEditingClassification = false
                     // Enviar la data a firebase
+
+                    if(id != null && classTV.selectedItem.toString() != classification) FirebaseUtils().updateProperty(COLLECTION_NAME,
+                        id!!, CLASIFICATION_FIELD, classTV.selectedItem.toString())
 
                 } else {
                     classTV.isEnabled = true
