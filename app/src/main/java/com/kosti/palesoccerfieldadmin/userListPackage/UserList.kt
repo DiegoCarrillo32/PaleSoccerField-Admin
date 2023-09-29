@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
@@ -19,28 +20,15 @@ import com.kosti.palesoccerfieldadmin.userProfile.ProfileScreen
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 
-/*
-* datos de un usuario
-*
-* apodo
-* clasificacion
-* bloqueos
-* contrasena
-* correo
-* estado
-* fecha_nacimiento
-* nombre
-* posiciones
-* rol
-* telefono
-* */
-class UserList : AppCompatActivity() {
+
+class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
     private lateinit var userListView:ListView
     private lateinit var userList: MutableList<JugadoresDataModel>
     private lateinit var adapter: UserListAdapter
     private lateinit var filteredList: MutableList<JugadoresDataModel>
     private lateinit var userListProgressBar: ProgressBar
     private lateinit var toolbar: Toolbar
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var ratesList = listOf<String>("Todos", "Malo", "Bueno", "Regular")
     private var positionList = listOf<String>("Todos","Defensa", "Arquero", "Medio campista", "Delantero")
     private var selectedRate = "Todos"
@@ -56,14 +44,24 @@ class UserList : AppCompatActivity() {
         userListView = findViewById(R.id.users_list)
         userListProgressBar = findViewById(R.id.userListProgressBar)
         toolbar = findViewById(R.id.toolbarUserList)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayoutUserList)
         filteredList = mutableListOf()
         userList = mutableListOf()
+        val fragmentProfileScreen = ProfileScreen()
+
+        fragmentProfileScreen.setOnDismissListener(this)
+
         fetchDataFromFirebase()
 
         initSearchWidget()
         setupSpinners()
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
+
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchDataFromFirebase()
+            swipeRefreshLayout.isRefreshing = false
+        }
 
         userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -77,18 +75,18 @@ class UserList : AppCompatActivity() {
                 data.putString("phone", userList[p2].Phone)
                 data.putStringArrayList("positions", userList[p2].Positions as ArrayList<String>)
                 data.putString("id", userList[p2].Id)
-                var fragmentProfileScreen = ProfileScreen()
                 fragmentProfileScreen.arguments = data
                 fragmentProfileScreen.show(supportFragmentManager, "ProfileScreen")
+                // implement on dismiss listener
+
             }
-
         }
-
     }
 
     private fun fetchDataFromFirebase() {
         Snackbar.make(userListView, "Buscando la informacion de los jugadores", Snackbar.LENGTH_LONG)
             .show()
+        userList.clear()
         userListProgressBar.visibility = View.VISIBLE
         FirebaseUtils().readCollection(playersNameCollection) { result ->
             result.onSuccess {
@@ -113,8 +111,6 @@ class UserList : AppCompatActivity() {
                         user["fecha_nacimiento"] as Timestamp,
                         user["id"].toString()
                     )
-
-
                     )
                 }
                 adapter = UserListAdapter(this, userList)
@@ -226,5 +222,10 @@ class UserList : AppCompatActivity() {
 
         } )
 
+    }
+
+    override fun onDismissOnActivity() {
+        Toast.makeText(this, "Se actualizo la informacion", Toast.LENGTH_LONG).show()
+        fetchDataFromFirebase()
     }
 }
