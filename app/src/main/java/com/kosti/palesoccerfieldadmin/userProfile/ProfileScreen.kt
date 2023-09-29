@@ -45,7 +45,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var isEditingClassification: Boolean = false
     private var nickname: String? = null
     private lateinit var positions: MutableList<String>
-    private var ratesList = listOf("Malo", "Bueno", "Regular")
+    private var ratesList = listOf("malo", "bueno", "regular")
 
 
 
@@ -94,8 +94,12 @@ class ProfileScreen : BottomSheetDialogFragment() {
             plyrNTV.text = name
             phoneTV.text = phone
             nicknameTV.text = nickname
+            Toast.makeText(requireContext(), classification, Toast.LENGTH_LONG).show()
+
+
             classTV.isEnabled = false
             classTV.isClickable = false
+
 
             editClasiBtn.setOnClickListener {
                 if (isEditingClassification) {
@@ -112,6 +116,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
                 }
             }
             classTV.adapter = rateAdapter
+            classTV.setSelection(rateAdapter.getPosition(classification))
 
 
         }

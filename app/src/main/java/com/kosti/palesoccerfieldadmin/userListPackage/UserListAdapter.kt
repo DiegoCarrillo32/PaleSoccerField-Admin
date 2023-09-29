@@ -33,6 +33,7 @@ class UserListAdapter (private val context: Context, private val data: List<Juga
         userScore = convertView.findViewById(R.id.user_score)
         userName.text = data[position].Name;
         // validate the position list and set a default value if list size is 0
+
         if (data[position].Positions.size > 0) {
             userPosition.text = data[position].Positions[0].capitalize()
         } else {

@@ -43,6 +43,25 @@ class FirebaseUtils {
             .addOnFailureListener { e -> println("Error deleting document: ${e.toString()}") }
     }
 
+    fun getDocumentById(collectionName: String, idCollection: String, callback: (Result<HashMap<String, Any>>) -> Unit){
+        db.collection(collectionName).document(idCollection)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val documentData = document.data as HashMap<String, Any>
+                    documentData["id"] = document.id
+                    callback(Result.success(documentData))
+                } else {
+                    Log.d(TAG, "No such document")
+                    callback(Result.failure(Exception("No such document")))
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+                callback(Result.failure(exception))
+            }
+    }
+
     fun filterBy(collectionName: String, fieldName: String, fieldValue: String,
                  callback: (Result<MutableList<HashMap<String, Any>>>)-> Unit) {
         val documets = mutableListOf<HashMap<String, Any>>()

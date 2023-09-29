@@ -92,15 +92,6 @@ class UserList : AppCompatActivity() {
         FirebaseUtils().readCollection(playersNameCollection) { result ->
             result.onSuccess {
                 for (user in it){
-
-                   /* UserListDataModel(
-                        user["nombre"].toString(),
-                        user["clasificacion"].toString(),
-                        user["posiciones"] as MutableList<String>,
-                        user["apodo"].toString(),
-                        user["telefono"].toString(),
-                        user["fecha_nacimiento"] as Timestamp,
-                    ) to HashMap<String, Any>()*/
                     if(user["posiciones"] == null ||
                         user["nombre"] == null ||
                         user["clasificacion"] == null ||
