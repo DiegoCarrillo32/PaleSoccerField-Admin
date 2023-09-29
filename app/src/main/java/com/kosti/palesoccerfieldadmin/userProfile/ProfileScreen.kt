@@ -1,20 +1,15 @@
 package com.kosti.palesoccerfieldadmin.userProfile
 
+import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
@@ -50,6 +45,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var id: String? = null
     private lateinit var positions: MutableList<String>
     private var ratesList = listOf("malo", "bueno", "regular")
+    private var onDismissListener: OnDismissListener? = null
+    private var didEditClassification: Boolean = false
 
 
 
@@ -75,9 +72,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         ): View? {
             // Inflate the layout for this fragment
             val view = inflater.inflate(R.layout.fragment_profile_screen, container, false)
-
             spinnerPositions(view,)
-
             return view
         }
 
@@ -108,10 +103,11 @@ class ProfileScreen : BottomSheetDialogFragment() {
                     classTV.isEnabled = false
                     classTV.isClickable = false
                     isEditingClassification = false
-                    // Enviar la data a firebase
-
-                    if(id != null && classTV.selectedItem.toString() != classification) FirebaseUtils().updateProperty(COLLECTION_NAME,
-                        id!!, CLASIFICATION_FIELD, classTV.selectedItem.toString())
+                    if(id != null && classTV.selectedItem.toString().toLowerCase() != classification?.toLowerCase() ) {
+                        FirebaseUtils().updateProperty(COLLECTION_NAME,
+                            id!!, CLASIFICATION_FIELD, classTV.selectedItem.toString())
+                        didEditClassification = true
+                    }
 
                 } else {
                     classTV.isEnabled = true
@@ -141,8 +137,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
             val elementos = positions
 
             val spinner: Spinner = view.findViewById(R.id.spinnerPositions)
-
-            // Creates an ArrayAdapter using the default elements and layout for the spinner
             val adapter =
                 this.context?.let {
                     ArrayAdapter(
@@ -152,25 +146,28 @@ class ProfileScreen : BottomSheetDialogFragment() {
                     )
                 }
 
-            // Specifies the layout to be used when the options are displayed.
             adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-            // Attach the ArrayAdapter to the Spinner
             spinner.adapter = adapter
+
         }
 
+    fun setOnDismissListener(listener: OnDismissListener) {
+        onDismissListener = listener
+    }
 
-//    companion object {
-//
-//        @JvmStatic
-//        fun newInstance(name: String, age: String) =
-//            ProfileScreen().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, name)
-//                    putString(ARG_PARAM2, age)
-//                }
-//            }
-//    }
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if(didEditClassification){
+            onDismissListener?.onDismissOnActivity()
+            didEditClassification = false
+        }
+
+    }
+
+    interface OnDismissListener {
+        fun onDismissOnActivity()
+    }
+
 }
 
 
