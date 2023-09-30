@@ -1,6 +1,7 @@
 package com.kosti.palesoccerfieldadmin.models
 
 import com.google.firebase.Timestamp
+import kotlin.properties.Delegates
 
 /*
     Datos de una promocion
@@ -13,17 +14,28 @@ import com.google.firebase.Timestamp
     - nombre -> Name
  */
 class PromotionDataModel(
-    description: String,
-    status: Boolean,
-    startDate: Timestamp,
-    endDate: Timestamp,
-    imageUrl: String,
-    name: String
 ) {
-    var Description: String = description
-    var Status: Boolean = status
-    var StartDate: Timestamp = startDate
-    var EndDate: Timestamp = endDate
-    var ImageUrl: String = imageUrl
-    var Name: String = name
+    lateinit var Description: String
+    var Status: Boolean by Delegates.notNull()
+    lateinit var StartDate: Timestamp
+    lateinit var EndDate: Timestamp
+    lateinit var ImageUrl: String
+    lateinit var Name: String
+
+    constructor(
+        description: String,
+        status: Boolean,
+        startDate: Timestamp,
+        endDate: Timestamp,
+        imageUrl: String,
+        name: String
+    ) : this() {
+         Description = description
+         Status = status
+         StartDate = startDate
+         EndDate = endDate
+         ImageUrl = imageUrl
+         Name = name
+    }
+
 }
