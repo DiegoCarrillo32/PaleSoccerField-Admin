@@ -16,7 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
-import com.kosti.palesoccerfieldadmin.userProfile.ProfileScreen
+import com.kosti.palesoccerfieldadmin.otherUsersProfile.ProfileScreen
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 
