@@ -11,8 +11,8 @@ import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 
 class AproveUserListAdapter (private val context: Context, private val data: List<JugadoresDataModel>): BaseAdapter() {
     private lateinit var userName: TextView
-    private lateinit var userPosition: TextView
-    private lateinit var userScore: TextView
+    private lateinit var userNickname: TextView
+
 
     override fun getCount(): Int {
         return data.size
@@ -28,13 +28,10 @@ class AproveUserListAdapter (private val context: Context, private val data: Lis
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var convertView = convertView
-        convertView = LayoutInflater.from(context).inflate(R.layout.user_list_item, parent, false)
-        userName = convertView.findViewById(R.id.user_name)
-        userPosition = convertView.findViewById(R.id.user_position)
-        userScore = convertView.findViewById(R.id.user_score)
+        convertView = LayoutInflater.from(context).inflate(R.layout.aprove_user_list_item, parent, false)
+        userName = convertView.findViewById(R.id.tvUserName)
         userName.text = data[position].Name;
-        userPosition.text = data[position].Positions[0]
-        userScore.text = data[position].Clasification
+        userNickname = convertView.findViewById(R.id.tvUserNickname)
         return convertView
     }
 }
