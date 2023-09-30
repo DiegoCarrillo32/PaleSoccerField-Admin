@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 
-class UserListAdapter (private val context: Context, private val data: List<UserListDataModel>): BaseAdapter() {
+class UserListAdapter (private val context: Context, private val data: List<JugadoresDataModel>): BaseAdapter() {
     private lateinit var userName: TextView
     private lateinit var userPosition: TextView
     private lateinit var userScore: TextView
@@ -31,8 +32,14 @@ class UserListAdapter (private val context: Context, private val data: List<User
         userPosition = convertView.findViewById(R.id.user_position)
         userScore = convertView.findViewById(R.id.user_score)
         userName.text = data[position].Name;
-        userPosition.text = data[position].Position
-        userScore.text = data[position].Clasification
+        // validate the position list and set a default value if list size is 0
+
+        if (data[position].Positions.size > 0) {
+            userPosition.text = data[position].Positions[0].capitalize()
+        } else {
+            userPosition.text = "Sin posición"
+        }
+        userScore.text = data[position].Clasification.capitalize()
         return convertView
     }
 
