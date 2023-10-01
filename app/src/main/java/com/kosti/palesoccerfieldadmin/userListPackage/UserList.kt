@@ -217,9 +217,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
 
                 userListView.adapter = UserListAdapter(applicationContext, filteredUsers);
                 return false;
-
             }
-
         } )
 
     }
