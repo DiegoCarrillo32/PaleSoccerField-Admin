@@ -10,11 +10,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.models.UserViewModel
 import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
@@ -25,8 +27,7 @@ class Login : AppCompatActivity() {
     lateinit var btnLogin: Button
     lateinit var textViewCreateAccount: TextView
     lateinit var progressBar: ProgressBar
-
-    private lateinit var auth: FirebaseAuth
+    lateinit var currentUserID: String
 
     /*
     public override fun onStart() {
@@ -47,8 +48,7 @@ class Login : AppCompatActivity() {
         textViewCreateAccount = findViewById(R.id.textViewCreateAccount)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
-
-        auth = Firebase.auth
+        var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         textViewCreateAccount.setOnClickListener {
             toRegister()
@@ -72,53 +72,56 @@ class Login : AppCompatActivity() {
             }
 
             // Verificar que exista e ingresar
+            FirebaseUtils().getCollectionByProperty("jugadores", "correo", email) { result ->
+                result.onSuccess {
+                    if (it.isNotEmpty()) {
+                        for (elem in it) {
+                            // que sea usuario y que sea admin
+                            if (elem["rol"] == "admin") {
+                                if (elem["contrasena"] == password) {
+                                    Toast.makeText(
+                                        this@Login,
+                                        "Authentication Successful. Usuario: ${elem["nombre"]}",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                    userViewModel.setUserId(currentUserID)
+                                    toMain()
+                                } else {
+                                    progressBar.visibility = View.GONE
+                                    Toast.makeText(
+                                        this@Login,
+                                        "Contraseña invalida",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                }
 
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    progressBar.visibility = View.GONE
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this@Login,
-                            "Authentication Successful.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        getUser()
-                        toMain()
-
+                            } else {
+                                progressBar.visibility = View.GONE
+                                Toast.makeText(
+                                    this@Login,
+                                    "Acceso denegado.",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }
+                        }
                     } else {
                         progressBar.visibility = View.GONE
                         Toast.makeText(
                             this@Login,
-                            "Authentication failed.",
+                            "El usuario no existe.",
                             Toast.LENGTH_SHORT,
                         ).show()
                     }
                 }
-        }
-    }
-
-    fun getUser() {
-
-        FirebaseUtils().filterBy("jugadores", "correo", auth.currentUser?.email.toString())
-        { result ->
-            result.onSuccess {
-                if (it.isNotEmpty()) {
-                    for (elem in it) {
-                        Toast.makeText(
-                            this@Login,
-                            "Authentication Successful FirebaseUtils. usuario: ${elem["nombre"]}",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+                result.onFailure { exception ->
+                    val errorMessage = exception.message ?: "Error desconocido"
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        this@Login,
+                        "Authentication failed FirebaseUtils. $errorMessage",
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
-            }
-            result.onFailure { exception ->
-                val errorMessage = exception.message ?: "Error desconocido"
-                Toast.makeText(
-                    this@Login,
-                    "Authentication failed FirebaseUtils. $errorMessage",
-                    Toast.LENGTH_SHORT,
-                ).show()
             }
         }
     }
@@ -127,12 +130,13 @@ class Login : AppCompatActivity() {
         progressBar.visibility = View.GONE
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        intent.putExtra("id",currentUserID)
         finish()
     }
+
     fun toRegister() {
         progressBar.visibility = View.GONE
         val intent = Intent(this, Register::class.java)
-        startActivity(intent)
         finish()
     }
 }

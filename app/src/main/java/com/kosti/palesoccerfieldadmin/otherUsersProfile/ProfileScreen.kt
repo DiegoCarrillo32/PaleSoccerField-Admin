@@ -52,8 +52,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
