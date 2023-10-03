@@ -137,6 +137,7 @@ class Login : AppCompatActivity() {
     fun toRegister() {
         progressBar.visibility = View.GONE
         val intent = Intent(this, Register::class.java)
+        startActivity(intent)
         finish()
     }
 }
