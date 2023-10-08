@@ -1,15 +1,35 @@
 package com.kosti.palesoccerfieldadmin.utils
 import android.content.ContentValues.TAG
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+
 class FirebaseUtils {
     private val db = Firebase.firestore
 
     fun readCollection(collectionName: String, callback: (Result<MutableList<HashMap<String, Any>>> ) -> Unit) {
         val documents = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val documentData = document.data as HashMap<String, Any>
+                    documentData["id"] = document.id
+                    documents.add(documentData)
+                }
+                callback(Result.success(documents))
+            }
+            .addOnFailureListener { exception ->
+                Log.w("Error getting documents.", exception)
+                callback(Result.failure(exception))
+            }
+    }
+
+
+    fun readCollectionFilter(collectionName: String, callback: (Result<MutableList<HashMap<String, Any>>> ) -> Unit) {
+        val documents = mutableListOf<HashMap<String, Any>>()
+        db.collection(collectionName)
+            .whereEqualTo("estado", false)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {

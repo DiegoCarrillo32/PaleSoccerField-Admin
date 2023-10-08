@@ -80,4 +80,13 @@ public class JugadoresDataModel() {
          Phone = phone
          Id = id
     }
+    constructor(name: String,
+                nick: String,
+                id: String
+    ): this () {
+
+         Nickname  = nick
+         Name= name
+         Id = id
+    }
 }

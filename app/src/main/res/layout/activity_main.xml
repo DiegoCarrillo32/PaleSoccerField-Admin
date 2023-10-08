@@ -110,6 +110,7 @@
                 app:tint="@color/black" />
 
             <Button
+                android:id="@+id/btnAproveUsers"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:backgroundTint="@color/white"
