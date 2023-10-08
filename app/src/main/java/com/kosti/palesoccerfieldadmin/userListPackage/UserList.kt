@@ -52,7 +52,6 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
         fragmentProfileScreen.setOnDismissListener(this)
 
         fetchDataFromFirebase()
-
         initSearchWidget()
         setupSpinners()
 
