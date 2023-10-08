@@ -1,40 +1,174 @@
 package com.kosti.palesoccerfieldadmin.aproveUsers
 
 import android.content.Context
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
+import com.google.firebase.firestore.FirebaseFirestore
 
-class AproveUserListAdapter (private val context: Context, private val data: List<JugadoresDataModel>): BaseAdapter() {
+class AproveUserListAdapter (private val context: Context, private val data: MutableList<JugadoresDataModel>):
+    RecyclerView.Adapter<AproveUserListAdapter.ViewHolder>() {
     private lateinit var userName: TextView
-    private lateinit var userPosition: TextView
-    private lateinit var userScore: TextView
+    private lateinit var userNickname: TextView
+    private lateinit var db: FirebaseFirestore
 
-    override fun getCount(): Int {
-        return data.size
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AproveUserListAdapter.ViewHolder {
+        return AproveUserListAdapter.ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.aprove_user_list_item, parent, false)
+        )
     }
 
-    override fun getItem(position: Int): Any {
-        return data[position]
+    override fun onBindViewHolder(holder: AproveUserListAdapter.ViewHolder, position: Int) {
+        val item = data[position]
+        holder.userName.text = item.Name
+        holder.userNickname.text = buildString {
+            append("( ")
+            append(item.Nickname)
+            append(" )")
+        }
+
+        val context = holder.itemView.context  // Get the context from the ViewHolder's itemView
+
+        // Approve Button Click
+        holder.btnAprove.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Aprobar usuario")
+            builder.setMessage("¿Estás seguro de que quieres aprobar este usuario?")
+            builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
+                val userApproved = db.collection("jugadores").document(item.Id)
+                db.runBatch() { batch ->
+                    batch.update(userApproved, "estado", true)
+                }.addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "Usuario aprobado", Toast.LENGTH_SHORT).show()
+                        data.removeAt(position)
+                        notifyItemRemoved(position)
+                    } else {
+                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
+            }
+            builder.show()
+        }
+
+        // Deny Button Click
+        holder.btnDeny.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Denegar usuario")
+            builder.setMessage("¿Estás seguro de que quieres denegar este usuario?")
+            builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
+                val userEliminated = db.collection("jugadores").document(item.Id)
+                db.runBatch() { batch ->
+                    batch.delete(userEliminated)
+                }.addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show()
+                        data.removeAt(position)
+                        notifyItemRemoved(position)
+                    } else {
+                        Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
+                // TODO: do nothing or handle cancel action
+            }
+            builder.show()
+        }
     }
+
+
+//    override fun onBindViewHolder(holder: AproveUserListAdapter.ViewHolder, position: Int) {
+//        val item = data[position]
+//        holder.userName.text = item.Name
+//        holder.userNickname.text = buildString {
+//        append("( ")
+//        append(item.Nickname)
+//        append(" )")
+//    }
+//        //TODO: to add the photo we use Glide.with()
+//        holder.btnAprove.setOnClickListener {
+//            db = FirebaseFirestore.getInstance()
+//            val activity = it.context as AppCompatActivity
+//            val builder = AlertDialog.Builder(activity)
+//            builder.setTitle("Aprobar usuario")
+//            builder.setMessage("¿Estas seguro de que quieres aprobar este usuario?")
+//            builder.setPositiveButton("Si")
+//            { dialogInterface : DialogInterface, i:Int ->
+//                val userApproved = db.collection("jugadores").document(item.Id)
+//                db.runBatch() { batch ->
+//                    batch.update(userApproved, "estado", true)
+//                }.addOnCompleteListener() {
+//                    Toast.makeText(context, "Usuario aprobado", Toast.LENGTH_SHORT).show()
+//                    data.toMutableList().removeAt(position)
+//                    notifyItemRemoved(position)
+//                }.addOnFailureListener() {
+//                    Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//        }
+//        holder.btnDeny.setOnClickListener {
+//            db = FirebaseFirestore.getInstance()
+//            val activity = it.context as AppCompatActivity
+//            val builder = AlertDialog.Builder(activity)
+//            builder.setTitle("Denegar usuario")
+//            builder.setMessage("¿Estas seguro de que quieres denegar este usuario?")
+//            builder.setPositiveButton("Si")
+//            { dialogInterface : DialogInterface, i:Int ->
+//                val userEliminated = db.collection("jugadores").document(item.Id)
+//                db.runBatch() { batch ->
+//                    batch.delete(userEliminated)
+//                }.addOnCompleteListener() {
+//                    Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show()
+//                    data.toMutableList().removeAt(position)
+//                    notifyItemRemoved(position)
+//                }.addOnFailureListener() {
+//                    Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            builder.setNegativeButton("Cancelar")
+//            { dialogInterface : DialogInterface, i:Int ->
+//                //TODO: do nothing
+//            }
+//        }
+//    }
+
+
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var convertView = convertView
-        convertView = LayoutInflater.from(context).inflate(R.layout.user_list_item, parent, false)
-        userName = convertView.findViewById(R.id.user_name)
-        userPosition = convertView.findViewById(R.id.user_position)
-        userScore = convertView.findViewById(R.id.user_score)
-        userName.text = data[position].Name;
-        userPosition.text = data[position].Positions[0]
-        userScore.text = data[position].Clasification
-        return convertView
+    override fun getItemCount(): Int {
+        return data.size
     }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val userName: TextView = itemView.findViewById(R.id.tvUserName)
+        val userNickname: TextView = itemView.findViewById(R.id.tvUserNickname)
+        val btnAprove: ImageButton = itemView.findViewById(R.id.acceptBtn)
+        val btnDeny: ImageButton = itemView.findViewById(R.id.denyBtn)
+    }
+
 }
