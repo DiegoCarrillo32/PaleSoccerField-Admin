@@ -97,22 +97,20 @@ class FirebaseUtils {
             .addOnFailureListener { e -> println("Error updating document: ${e.toString()}") }
     }
 
-    fun filterBy(collectionName: String, fieldName: String, fieldValue: String,
-                 callback: (Result<MutableList<HashMap<String, Any>>>)-> Unit) {
-        val documets = mutableListOf<HashMap<String, Any>>()
+    fun getCollectionByProperty(collectionName: String, fieldName: String, fieldValue: String,
+                                callback: (Result<MutableList<HashMap<String, Any>>>)-> Unit) {
+        val collection = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName).whereEqualTo(fieldName, fieldValue)
             .limit(1).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     val documentData = document.data as HashMap<String, Any>
                     documentData["id"] = document.id
-                    documets.add(documentData)
-                    Log.d(TAG, "${document.id} => ${document.data}")
+                    collection.add(documentData)
                 }
-                callback(Result.success(documets))
+                callback(Result.success(collection))
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
                 callback(Result.failure(exception))
             }
     }
