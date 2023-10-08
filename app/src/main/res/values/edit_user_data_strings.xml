@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="editImage">
+        Editar Imagen
+    </string>
+
+    <string name="changePassword">
+        ¡Cambiar contraseña!
+    </string>
+
+    <string name="name">
+        Nombre
+    </string>
+
+    <string name="selectionText">
+        Seleccione las posiciones
+    </string>
+
+    <string name="delantero">
+        Delantero
+    </string>
+
+    <string name="medioCampista">
+        Medio Campista
+    </string>
+
+    <string name="portero">
+        Portero
+    </string>
+
+
+</resources>

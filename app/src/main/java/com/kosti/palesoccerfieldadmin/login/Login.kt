@@ -43,16 +43,19 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        editTextEmail = findViewById(R.id.email)
+        editTextEmail = findViewById(R.id.data)
         editTextPassword = findViewById(R.id.password)
         textViewCreateAccount = findViewById(R.id.textViewCreateAccount)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
+
         var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         textViewCreateAccount.setOnClickListener {
             toRegister()
         }
+
+        userViewModel.setUserId("vnCw2ctK4hPa06RmsSpm")
 
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -71,6 +74,8 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+
+
             // Verificar que exista e ingresar
             FirebaseUtils().getCollectionByProperty("jugadores", "correo", email) { result ->
                 result.onSuccess {
@@ -84,7 +89,8 @@ class Login : AppCompatActivity() {
                                         "Authentication Successful. Usuario: ${elem["nombre"]}",
                                         Toast.LENGTH_SHORT,
                                     ).show()
-                                    userViewModel.setUserId(currentUserID)
+                                    currentUserID = elem["id"].toString()
+
                                     toMain()
                                 } else {
                                     progressBar.visibility = View.GONE
