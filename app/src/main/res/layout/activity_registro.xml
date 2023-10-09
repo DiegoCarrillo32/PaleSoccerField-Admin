@@ -18,6 +18,16 @@
         android:scaleType="fitXY"
         android:src="@drawable/pales_logo" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="@string/registro"
+        android:textColor="@color/principal"
+        android:textSize="27sp"
+        android:textStyle="bold" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,18 +37,49 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="15dp"
-            android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:gravity="center"
-                android:text="@string/registro"
-                android:textColor="@color/principal"
-                android:textSize="27sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/rectangle_fecha_nacimiento"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tipoDeUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingStart="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="18dp"
+                    android:text="@string/rol_del_usuario"
+                    android:textSize="16sp">
+
+                </com.google.android.material.textview.MaterialTextView>
+
+                <RadioGroup
+                    android:id="@+id/rg_tipoDeUsuario"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checkedButton="@+id/radio_button_1">
+
+                    <RadioButton
+                        android:id="@+id/radio_btn_admin"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/administrador" />
+
+                    <RadioButton
+                        android:id="@+id/radio_btn_jugador"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/jugador" />
+                </RadioGroup>
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -51,7 +92,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/nombre"
-                    android:inputType="date" />
+                    android:inputType="text"
+                    android:maxLength="64"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,11 +105,12 @@
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/apodo"
+                    android:id="@+id/apodoRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/apodo"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:maxLength="64"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,11 +121,12 @@
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/telefono"
+                    android:id="@+id/telefonoRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/telefono"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:maxLength="20"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,9 +142,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:maxLength="150"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:id="@+id/fechaNacimientoRegister"
+                android:layout_height="60dp"
+                android:hint="@string/fecha_de_nacimiento"
+                android:textSize="16sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="15dp"
+                android:paddingEnd="18dp"
+                android:paddingStart="10dp"
+                android:background="@drawable/rectangle_fecha_nacimiento"
+                android:layout_marginBottom="20dp">
+
+            </com.google.android.material.textview.MaterialTextView>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -112,36 +176,54 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/contrasenia"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:layout_marginBottom="20dp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center_horizontal"
-                >
-
-                <Button
-                    android:id="@+id/btn_fecha_nacimiento"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_selector"
-                    android:text="@string/fecha_de_nacimiento"
-                    android:layout_marginTop="20dp"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-
-                    />
+                android:background="@drawable/rectangle_fecha_nacimiento">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textView"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="TextView" />
+                    android:id="@+id/clasificacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingStart="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="18dp"
+                    android:text="@string/clasificacion"
+                    android:textSize="16sp">
+
+                </com.google.android.material.textview.MaterialTextView>
+
+                <RadioGroup
+                    android:id="@+id/rg_clasificacion"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checkedButton="@+id/radio_button_1">
+
+                    <RadioButton
+                        android:id="@+id/radio_btn_bueno"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/bueno" />
+
+                    <RadioButton
+                        android:id="@+id/radio_btn_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/regular" />
+                    <RadioButton
+                        android:id="@+id/radio_btn_malo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/malo" />
+                </RadioGroup>
             </LinearLayout>
 
             <TextView
@@ -150,7 +232,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
                 android:layout_marginTop="15dp"
-                android:text="@string/ir_a_inicio"
+                android:text="@string/menu_principal"
                 android:textColor="@color/principal"
                 android:textSize="18sp" />
 
