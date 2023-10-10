@@ -7,25 +7,20 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.UserViewModel
-import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+
 
 class Login : AppCompatActivity() {
 
     lateinit var editTextEmail: EditText
     lateinit var editTextPassword: EditText
     lateinit var btnLogin: Button
-    lateinit var textViewCreateAccount: TextView
     lateinit var progressBar: ProgressBar
     lateinit var currentUserID: String
 
@@ -45,14 +40,9 @@ class Login : AppCompatActivity() {
 
         editTextEmail = findViewById(R.id.email)
         editTextPassword = findViewById(R.id.password)
-        textViewCreateAccount = findViewById(R.id.textViewCreateAccount)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
         var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        textViewCreateAccount.setOnClickListener {
-            toRegister()
-        }
 
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -84,7 +74,9 @@ class Login : AppCompatActivity() {
                                         "Authentication Successful. Usuario: ${elem["nombre"]}",
                                         Toast.LENGTH_SHORT,
                                     ).show()
+                                    currentUserID = elem["id"].toString()
                                     userViewModel.setUserId(currentUserID)
+
                                     toMain()
                                 } else {
                                     progressBar.visibility = View.GONE
@@ -130,15 +122,9 @@ class Login : AppCompatActivity() {
         progressBar.visibility = View.GONE
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        intent.putExtra("id",currentUserID)
         finish()
     }
 
-    fun toRegister() {
-        progressBar.visibility = View.GONE
-        val intent = Intent(this, Register::class.java)
-        finish()
-    }
 }
 
 
