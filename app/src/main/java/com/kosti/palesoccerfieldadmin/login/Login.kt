@@ -42,6 +42,9 @@ class Login : AppCompatActivity() {
         editTextPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
+
+        auth = Firebase.auth
+
         var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         btnLogin.setOnClickListener {
@@ -61,23 +64,48 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Verificar que exista e ingresar
-            FirebaseUtils().getCollectionByProperty("jugadores", "correo", email) { result ->
-                result.onSuccess {
-                    if (it.isNotEmpty()) {
-                        for (elem in it) {
-                            // que sea usuario y que sea admin
-                            if (elem["rol"] == "Administrador") {
-                                if (elem["contrasena"] == password) {
-                                    Toast.makeText(
-                                        this@Login,
-                                        "Authentication Successful. Usuario: ${elem["nombre"]}",
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
-                                    currentUserID = elem["id"].toString()
-                                    userViewModel.setUserId(currentUserID)
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Verificar que exista e ingresar
+                        FirebaseUtils().getCollectionByProperty(
+                            "jugadores",
+                            "correo",
+                            email
+                        ) { result ->
+                            result.onSuccess {
+                                if (it.isNotEmpty()) {
+                                    for (elem in it) {
+                                        // que sea usuario y que sea admin
+                                        if (elem["rol"] == "Administrador") {
+                                            if (elem["contrasena"] == password) {
+                                                Toast.makeText(
+                                                    this@Login,
+                                                    "Authentication Successful. Usuario: ${elem["nombre"]}",
+                                                    Toast.LENGTH_SHORT,
+                                                ).show()
+                                                currentUserID = elem["id"].toString()
+                                                userViewModel.setUserId(currentUserID)
 
-                                    toMain()
+                                                toMain()
+                                            } else {
+                                                progressBar.visibility = View.GONE
+                                                Toast.makeText(
+                                                    this@Login,
+                                                    "Contraseña invalida.",
+                                                    Toast.LENGTH_SHORT,
+                                                ).show()
+                                            }
+
+                                        } else {
+                                            progressBar.visibility = View.GONE
+                                            Toast.makeText(
+                                                this@Login,
+                                                "Acceso denegado.",
+                                                Toast.LENGTH_SHORT,
+                                            ).show()
+                                        }
+                                    }
                                 } else {
                                     progressBar.visibility = View.GONE
                                     Toast.makeText(
