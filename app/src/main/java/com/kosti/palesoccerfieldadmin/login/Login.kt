@@ -43,14 +43,21 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        editTextEmail = findViewById(R.id.email)
+        editTextEmail = findViewById(R.id.data)
         editTextPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
+<<<<<<< HEAD
+
+        var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+=======
+>>>>>>> develop
 
         auth = Firebase.auth
 
         var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        userViewModel.setUserId("vnCw2ctK4hPa06RmsSpm")
 
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -69,6 +76,26 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+<<<<<<< HEAD
+
+
+            // Verificar que exista e ingresar
+            FirebaseUtils().getCollectionByProperty("jugadores", "correo", email) { result ->
+                result.onSuccess {
+                    if (it.isNotEmpty()) {
+                        for (elem in it) {
+                            // que sea usuario y que sea admin
+                            if (elem["rol"] == "admin") {
+                                if (elem["contrasena"] == password) {
+                                    Toast.makeText(
+                                        this@Login,
+                                        "Authentication Successful. Usuario: ${elem["nombre"]}",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                    currentUserID = elem["id"].toString()
+
+                                    toMain()
+=======
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -111,6 +138,7 @@ class Login : AppCompatActivity() {
                                             ).show()
                                         }
                                     }
+>>>>>>> develop
                                 } else {
                                     progressBar.visibility = View.GONE
                                     Toast.makeText(
