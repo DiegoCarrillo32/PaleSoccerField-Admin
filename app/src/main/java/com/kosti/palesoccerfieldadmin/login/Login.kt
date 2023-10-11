@@ -152,5 +152,3 @@ class Login : AppCompatActivity() {
     }
 
 }
-
-
