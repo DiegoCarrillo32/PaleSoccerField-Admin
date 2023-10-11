@@ -15,6 +15,7 @@
         android:theme="@style/Base.Theme.PaleSoccerFieldAdmin"
         tools:targetApi="s">
         <activity
+<<<<<<< HEAD
             android:name=".userAdminProfile.EditPositionsUser"
             android:exported="false" />
         <activity
@@ -31,6 +32,18 @@
         <activity
             android:name=".registro.Register"
             android:exported="true" />
+=======
+            android:name=".aproveUsers.AproveUsers"
+            android:exported="false" />
+        <activity
+            android:name=".userListPackage.UserList"
+            android:exported="false" />
+        <activity
+            android:name=".registro.Register"
+            android:exported="true">
+
+        </activity>
+>>>>>>> develop
         <activity
             android:name=".login.Login"
             android:exported="true"
@@ -43,7 +56,9 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true" >
+            
+        </activity>
     </application>
 
 </manifest>
