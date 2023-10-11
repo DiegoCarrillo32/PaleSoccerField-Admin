@@ -1,7 +1,9 @@
 package com.kosti.palesoccerfieldadmin.otherUsersProfile
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
@@ -87,6 +90,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val editClasiBtn: ImageButton = view.findViewById(R.id.editClassBtn)
         val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
         val closeButton: ImageButton = view.findViewById(R.id.backButton)
+        val bloquedPeopleButton: ImageButton = view.findViewById(R.id.bloquedPeopleButton)
+
 
         //Sheet behaviour
         bottomSheetBehaviour = BottomSheetBehavior.from( view.parent as View);
@@ -95,6 +100,13 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
         closeButton.setOnClickListener {
             closeBottomSheet()
+        }
+
+        bloquedPeopleButton.setOnClickListener {
+            val intent = Intent(context, BlockedUsersList::class.java)
+            Log.d("Usercito", "$id")
+            intent.putExtra("textParameter", id.toString())
+            context?.startActivity(intent)
         }
 
         rateAdapter.setDropDownViewResource(
