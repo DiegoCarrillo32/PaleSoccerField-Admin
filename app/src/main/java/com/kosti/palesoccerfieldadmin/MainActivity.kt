@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
             toRegister()
         }
 
-
-
     }
 
     fun toRegister() {
