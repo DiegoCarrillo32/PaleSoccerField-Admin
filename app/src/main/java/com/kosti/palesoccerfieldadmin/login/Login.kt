@@ -43,19 +43,15 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        editTextEmail = findViewById(R.id.data)
+        editTextEmail = findViewById(R.id.email)
         editTextPassword = findViewById(R.id.password)
         textViewCreateAccount = findViewById(R.id.textViewCreateAccount)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
 
+        auth = Firebase.auth
+
         var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        textViewCreateAccount.setOnClickListener {
-            toRegister()
-        }
-
-        userViewModel.setUserId("vnCw2ctK4hPa06RmsSpm")
 
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -74,24 +70,48 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Verificar que exista e ingresar
+                        FirebaseUtils().getCollectionByProperty(
+                            "jugadores",
+                            "correo",
+                            email
+                        ) { result ->
+                            result.onSuccess {
+                                if (it.isNotEmpty()) {
+                                    for (elem in it) {
+                                        // que sea usuario y que sea admin
+                                        if (elem["rol"] == "Administrador") {
+                                            if (elem["contrasena"] == password) {
+                                                Toast.makeText(
+                                                    this@Login,
+                                                    "Authentication Successful. Usuario: ${elem["nombre"]}",
+                                                    Toast.LENGTH_SHORT,
+                                                ).show()
+                                                currentUserID = elem["id"].toString()
+                                                userViewModel.setUserId(currentUserID)
 
+                                                toMain()
+                                            } else {
+                                                progressBar.visibility = View.GONE
+                                                Toast.makeText(
+                                                    this@Login,
+                                                    "Contraseña invalida.",
+                                                    Toast.LENGTH_SHORT,
+                                                ).show()
+                                            }
 
-            // Verificar que exista e ingresar
-            FirebaseUtils().getCollectionByProperty("jugadores", "correo", email) { result ->
-                result.onSuccess {
-                    if (it.isNotEmpty()) {
-                        for (elem in it) {
-                            // que sea usuario y que sea admin
-                            if (elem["rol"] == "admin") {
-                                if (elem["contrasena"] == password) {
-                                    Toast.makeText(
-                                        this@Login,
-                                        "Authentication Successful. Usuario: ${elem["nombre"]}",
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
-                                    currentUserID = elem["id"].toString()
-
-                                    toMain()
+                                        } else {
+                                            progressBar.visibility = View.GONE
+                                            Toast.makeText(
+                                                this@Login,
+                                                "Acceso denegado.",
+                                                Toast.LENGTH_SHORT,
+                                            ).show()
+                                        }
+                                    }
                                 } else {
                                     progressBar.visibility = View.GONE
                                     Toast.makeText(
@@ -146,5 +166,3 @@ class Login : AppCompatActivity() {
         finish()
     }
 }
-
-
