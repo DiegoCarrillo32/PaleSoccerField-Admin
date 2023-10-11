@@ -27,6 +27,7 @@ import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
 import java.time.LocalDate
 import java.time.ZoneOffset
+import java.util.Locale
 
 class Register : AppCompatActivity() {
 
@@ -241,16 +242,16 @@ class Register : AppCompatActivity() {
         val bloqueosList = mutableListOf<String>()
         val posicionesList = mutableListOf<String>()
 
-        jugadorPorDefecto["apodo"] = apodo
+        jugadorPorDefecto["apodo"] = apodo.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["bloqueos"] = bloqueosList
-        jugadorPorDefecto["clasificacion"] = clasf
+        jugadorPorDefecto["clasificacion"] = clasf.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["contrasena"] = password
         jugadorPorDefecto["correo"] = email
         jugadorPorDefecto["estado"] = true
         jugadorPorDefecto["fecha_nacimiento"] = fechaNac
-        jugadorPorDefecto["nombre"] = nombre
+        jugadorPorDefecto["nombre"] = nombre.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["posiciones"] = posicionesList
-        jugadorPorDefecto["rol"] = rol
+        jugadorPorDefecto["rol"] = rol.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["telefono"] = telefono
 
         FirebaseUtils().createDocument("jugadores", jugadorPorDefecto)

@@ -67,7 +67,7 @@ class Login : AppCompatActivity() {
                     if (it.isNotEmpty()) {
                         for (elem in it) {
                             // que sea usuario y que sea admin
-                            if (elem["rol"] == "admin") {
+                            if (elem["rol"] == "Administrador") {
                                 if (elem["contrasena"] == password) {
                                     Toast.makeText(
                                         this@Login,
