@@ -10,6 +10,9 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.UserViewModel
@@ -23,6 +26,8 @@ class Login : AppCompatActivity() {
     lateinit var btnLogin: Button
     lateinit var progressBar: ProgressBar
     lateinit var currentUserID: String
+
+    private lateinit var auth: FirebaseAuth
 
     /*
     public override fun onStart() {
@@ -42,6 +47,9 @@ class Login : AppCompatActivity() {
         editTextPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
+
+        auth = Firebase.auth
+
         var userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         btnLogin.setOnClickListener {
@@ -61,60 +69,78 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Verificar que exista e ingresar
-            FirebaseUtils().getCollectionByProperty("jugadores", "correo", email) { result ->
-                result.onSuccess {
-                    if (it.isNotEmpty()) {
-                        for (elem in it) {
-                            // que sea usuario y que sea admin
-                            if (elem["rol"] == "Administrador") {
-                                if (elem["contrasena"] == password) {
-                                    Toast.makeText(
-                                        this@Login,
-                                        "Authentication Successful. Usuario: ${elem["nombre"]}",
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
-                                    currentUserID = elem["id"].toString()
-                                    userViewModel.setUserId(currentUserID)
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Verificar que exista e ingresar
+                        FirebaseUtils().getCollectionByProperty(
+                            "jugadores",
+                            "correo",
+                            email
+                        ) { result ->
+                            result.onSuccess {
+                                if (it.isNotEmpty()) {
+                                    for (elem in it) {
+                                        // que sea usuario y que sea admin
+                                        if (elem["rol"] == "Administrador") {
+                                            if (elem["contrasena"] == password) {
+                                                Toast.makeText(
+                                                    this@Login,
+                                                    "Authentication Successful. Usuario: ${elem["nombre"]}",
+                                                    Toast.LENGTH_SHORT,
+                                                ).show()
+                                                currentUserID = elem["id"].toString()
+                                                userViewModel.setUserId(currentUserID)
 
-                                    toMain()
+                                                toMain()
+                                            } else {
+                                                progressBar.visibility = View.GONE
+                                                Toast.makeText(
+                                                    this@Login,
+                                                    "Contraseña invalida.",
+                                                    Toast.LENGTH_SHORT,
+                                                ).show()
+                                            }
+
+                                        } else {
+                                            progressBar.visibility = View.GONE
+                                            Toast.makeText(
+                                                this@Login,
+                                                "Acceso denegado.",
+                                                Toast.LENGTH_SHORT,
+                                            ).show()
+                                        }
+                                    }
                                 } else {
                                     progressBar.visibility = View.GONE
                                     Toast.makeText(
                                         this@Login,
-                                        "Contraseña invalida",
+                                        "El usuario no existe.",
                                         Toast.LENGTH_SHORT,
                                     ).show()
                                 }
-
-                            } else {
+                            }
+                            result.onFailure { exception ->
+                                val errorMessage = exception.message ?: "Error desconocido"
                                 progressBar.visibility = View.GONE
                                 Toast.makeText(
                                     this@Login,
-                                    "Acceso denegado.",
+                                    "Authentication failed FirebaseUtils. $errorMessage",
                                     Toast.LENGTH_SHORT,
                                 ).show()
                             }
                         }
                     } else {
-                        progressBar.visibility = View.GONE
+                        // If sign in fails, display a message to the user.
+
                         Toast.makeText(
-                            this@Login,
-                            "El usuario no existe.",
+                            baseContext,
+                            "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
+                        progressBar.visibility = View.GONE
                     }
                 }
-                result.onFailure { exception ->
-                    val errorMessage = exception.message ?: "Error desconocido"
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(
-                        this@Login,
-                        "Authentication failed FirebaseUtils. $errorMessage",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-            }
         }
     }
 
