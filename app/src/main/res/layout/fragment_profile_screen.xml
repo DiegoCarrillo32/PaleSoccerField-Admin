@@ -23,12 +23,10 @@
             android:background="@null"
             android:contentDescription="@string/backButtonDescription"
             android:src="@drawable/arrow_back_white" />
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_weight="1"
-            >
-        </View>
+            android:layout_weight="1" />
         <ImageButton
             android:id="@+id/bloquedPeopleButton"
             android:layout_width="67dp"
