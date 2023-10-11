@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonAsTextView" parent="Widget.AppCompat.Button">
+        <item name="android:background">@android:color/transparent</item> <!-- Fondo transparente -->
+        <item name="android:textColor">#2F80ED</item> <!-- Color del texto -->
+        <item name="android:textSize">14sp</item> <!-- Tamaño del texto -->
+        <!-- Otros atributos de estilo aquí -->
+    </style>
+
+
+</resources>
