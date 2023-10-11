@@ -213,7 +213,7 @@ class Register : AppCompatActivity() {
                             "Authentication successful.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        createUser(nombre, email, password,apodo, telefono, fechaCovertida, rol, clasificacion)
+                        createUser(nombre, email, password,apodo, telefono, fechaCovertida, clasificacion, rol)
                         toMain()
                     } else {
                         // If sign in fails, display a message to the user.
