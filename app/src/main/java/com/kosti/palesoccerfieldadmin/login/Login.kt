@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -17,17 +16,18 @@ import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.UserViewModel
-import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+
 
 class Login : AppCompatActivity() {
 
     lateinit var editTextEmail: EditText
     lateinit var editTextPassword: EditText
     lateinit var btnLogin: Button
-    lateinit var textViewCreateAccount: TextView
     lateinit var progressBar: ProgressBar
     lateinit var currentUserID: String
+
+    private lateinit var auth: FirebaseAuth
 
     /*
     public override fun onStart() {
@@ -45,7 +45,6 @@ class Login : AppCompatActivity() {
 
         editTextEmail = findViewById(R.id.email)
         editTextPassword = findViewById(R.id.password)
-        textViewCreateAccount = findViewById(R.id.textViewCreateAccount)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar_login)
 
@@ -116,39 +115,32 @@ class Login : AppCompatActivity() {
                                     progressBar.visibility = View.GONE
                                     Toast.makeText(
                                         this@Login,
-                                        "Contraseña invalida",
+                                        "El usuario no existe.",
                                         Toast.LENGTH_SHORT,
                                     ).show()
                                 }
-
-                            } else {
+                            }
+                            result.onFailure { exception ->
+                                val errorMessage = exception.message ?: "Error desconocido"
                                 progressBar.visibility = View.GONE
                                 Toast.makeText(
                                     this@Login,
-                                    "Acceso denegado.",
+                                    "Authentication failed FirebaseUtils. $errorMessage",
                                     Toast.LENGTH_SHORT,
                                 ).show()
                             }
                         }
                     } else {
-                        progressBar.visibility = View.GONE
+                        // If sign in fails, display a message to the user.
+
                         Toast.makeText(
-                            this@Login,
-                            "El usuario no existe.",
+                            baseContext,
+                            "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
+                        progressBar.visibility = View.GONE
                     }
                 }
-                result.onFailure { exception ->
-                    val errorMessage = exception.message ?: "Error desconocido"
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(
-                        this@Login,
-                        "Authentication failed FirebaseUtils. $errorMessage",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-            }
         }
     }
 
@@ -156,13 +148,7 @@ class Login : AppCompatActivity() {
         progressBar.visibility = View.GONE
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        intent.putExtra("id",currentUserID)
         finish()
     }
 
-    fun toRegister() {
-        progressBar.visibility = View.GONE
-        val intent = Intent(this, Register::class.java)
-        finish()
-    }
 }

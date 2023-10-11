@@ -1,60 +1,90 @@
 package com.kosti.palesoccerfieldadmin.aproveUsers
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isGone
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class AproveUsers : AppCompatActivity() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AproveUsers.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AproveUsers : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var userRecyclerView: RecyclerView
+    private lateinit var userList: MutableList<JugadoresDataModel>
+    private lateinit var adapter: AproveUserListAdapter
+    private lateinit var filteredList: MutableList<JugadoresDataModel>
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var userListProgressBar: ProgressBar
+    private lateinit var toolbar: Toolbar
 
+
+    private val playersNameCollection = "jugadores"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        setContentView(R.layout.activity_aprove_users)
+        userRecyclerView = findViewById(R.id.userListRecycler)
+        userListProgressBar = findViewById(R.id.progressBar)
+        toolbar = findViewById(R.id.toolbarAproveUsers)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayoutUserList)
+        filteredList = mutableListOf()
+        userList = mutableListOf()
+        fetchDataFromFirebase()
+
+        // Add the LinearLayoutManager to  RecyclerView
+        val layoutManager = LinearLayoutManager(this)
+        userRecyclerView.layoutManager = layoutManager
+
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchDataFromFirebase()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+
+    }
+    private fun fetchDataFromFirebase() {
+        Snackbar.make(userRecyclerView, "Buscando la informacion de los jugadores", Snackbar.LENGTH_LONG)
+            .show()
+        userList.clear()
+        userListProgressBar.visibility = View.VISIBLE
+        FirebaseUtils().readCollectionFilter(playersNameCollection) { result ->
+            result.onSuccess {
+                for (user in it){
+                    if(user["posiciones"] == null ||
+                        user["nombre"] == null ||
+                        user["apodo"] == null ||
+                        user["id"] == null
+                        ){
+                        Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
+                        continue
+                    }
+                    userList.add(
+                        JugadoresDataModel(
+                            user["nombre"].toString(),
+                            user["apodo"].toString(),
+                            user["id"].toString()
+                        )
+                    )
+                }
+                adapter = AproveUserListAdapter(this, userList)
+                userRecyclerView.adapter = adapter
+                userListProgressBar.visibility = View.GONE
+            }
+            result.onFailure {
+                Snackbar.make(userRecyclerView, "Error al cargar los datos", Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_aprove_users, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AproveUsers.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AproveUsers().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 }
