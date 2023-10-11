@@ -70,7 +70,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                 data.putString("classification", userList[p2].Clasification)
                 data.putString("nickname", userList[p2].Nickname)
                 // Calculate age from Timestamp
-                data.putString("age", ((Date().time - userList[p2].Age.toLong()).toString()))
+                data.putString("age", ((Date().time - userList[p2].Age.toInt()).toString()))
                 data.putString("phone", userList[p2].Phone)
                 data.putStringArrayList("positions", userList[p2].Positions as ArrayList<String>)
                 data.putString("id", userList[p2].Id)
