@@ -38,7 +38,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
     // TODO: Rename and change types of parameters
     private var name: String? = null
-    private var age: Int? = null
+    private var age: Long? = null
     private var phone: String? = null
     private var classification: String? = null
     private var isEditingClassification: Boolean = false
@@ -56,7 +56,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             name = it.getString(ARG_PARAM1)
-            age = it.getInt(ARG_PARAM2)
+            age = it.getLong(ARG_PARAM2)
             phone = it.getString(ARG_PARAM3)
             classification = it.getString(ARG_PARAM4)
             positions = it.getStringArrayList(ARG_PARAM5)!!

@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
     - posiciones -> Positions
     - rol -> Role
     - telefono -> Phone
-    *
+    *d
 * */
 public class JugadoresDataModel() {
 
