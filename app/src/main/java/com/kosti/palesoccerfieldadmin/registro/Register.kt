@@ -2,7 +2,6 @@ package com.kosti.palesoccerfieldadmin.registro
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
@@ -14,20 +13,17 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.time.LocalDate
-import java.time.ZoneOffset
 import java.util.Locale
+
 
 class Register : AppCompatActivity() {
 
@@ -46,11 +42,13 @@ class Register : AppCompatActivity() {
 
     lateinit var radioGroupUserType: RadioGroup
     lateinit var radioButtonUserType: RadioButton
-    lateinit var rol:String
+    lateinit var rol: String
 
     lateinit var radioGroupClasificacion: RadioGroup
     lateinit var radioButtonClasificacion: RadioButton
-    lateinit var clasificacion:String
+    lateinit var clasificacion: String
+
+    lateinit var userUID: String
 
     private lateinit var auth: FirebaseAuth
 
@@ -71,23 +69,21 @@ class Register : AppCompatActivity() {
         radioGroupClasificacion = findViewById(R.id.rg_clasificacion)
         rol = ""
         clasificacion = ""
-
+        userUID = ""
         auth = Firebase.auth
 
         textViewToLogin.setOnClickListener {
             toMain()
         }
 
-        radioGroupUserType.setOnCheckedChangeListener{
-            group, checkedId ->
+        radioGroupUserType.setOnCheckedChangeListener { group, checkedId ->
 
             radioButtonUserType = findViewById(checkedId)
             rol = radioButtonUserType.text.toString()
 
         }
 
-        radioGroupClasificacion.setOnCheckedChangeListener{
-                group, checkedId ->
+        radioGroupClasificacion.setOnCheckedChangeListener { group, checkedId ->
 
             radioButtonClasificacion = findViewById(checkedId)
             clasificacion = radioButtonClasificacion.text.toString()
@@ -111,19 +107,16 @@ class Register : AppCompatActivity() {
 
 
                     // Crea una instancia de Calendar y configura la fecha seleccionada
-                    val calendario = Calendar.getInstance()
-                    calendario.set(Calendar.YEAR, year)
-                    calendario.set(Calendar.MONTH, month) // Ten en cuenta que los meses comienzan desde 0 en Calendar
-                    calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    val date: Long = SimpleDateFormat("dd/MM/yyyy").parse(fechaSeleccionada).time
 
                     // Obtiene el Timestamp de la fecha seleccionada
                     textViewFechanacimiento.text = fechaSeleccionada
-                    fechaCovertida = calendario.timeInMillis.toString()
+                    fechaCovertida = date.toString()
 
                 },
                 year, month, day
             )
-
+            datePickerDialog.datePicker.maxDate = calendar.timeInMillis
             datePickerDialog.show()
         }
 
@@ -139,11 +132,11 @@ class Register : AppCompatActivity() {
             val fechaNac: String = textViewFechanacimiento.text.toString()
 
 
-            if(TextUtils.isEmpty(nombre) || TextUtils.isEmpty(email) ||
+            if (TextUtils.isEmpty(nombre) || TextUtils.isEmpty(email) ||
                 TextUtils.isEmpty(password) || TextUtils.isEmpty(telefono)
                 || TextUtils.isEmpty(fechaNac) || TextUtils.isEmpty(clasificacion)
                 || TextUtils.isEmpty(rol)
-            ){
+            ) {
 
                 if (TextUtils.isEmpty(nombre)) {
                     editTextNombre.error = "Ingrese su nombre"
@@ -164,7 +157,7 @@ class Register : AppCompatActivity() {
                 if (TextUtils.isEmpty(clasificacion)) {
                     Toast.makeText(
                         this@Register,
-                       "Por favor, seleccione la clasificacion.",
+                        "Por favor, seleccione la clasificacion.",
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
@@ -210,50 +203,67 @@ class Register : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         Toast.makeText(
                             this@Register,
-                            "Authentication successful.",
+                            "Registro exitoso.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        createUser(nombre, email, password,apodo, telefono, fechaCovertida, clasificacion, rol)
+                        userUID = auth.currentUser?.uid.toString()
+                        createUser(
+                            nombre,
+                            email,
+                            password,
+                            apodo,
+                            telefono,
+                            fechaCovertida,
+                            clasificacion,
+                            rol,
+                            userUID
+                        )
                         toMain()
                     } else {
                         // If sign in fails, display a message to the user.
-
+                        editTextEmail.error = "Correo ya existe."
+                        progressBar.visibility = View.GONE
                         Toast.makeText(
                             this@Register,
-                            "Authentication failed.",
+                            "Correo ya existe.",
                             Toast.LENGTH_SHORT,
                         ).show()
-
                     }
                 }
         }
     }
 
-    private fun createUser(nombre: String,
-                           email: String,
-                           password: String,
-                           apodo: String,
-                           telefono: String,
-                           fechaNac: String,
-                           clasf: String,
-                           rol: String
+    private fun createUser(
+        nombre: String,
+        email: String,
+        password: String,
+        apodo: String,
+        telefono: String,
+        fechaNac: String,
+        clasf: String,
+        rol: String,
+        uid: String
     ) {
         val jugadorPorDefecto: HashMap<String, Any> = HashMap<String, Any>()
         val bloqueosList = mutableListOf<String>()
         val posicionesList = mutableListOf<String>()
 
-        jugadorPorDefecto["apodo"] = apodo.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["apodo"] = apodo.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["bloqueos"] = bloqueosList
-        jugadorPorDefecto["clasificacion"] = clasf.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["clasificacion"] = clasf.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["contrasena"] = password
         jugadorPorDefecto["correo"] = email
         jugadorPorDefecto["estado"] = true
         jugadorPorDefecto["fecha_nacimiento"] = fechaNac
-        jugadorPorDefecto["nombre"] = nombre.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["nombre"] = nombre.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["posiciones"] = posicionesList
-        jugadorPorDefecto["rol"] = rol.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["rol"] = rol.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["telefono"] = telefono
-
+        jugadorPorDefecto["UID"] = uid
         FirebaseUtils().createDocument("jugadores", jugadorPorDefecto)
     }
 

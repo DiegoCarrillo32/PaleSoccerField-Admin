@@ -1,12 +1,11 @@
 package com.kosti.palesoccerfieldadmin.models
 
-import com.google.firebase.Timestamp
 import kotlin.properties.Delegates
 
 
 /*
 *   Datos de un usuario
-
+    - uid   -> UID
     - apodo -> Nickname
     - bloqueos -> bannedList
     - clasificacion -> Clasification
@@ -20,7 +19,7 @@ import kotlin.properties.Delegates
     - telefono -> Phone
     *
 * */
-public class JugadoresDataModel() {
+class JugadoresDataModel() {
 
     lateinit var Nickname: String
     lateinit var BannedList: MutableList<String>
@@ -34,59 +33,65 @@ public class JugadoresDataModel() {
     lateinit var Role: String
     lateinit var Phone: String
     lateinit var Id: String
+    lateinit var Uid: String
 
-    constructor(nick: String,
-                bannedList: MutableList<String>,
-                clasf:String,
-                password: String,
-                email: String,
-                status: Boolean,
-                name: String,
-                pos: MutableList<String>,
-                role: String,
-                phone: String,
-                date: String,
-                id: String
-    ): this () {
-
-         Nickname = nick
-         BannedList = bannedList
-         Clasification = clasf
-         Password= password
-         Email = email
-         Status = status
-         Age = date
-         Name = name
-         Positions = pos
-         Role = role
-         Phone = phone
-         Id = id
+    constructor(
+        uid: String,
+        nick: String,
+        bannedList: MutableList<String>,
+        clasf: String,
+        password: String,
+        email: String,
+        status: Boolean,
+        name: String,
+        pos: MutableList<String>,
+        role: String,
+        phone: String,
+        date: String,
+        id: String
+    ) : this() {
+        Uid = uid
+        Nickname = nick
+        BannedList = bannedList
+        Clasification = clasf
+        Password = password
+        Email = email
+        Status = status
+        Age = date
+        Name = name
+        Positions = pos
+        Role = role
+        Phone = phone
+        Id = id
     }
 
-    constructor(name: String,
-                clasf:String,
-                pos: MutableList<String>,
-                nick: String,
-                phone: String,
-                date: String,
-                id: String
-                ): this () {
+    constructor(
+        name: String,
+        clasf: String,
+        pos: MutableList<String>,
+        nick: String,
+        phone: String,
+        date: String,
+        id: String
+    ) : this() {
 
-         Nickname  = nick
-         Clasification = clasf
-         Age = date
-         Name= name
-         Positions = pos
-         Phone = phone
-         Id = id
+        Nickname = nick
+        Clasification = clasf
+        Age = date
+        Name = name
+        Positions = pos
+        Phone = phone
+        Id = id
     }
-    constructor(name: String,
-                nick: String,
-                id: String
-    ): this () {
 
-         Nickname  = nick
-         Name= name
-         Id = id
+    constructor(
+        name: String,
+        nick: String,
+        id: String
+    ) : this() {
+
+        Nickname = nick
+        Name = name
+        Id = id
     }
 }
