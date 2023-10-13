@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
     - posiciones -> Positions
     - rol -> Role
     - telefono -> Phone
-    *
+    *d
 * */
 public class JugadoresDataModel() {
 
@@ -28,7 +28,7 @@ public class JugadoresDataModel() {
     lateinit var Password: String
     lateinit var Email: String
     var Status: Boolean by Delegates.notNull()
-    lateinit var Age: Timestamp
+    lateinit var Age: String
     lateinit var Name: String
     lateinit var Positions: MutableList<String>
     lateinit var Role: String
@@ -45,7 +45,7 @@ public class JugadoresDataModel() {
                 pos: MutableList<String>,
                 role: String,
                 phone: String,
-                date: Timestamp,
+                date: String,
                 id: String
     ): this () {
 
@@ -68,7 +68,7 @@ public class JugadoresDataModel() {
                 pos: MutableList<String>,
                 nick: String,
                 phone: String,
-                date: Timestamp,
+                date: String,
                 id: String
                 ): this () {
 
@@ -78,6 +78,15 @@ public class JugadoresDataModel() {
          Name= name
          Positions = pos
          Phone = phone
+         Id = id
+    }
+    constructor(name: String,
+                nick: String,
+                id: String
+    ): this () {
+
+         Nickname  = nick
+         Name= name
          Id = id
     }
 }

@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "472894101142-adr4qojv1n1cbdd5jo8bg3a05akb1n18.apps.googleusercontent.com",
+          "client_id": "472894101142-kbqb9p676s4tbpu4n3j0puldop2eblld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kosti.palesoccerfieldadmin",
+            "certificate_hash": "62f9723c650b1e120f0e681e29b748b95239365d"
+          }
+        },
+        {
+          "client_id": "472894101142-df3mcn2554orgldj25s62v2a5aurqq0h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

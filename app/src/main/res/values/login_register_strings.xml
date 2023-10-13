@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="login">Inicio de Sesion</string>
     <string name="email">Email</string>
     <string name="contrasenia">Contraseña</string>
     <string name="aceptar">Aceptar</string>
-    <string name="registro">Registrarse</string>
+    <string name="registro">Registrar Usuario</string>
     <string name="nombre">Nombre</string>
     <string name="crear_cuenta"><u>Crear cuenta</u></string>
     <string name="regresar">Regresar</string>
     <string name="ir_a_inicio"><u>Ir a inicio</u></string>
+    <string name="apodo">Apodo</string>
+    <string name="telefono">Telefono</string>
+    <string name="fecha_de_nacimiento">Fecha de nacimiento</string>
+    <string name="tipo_de_usuario">Tipo de usuario</string>
+    <string name="rol_del_usuario">Rol del usuario</string>
+    <string name="menu_principal">Menu principal</string>
+    <string name="administrador">Administrador</string>
+    <string name="jugador">Jugador</string>
+    <string name="clasificacion">Clasificacion</string>
+    <string name="bueno">Bueno</string>
+    <string name="regular">Regular</string>
+    <string name="malo">Malo</string>
+    <string name="web_client_id">514498810223-n23oav4f745q9d6r7lhvma7r0vb0mj5g.apps.googleusercontent.com</string>
 </resources>
