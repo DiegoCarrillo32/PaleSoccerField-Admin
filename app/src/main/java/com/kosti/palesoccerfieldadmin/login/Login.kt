@@ -28,6 +28,7 @@ import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.UserViewModel
+import com.kosti.palesoccerfieldadmin.utils.CryptograpyPasswordClass
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
@@ -151,6 +152,12 @@ class Login : AppCompatActivity() {
                     // No Google Accounts found. Just continue presenting the signed-out UI.
 
                 }
+
+            Toast.makeText(
+                this@Login,
+                "Boton de Google.",
+                Toast.LENGTH_SHORT,
+            ).show()
         }
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -182,6 +189,8 @@ class Login : AppCompatActivity() {
     }
 
     fun autentificacion(email:String, password:String, userViewModel: UserViewModel){
+        val cryptClass = CryptograpyPasswordClass()
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -196,7 +205,8 @@ class Login : AppCompatActivity() {
                                 for (elem in it) {
                                     // que sea usuario y que sea admin
                                     if (elem["rol"] == "Administrador") {
-                                        if (elem["contrasena"] == password) {
+                                        val passDecrypt = cryptClass.decrypt(elem["contrasena"].toString())
+                                        if (passDecrypt == password) {
                                             Toast.makeText(
                                                 this@Login,
                                                 "Authentication Successful. Usuario: ${elem["nombre"]}",
