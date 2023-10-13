@@ -13,11 +13,12 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.models.UserViewModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import java.util.Date
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import kotlin.math.log
 
 
 class EditUserData : AppCompatActivity() {
@@ -43,18 +44,41 @@ class EditUserData : AppCompatActivity() {
     private var name: String? = null
     private var nickname: String? = null
     private var phone: String? = null
+    private var fechaNacimiento: Date? = null
     private var age: String? = null
+
+
+    fun epochToDateWithFormat(epoch: Int) : Date {
+        return Date(epoch * 1000L)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user_data)
 
-        val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        //val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        userViewModel.userId.observe(this, Observer { userId ->
+        //userViewModel.userId.observe(this, Observer { userId ->
 
-            Toast.makeText(applicationContext, userId, Toast.LENGTH_SHORT).show()
-        })
+       //    Toast.makeText(applicationContext, userId, Toast.LENGTH_SHORT).show()
+       // })
+
+        currentUserId = "QNLLg9OhQ1z8uc2yELWn"
+
+        FirebaseUtils().getDocumentById("jugadores" , currentUserId) { user ->
+            user.onSuccess {
+                val userData = user.getOrThrow()
+                name = userData["nombre"].toString()
+                nickname = userData["apodo"].toString()
+                phone = userData["telefono"].toString()
+                val timestamp = userData["fecha_nacimiento"] as Int
+                fechaNacimiento = epochToDateWithFormat(timestamp)
+
+            }
+            user.onFailure {
+                Toast.makeText(applicationContext, "Error al cargar el usuario", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         //Layouts asignations
         linearLayoutPositions = findViewById(R.id.layoutPositions)
@@ -71,41 +95,26 @@ class EditUserData : AppCompatActivity() {
         btnEditAge = findViewById(R.id.btnEditAge)
 
         //User data asignations
-        currentUserId = "vnCw2ctK4hPa06RmsSpm"
+
 
         positions = mutableListOf("Delantero", "Medio Campista")
-        age = "21"
 
         val nameTV : TextView = findViewById(R.id.nameText)
         val nicknameTV : TextView = findViewById(R.id.nicknameText)
         val phoneTV : TextView = findViewById(R.id.phoneText)
+        val ageTV : TextView = findViewById(R.id.ageText)
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
 
-        FirebaseUtils().getDocumentById("jugadores" , currentUserId) { user ->
-            user.onSuccess {
-                name = user.getOrThrow()["nombre"].toString()
-                nickname = user.getOrThrow()["apodo"].toString()
-                phone = user.getOrThrow()["telefono"].toString()
-
-                nameTV.text = name
-                nicknameTV.text = nickname
-                phoneTV.text = phone
-                Toast.makeText(applicationContext, user.getOrThrow()["positions"].toString(), Toast.LENGTH_SHORT).show()
-
-            }
-            user.onFailure {
-                Toast.makeText(applicationContext, "Error al cargar el usuario", Toast.LENGTH_SHORT).show()
-            }
-        }
-
+        nameTV.text = name
+        nicknameTV.text = nickname
+        phoneTV.text = phone
+        ageTV.text = "55"
 
 
         val spinner = findViewById<Spinner>(R.id.spinnerPositions)
 
-        val ageTV : TextView = findViewById(R.id.ageText)
 
-
-        ageTV.text = age
-
+        //ageTV.text = age
         //Events setClickOnListener
         btnEditPositions.setOnClickListener { editPositions() }
         btnEditName.setOnClickListener { editName() }
