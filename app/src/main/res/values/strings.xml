@@ -12,6 +12,9 @@
     <string name="age">
         Edad
     </string>
+    <string name="fechaNto">
+        Fecha nto
+    </string>
     <string name="classification">
         Clasificación
     </string>

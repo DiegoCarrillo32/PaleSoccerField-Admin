@@ -305,7 +305,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center|left"
-                        android:text="@string/age" />
+                        android:text="@string/fechaNto" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
