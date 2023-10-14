@@ -16,14 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import kotlin.math.log
 
 
 class EditUserData : AppCompatActivity() {
 
     private lateinit var currentUserId: String
+    private val userList = mutableListOf<HashMap<String, Any>>()
+
 
     //Layouts declarations
     private lateinit var linearLayoutPositions: LinearLayout
@@ -40,45 +40,87 @@ class EditUserData : AppCompatActivity() {
     private lateinit var btnEditAge: ImageButton
 
     //User data declarations
-    private lateinit var positions: MutableList<String>
+    private var positions: MutableList<String> = mutableListOf()
     private var name: String? = null
     private var nickname: String? = null
     private var phone: String? = null
     private var fechaNacimiento: Date? = null
+    private var fechaNacimientoV: String? = null
     private var age: String? = null
 
 
-    fun epochToDateWithFormat(epoch: Int) : Date {
-        return Date(epoch * 1000L)
+    fun epochToDateWithFormat(epoch: String) : String {
+        val epoch = epoch.toLong()
+        val date = Date(epoch * 1000L)
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
+        return formatter.format(date).toString()
+    }
+
+    fun epochToDate(epoch: String) : Date {
+        val epochInt = epoch.toLong()
+        return Date(epochInt * 1000L)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user_data)
 
-        //val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        //userViewModel.userId.observe(this, Observer { userId ->
-
-       //    Toast.makeText(applicationContext, userId, Toast.LENGTH_SHORT).show()
-       // })
+        val nameTV : TextView = findViewById(R.id.nameText)
+        val nicknameTV : TextView = findViewById(R.id.nicknameText)
+        val phoneTV : TextView = findViewById(R.id.phoneText)
+        val fechaNtoTV : TextView = findViewById(R.id.ageText)
+        val spinner = findViewById<Spinner>(R.id.spinnerPositions)
 
         currentUserId = "QNLLg9OhQ1z8uc2yELWn"
 
         FirebaseUtils().getDocumentById("jugadores" , currentUserId) { user ->
             user.onSuccess {
-                val userData = user.getOrThrow()
+                val userData: HashMap<String, Any> = user.getOrThrow()
+
                 name = userData["nombre"].toString()
                 nickname = userData["apodo"].toString()
                 phone = userData["telefono"].toString()
-                val timestamp = userData["fecha_nacimiento"] as Int
-                fechaNacimiento = epochToDateWithFormat(timestamp)
+                val timestamp: String = userData["fecha_nacimiento"].toString()
+                fechaNacimiento = epochToDate(timestamp)
+
+                fechaNacimientoV = epochToDateWithFormat(timestamp)
+                val list = userData["posiciones"] as List<String>?
+                if (list != null) {
+                    for (item in list) {
+                        positions.add(item)
+                        println(item)
+                    }
+                } else {
+                    println("El campo 'miLista' está vacío o no contiene una lista de cadenas.")
+                }
+
+                nameTV.text = name
+                nicknameTV.text = nickname
+                phoneTV.text = phone
+                fechaNtoTV.text = fechaNacimientoV
+
+
+                val adaptador = ArrayAdapter(this, android.R.layout.simple_spinner_item, positions)
+
+                // Establece el diseño que se usará cuando se despliegue la lista de opciones
+                adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                // Asigna el adaptador al Spinner
+                spinner.adapter = adaptador
 
             }
             user.onFailure {
                 Toast.makeText(applicationContext, "Error al cargar el usuario", Toast.LENGTH_SHORT).show()
             }
         }
+
+        //val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        //userViewModel.userId.observe(this, Observer { userId ->
+
+       //    Toast.makeText(applicationContext, userId, Toast.LENGTH_SHORT).show()
+       // }
+
 
         //Layouts asignations
         linearLayoutPositions = findViewById(R.id.layoutPositions)
@@ -94,27 +136,6 @@ class EditUserData : AppCompatActivity() {
         btnEditPhone = findViewById(R.id.btnEditPhone)
         btnEditAge = findViewById(R.id.btnEditAge)
 
-        //User data asignations
-
-
-        positions = mutableListOf("Delantero", "Medio Campista")
-
-        val nameTV : TextView = findViewById(R.id.nameText)
-        val nicknameTV : TextView = findViewById(R.id.nicknameText)
-        val phoneTV : TextView = findViewById(R.id.phoneText)
-        val ageTV : TextView = findViewById(R.id.ageText)
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
-
-        nameTV.text = name
-        nicknameTV.text = nickname
-        phoneTV.text = phone
-        ageTV.text = "55"
-
-
-        val spinner = findViewById<Spinner>(R.id.spinnerPositions)
-
-
-        //ageTV.text = age
         //Events setClickOnListener
         btnEditPositions.setOnClickListener { editPositions() }
         btnEditName.setOnClickListener { editName() }
@@ -122,13 +143,7 @@ class EditUserData : AppCompatActivity() {
         btnEditPhone.setOnClickListener { editPhone() }
         btnEditAge.setOnClickListener { editAge() }
 
-        val adaptador = ArrayAdapter(this, android.R.layout.simple_spinner_item, positions)
 
-        // Establece el diseño que se usará cuando se despliegue la lista de opciones
-        adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Asigna el adaptador al Spinner
-        spinner.adapter = adaptador
 
         // Opcional: Agrega un oyente de selección para manejar las selecciones del usuario
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -143,11 +158,6 @@ class EditUserData : AppCompatActivity() {
             }
         }
     }
-
-
-
-
-
 
     fun activityEditField(type: String, data: String){
         val intent = Intent(this, EditField::class.java)
