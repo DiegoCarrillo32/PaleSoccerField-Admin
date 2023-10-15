@@ -235,7 +235,7 @@ class EditUserData : AppCompatActivity() {
         intent.putExtra("data", data)
 
         // Iniciar la nueva actividad
-        startActivity(intent)
+        startActivityForResult(intent, REQUEST_CODE_EDIT_FIELD)
     }
 
     fun activityEditPositions(type: String){
