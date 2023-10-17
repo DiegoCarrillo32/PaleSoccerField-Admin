@@ -34,6 +34,7 @@ public class JugadoresDataModel() {
     lateinit var Role: String
     lateinit var Phone: String
     lateinit var Id: String
+    lateinit var UID : String
 
     constructor(nick: String,
                 bannedList: MutableList<String>,
@@ -88,5 +89,17 @@ public class JugadoresDataModel() {
          Nickname  = nick
          Name= name
          Id = id
+    }
+    constructor(id: String,
+                uid: String,
+                email: String,
+                pass: String
+    ): this () {
+
+        Id  = id
+        UID = uid
+        Email = email
+        Password = pass
+
     }
 }

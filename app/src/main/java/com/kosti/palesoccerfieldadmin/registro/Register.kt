@@ -256,6 +256,7 @@ class Register : AppCompatActivity() {
         jugadorPorDefecto["posiciones"] = posicionesList
         jugadorPorDefecto["rol"] = rol.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["telefono"] = telefono
+        jugadorPorDefecto["UID"] = Firebase.auth.currentUser?.uid.toString()
 
         FirebaseUtils().createDocument("jugadores", jugadorPorDefecto)
     }
