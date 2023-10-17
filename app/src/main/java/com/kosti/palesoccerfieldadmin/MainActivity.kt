@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.registro.Register
+import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.userListPackage.UserList
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +28,12 @@ class MainActivity : AppCompatActivity() {
         val btnNavegarAprobar = findViewById<Button>(R.id.btnAproveUsers)
         btnNavegarAprobar.setOnClickListener {
             val intent = Intent(this, AproveUsers::class.java)
+            startActivity(intent)
+        }
+
+        val btnCuenta = findViewById<Button>(R.id.btnCuenta)
+        btnCuenta.setOnClickListener {
+            val intent = Intent(this, EditUserData::class.java)
             startActivity(intent)
         }
 

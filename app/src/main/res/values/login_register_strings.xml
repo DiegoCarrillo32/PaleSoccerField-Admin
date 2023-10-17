@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="login">Inicio de Sesion</string>
     <string name="email">Email</string>
     <string name="contrasenia">Contraseña</string>
@@ -21,4 +22,5 @@
     <string name="bueno">Bueno</string>
     <string name="regular">Regular</string>
     <string name="malo">Malo</string>
+    <string name="web_client_id">514498810223-n23oav4f745q9d6r7lhvma7r0vb0mj5g.apps.googleusercontent.com</string>
 </resources>
