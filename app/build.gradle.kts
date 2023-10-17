@@ -53,6 +53,8 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.android.gms:play-services-auth:20.4.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata:2.3.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
