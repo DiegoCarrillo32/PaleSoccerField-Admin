@@ -115,10 +115,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val transformedAge = age?.let { FirebaseUtils().transformEpochToAge(it) }
         ageTV.text = transformedAge.toString()
         plyrNTV.text = name
-        Toast.makeText(requireContext(), ratesList.indexOf(classification).toString(), Toast.LENGTH_LONG).show()
-        // set the classification to the spinner
-
-
 
         editClasiBtn.setOnClickListener {
             if (isEditingClassification) {
@@ -180,7 +176,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
     private fun spinnerClassification(view: View) {
         val elementos = ratesList
-        Toast.makeText(requireContext(), ratesList.indexOf(classification).toString(), Toast.LENGTH_LONG).show()
         val spinner: Spinner? = view.findViewById(R.id.clasificacionSpinner)
         if(spinner == null){
             Toast.makeText(requireContext(), "Spinner is null", Toast.LENGTH_LONG).show()
@@ -215,6 +210,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
             onDismissListener?.onDismissOnActivity()
             didEditClassification = false
         }
+
 
 
 

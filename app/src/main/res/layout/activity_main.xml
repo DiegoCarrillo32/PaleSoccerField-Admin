@@ -165,6 +165,7 @@
         android:background="@color/grey"
         />
     <Button
+        android:id="@+id/btnLogOut"
         android:backgroundTint="@color/white"
         android:textColor="@color/black"
         android:textSize="20sp"

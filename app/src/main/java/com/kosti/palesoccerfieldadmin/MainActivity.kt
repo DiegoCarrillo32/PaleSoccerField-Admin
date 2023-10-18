@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
+import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.userListPackage.UserList
@@ -13,6 +14,7 @@ import com.kosti.palesoccerfieldadmin.userListPackage.UserList
 class MainActivity : AppCompatActivity() {
 
     lateinit var btnRegistrarUsuario: Button
+    lateinit var btnLogOut: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,10 +43,22 @@ class MainActivity : AppCompatActivity() {
             toRegister()
         }
 
+        btnLogOut = findViewById(R.id.btnLogOut)
+        btnLogOut.setOnClickListener {
+            // TODO: Hacer el logout en firebase o lo que sea
+            toLogin()
+        }
+
     }
 
     fun toRegister() {
         val intent = Intent(this, Register::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    fun toLogin() {
+        val intent = Intent(this, Login::class.java)
         startActivity(intent)
         finish()
     }
