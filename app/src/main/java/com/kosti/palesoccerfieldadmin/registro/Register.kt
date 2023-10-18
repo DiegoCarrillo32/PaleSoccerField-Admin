@@ -23,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.login.Login
+import com.kosti.palesoccerfieldadmin.utils.CryptograpyPasswordClass
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
 import java.time.LocalDate
@@ -123,7 +124,7 @@ class Register : AppCompatActivity() {
                 },
                 year, month, day
             )
-
+            datePickerDialog.datePicker.maxDate = calendar.timeInMillis
             datePickerDialog.show()
         }
 
@@ -238,6 +239,8 @@ class Register : AppCompatActivity() {
                            clasf: String,
                            rol: String
     ) {
+        val cryptClass = CryptograpyPasswordClass()
+        val passEncrypt = cryptClass.encrypt(password)
         val jugadorPorDefecto: HashMap<String, Any> = HashMap<String, Any>()
         val bloqueosList = mutableListOf<String>()
         val posicionesList = mutableListOf<String>()
@@ -245,7 +248,7 @@ class Register : AppCompatActivity() {
         jugadorPorDefecto["apodo"] = apodo.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["bloqueos"] = bloqueosList
         jugadorPorDefecto["clasificacion"] = clasf.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-        jugadorPorDefecto["contrasena"] = password
+        jugadorPorDefecto["contrasena"] = passEncrypt
         jugadorPorDefecto["correo"] = email
         jugadorPorDefecto["estado"] = true
         jugadorPorDefecto["fecha_nacimiento"] = fechaNac
@@ -253,6 +256,7 @@ class Register : AppCompatActivity() {
         jugadorPorDefecto["posiciones"] = posicionesList
         jugadorPorDefecto["rol"] = rol.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["telefono"] = telefono
+        jugadorPorDefecto["UID"] = Firebase.auth.currentUser?.uid.toString()
 
         FirebaseUtils().createDocument("jugadores", jugadorPorDefecto)
     }

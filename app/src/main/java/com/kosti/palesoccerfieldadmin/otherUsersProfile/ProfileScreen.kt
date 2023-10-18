@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
@@ -41,14 +42,14 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
     // TODO: Rename and change types of parameters
     private var name: String? = null
-    private var age: Int? = null
+    private var age: Long? = null
     private var phone: String? = null
     private var classification: String? = null
     private var isEditingClassification: Boolean = false
     private var nickname: String? = null
     private var id: String? = null
     private lateinit var positions: MutableList<String>
-    private var ratesList = listOf("malo", "bueno", "regular")
+    private var ratesList = listOf("Malo", "Bueno", "Regular")
     private var onDismissListener: OnDismissListener? = null
     private var didEditClassification: Boolean = false
     private lateinit var  bottomSheetBehaviour: BottomSheetBehavior<View>;
@@ -59,7 +60,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             name = it.getString(ARG_PARAM1)
-            age = it.getInt(ARG_PARAM2)
+            age = it.getLong(ARG_PARAM2)
             phone = it.getString(ARG_PARAM3)
             classification = it.getString(ARG_PARAM4)
             positions = it.getStringArrayList(ARG_PARAM5)!!
@@ -67,6 +68,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
             id = it.getString(ARG_PARAM7)
 
         }
+
+
     }
 
     override fun onCreateView(
@@ -76,8 +79,11 @@ class ProfileScreen : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile_screen, container, false)
         spinnerPositions(view,)
+        spinnerClassification(view)
         return view
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -113,12 +119,17 @@ class ProfileScreen : BottomSheetDialogFragment() {
             android.R.layout.simple_spinner_dropdown_item
         )
 
-        ageTV.text = age.toString()
-        plyrNTV.text = name
+        // The age is a string in a epoch format, so we need to convert it to a date
+        // and then calculate the age
+
         phoneTV.text = phone
         nicknameTV.text = nickname
-        classTV.isEnabled = false
-        classTV.isClickable = false
+        val transformedAge = age?.let { FirebaseUtils().transformEpochToAge(it) }
+        ageTV.text = transformedAge.toString()
+        plyrNTV.text = name
+        Toast.makeText(requireContext(), ratesList.indexOf(classification).toString(), Toast.LENGTH_LONG).show()
+        // set the classification to the spinner
+
 
 
         editClasiBtn.setOnClickListener {
@@ -139,8 +150,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
             }
         }
-        classTV.adapter = rateAdapter
-        classTV.setSelection(rateAdapter.getPosition(classification))
+
+
 
 
     }
@@ -179,6 +190,33 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
     }
 
+    private fun spinnerClassification(view: View) {
+        val elementos = ratesList
+        Toast.makeText(requireContext(), ratesList.indexOf(classification).toString(), Toast.LENGTH_LONG).show()
+        val spinner: Spinner? = view.findViewById(R.id.clasificacionSpinner)
+        if(spinner == null){
+            Toast.makeText(requireContext(), "Spinner is null", Toast.LENGTH_LONG).show()
+            return
+        }
+        val adapter =
+            this.context?.let {
+                ArrayAdapter(
+                    it,
+                    android.R.layout.simple_spinner_item,
+                    elementos
+                )
+            }
+
+        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        spinner.setSelection(ratesList.indexOf(classification), false)
+        adapter?.notifyDataSetChanged()
+        spinner.isEnabled = false
+        spinner.isClickable = false
+
+    }
+
     fun setOnDismissListener(listener: OnDismissListener) {
         onDismissListener = listener
     }
@@ -189,6 +227,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
             onDismissListener?.onDismissOnActivity()
             didEditClassification = false
         }
+
+
 
     }
 

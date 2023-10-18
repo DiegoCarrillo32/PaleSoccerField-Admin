@@ -3,6 +3,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.Date
 
 class FirebaseUtils {
     private val db = Firebase.firestore
@@ -113,6 +114,13 @@ class FirebaseUtils {
             .addOnFailureListener { exception ->
                 callback(Result.failure(exception))
             }
+    }
+
+    fun transformEpochToAge(it: Long): Int {
+        val date = Date(it)
+        val currentDate = Date()
+        return currentDate.year - date.year
+
     }
 
 }
