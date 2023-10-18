@@ -11,6 +11,8 @@
     tools:context=".login.Login">
 
     <ImageView
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
         android:id="@+id/backgroundImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <TextView
@@ -90,14 +92,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:gravity="end"
+        >
         <Button
+            android:layout_marginTop="400dp"
+            android:layout_marginEnd="20dp"
             android:id="@+id/btn_login"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="570dp"
-            android:layout_marginTop="100dp"
             android:background="@drawable/button_selector"
             android:text="@string/aceptar"
             android:textColor="@color/principal"
