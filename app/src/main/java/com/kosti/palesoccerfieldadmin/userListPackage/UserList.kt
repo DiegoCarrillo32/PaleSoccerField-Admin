@@ -47,9 +47,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayoutUserList)
         filteredList = mutableListOf()
         userList = mutableListOf()
-        val fragmentProfileScreen = ProfileScreen()
 
-        fragmentProfileScreen.setOnDismissListener(this)
 
         fetchDataFromFirebase()
         initSearchWidget()
@@ -64,19 +62,24 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
 
         userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val fragmentProfileScreen = ProfileScreen()
 
+                fragmentProfileScreen.setOnDismissListener(this@UserList)
                 var data = Bundle()
                 data.putString("name", userList[p2].Name)
                 data.putString("classification", userList[p2].Clasification)
                 data.putString("nickname", userList[p2].Nickname)
                 // Calculate age from Timestamp
-                data.putString("age", ((Date().time - userList[p2].Age.toLong()).toString()))
+
+                data.putLong("age", (userList[p2].Age.toLong()))
+
                 data.putString("phone", userList[p2].Phone)
                 data.putStringArrayList("positions", userList[p2].Positions as ArrayList<String>)
                 data.putString("id", userList[p2].Id)
                 fragmentProfileScreen.arguments = data
+
                 fragmentProfileScreen.show(supportFragmentManager, "ProfileScreen")
-                // implement on dismiss listener
+
 
             }
         }
@@ -100,6 +103,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                         Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
                         continue
                     }
+
                     userList.add(
                         JugadoresDataModel(
                             user["nombre"].toString(),
@@ -224,5 +228,6 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
     override fun onDismissOnActivity() {
         Toast.makeText(this, "Se actualizo la informacion", Toast.LENGTH_LONG).show()
         fetchDataFromFirebase()
+
     }
 }
