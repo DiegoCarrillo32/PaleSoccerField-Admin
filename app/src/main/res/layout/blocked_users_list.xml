@@ -6,7 +6,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".blockedUserList.BlockedUsersList">
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarBlockedUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:navigationIcon="@drawable/arrow_back_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Usuarios bloqueados"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="112dp"
+            tools:layout_editor_absoluteY="18dp" />
+    </androidx.appcompat.widget.Toolbar>
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewBUL"
         android:layout_width="match_parent"

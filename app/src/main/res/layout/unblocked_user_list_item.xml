@@ -41,6 +41,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/baseline_check_circle_outline_24"
+        android:backgroundTint="#fffbfe"
         android:text="@string/desbloquear" />
 
     <!-- Botón para bloquear usuario -->

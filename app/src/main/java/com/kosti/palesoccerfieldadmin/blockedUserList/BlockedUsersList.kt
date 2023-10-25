@@ -15,6 +15,7 @@ import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import com.google.firebase.firestore.ktx.firestore
@@ -35,6 +36,7 @@ class BlockedUsersList : AppCompatActivity() {
     private lateinit var radioProgressBar: ProgressBar
     private lateinit var searchView: androidx.appcompat.widget.SearchView
     private var selected by Delegates.notNull<Boolean>()
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.blocked_users_list)
@@ -47,6 +49,7 @@ class BlockedUsersList : AppCompatActivity() {
         progressBarLoading = findViewById(R.id.progressBarLoading)
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewBlockedUsers)
         searchView = findViewById<androidx.appcompat.widget.SearchView>(R.id.searchViewBUL)
+        toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarBlockedUsers)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapterBlocked = BlockedUsersListAdapter(ArrayList(), this::blockUsers)
@@ -88,7 +91,7 @@ class BlockedUsersList : AppCompatActivity() {
                 }
             }
         }
-
+        toolbar.setNavigationOnClickListener { onBackPressed() }
         // Llamar a getListBlockedUsers(idUser) después de inicializar el adaptador
         getListBlockedUsers(idUser)
     }
