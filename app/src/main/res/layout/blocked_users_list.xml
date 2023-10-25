@@ -7,16 +7,71 @@
     android:orientation="vertical"
     tools:context=".blockedUserList.BlockedUsersList">
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewBUL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:iconifiedByDefault="false" />
 
-    </SearchView>
+    <RadioGroup
+        android:id="@+id/radioGroupFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioBlocked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/personas_bloqueadas"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/radioAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todas_las_personas" />
+    </RadioGroup>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBlockedUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/textViewNoBlockedUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_hay_personas_bloqueadas"
+        android:visibility="gone"
+    />
+    <ProgressBar
+        android:id="@+id/progressBarLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+    />
+
+    <ProgressBar
+        android:id="@+id/radioProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/loadingMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioProgressBar"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:text="@string/cargando" />
+
 
 </LinearLayout>

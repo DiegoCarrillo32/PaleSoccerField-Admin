@@ -98,16 +98,16 @@ public class JugadoresDataModel() {
     }
 
     constructor(
-        id: String,
+        nombre: String,
+        nickname: String,
         uid: String,
-        email: String,
-        pass: String
+        id: String
     ) : this() {
-
-        Id = id
+        Name = nombre
+        Nickname = nickname
         UID = uid
-        Email = email
-        Password = pass
-
+        Id = id
     }
+
+
 }

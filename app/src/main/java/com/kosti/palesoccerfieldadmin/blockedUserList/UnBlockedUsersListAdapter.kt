@@ -10,19 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 
-class BlockedUsersListAdapter(
+class UnBlockedUsersListAdapter(
     private var data: MutableList<JugadoresDataModel>,
-    private var blockClickListener: (JugadoresDataModel) -> Unit
-) : RecyclerView.Adapter<BlockedUsersListAdapter.ViewHolder>() {
+    private var unblockClickListener: (JugadoresDataModel) -> Unit
+) : RecyclerView.Adapter<UnBlockedUsersListAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgProfile: ImageView = itemView.findViewById(R.id.user_img_Blocked_Users_list)
-        val nameProfile: TextView = itemView.findViewById(R.id.user_name_Blocked_Users_list)
-        val nickNameProfile: TextView = itemView.findViewById(R.id.user_nickname_Blocked_Users_list)
-        val blockButton: ImageButton = itemView.findViewById(R.id.blockButton)
+        val imgProfile: ImageView = itemView.findViewById(R.id.user_img_un_Blocked_Users_list)
+        val nameProfile: TextView = itemView.findViewById(R.id.user_name_un_Blocked_Users_list)
+        val nickNameProfile: TextView = itemView.findViewById(R.id.user_nickname_un_Blocked_Users_list)
+        val unblockButton: ImageButton = itemView.findViewById(R.id.unblockButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.blocked_user_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.unblocked_user_list_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -33,8 +33,10 @@ class BlockedUsersListAdapter(
         holder.nameProfile.text = userData.Name
         holder.nickNameProfile.text = userData.Nickname
 
-        holder.blockButton.setOnClickListener {
-            blockClickListener(userData)
+        holder.unblockButton.setOnClickListener {
+            val usercillo = userData.Id
+            Log.d("Usercito","Este es el unblock,$usercillo")
+            unblockClickListener(userData)
         }
     }
 

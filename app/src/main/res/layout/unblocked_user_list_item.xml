@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/user_img_Blocked_Users_list"
+        android:id="@+id/user_img_un_Blocked_Users_list"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerCrop" />
@@ -20,27 +20,29 @@
         android:layout_marginStart="16dp">
 
         <TextView
-            android:id="@+id/user_name_Blocked_Users_list"
+            android:id="@+id/user_name_un_Blocked_Users_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/user_nickname_Blocked_Users_list"
+            android:id="@+id/user_nickname_un_Blocked_Users_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp" />
     </LinearLayout>
 
     <!-- Botón para desbloquear usuario -->
-
     <ImageButton
-        android:id="@+id/blockButton"
+        android:id="@+id/unblockButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/baseline_block_24"
-        android:text="@string/bloquear" />
+        android:src="@drawable/baseline_check_circle_outline_24"
+        android:text="@string/desbloquear" />
+
+    <!-- Botón para bloquear usuario -->
+
 </LinearLayout>
