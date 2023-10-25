@@ -42,12 +42,15 @@ class Login : AppCompatActivity() {
 
     /* ----------sign in with google ---------- start */
 
+    /*
     private lateinit var oneTapClient: SignInClient
     private lateinit var signUpRequest: BeginSignInRequest
     private val REQ_ONE_TAP = 2
     private var showOneTapUI = true
     private lateinit var emailFromGoogle: String
     private lateinit var passwordFromGoogle: String
+    */
+
     /* ----------sign in with google ---------- end */
     /*
     public override fun onStart() {
@@ -64,7 +67,7 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         /* ----------sign in with google ---------- start */
-
+/*
         oneTapClient = Identity.getSignInClient(this)
         signUpRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
@@ -114,6 +117,9 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
+
+            */
+
         /* ---------- sign in with google ---------- end */
 
         editTextEmail = findViewById(R.id.email)
@@ -124,6 +130,7 @@ class Login : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        /*
         btnGoogle.setOnClickListener {
             oneTapClient.beginSignIn(signUpRequest)
                 .addOnSuccessListener(this) { result ->
@@ -153,7 +160,8 @@ class Login : AppCompatActivity() {
                 "Boton de Google.",
                 Toast.LENGTH_SHORT,
             ).show()
-        }
+        }*/
+
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             val email: String = editTextEmail.text.toString()

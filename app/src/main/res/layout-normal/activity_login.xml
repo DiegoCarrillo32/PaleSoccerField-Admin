@@ -11,7 +11,7 @@
     tools:context=".login.Login">
 
     <ImageView
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="85dp"
         android:id="@+id/backgroundImageView"
         android:layout_width="201dp"
         android:layout_height="191dp"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:orientation="vertical">
 
         <TextView
@@ -65,7 +65,7 @@
                 android:hint="@string/contrasenia"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
+<!--
         <ImageButton
             android:id="@+id/btn_google"
             android:layout_width="50dp"
@@ -74,7 +74,7 @@
             android:src="@drawable/googleg_standard_color_18">
 
         </ImageButton>
-
+-->
         <ProgressBar
             android:id="@+id/progress_bar_login"
             android:layout_width="wrap_content"
@@ -86,8 +86,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:gravity="end"
+        android:layout_weight="1"
+        android:gravity="end|bottom"
         android:orientation="vertical">
 
         <Button
@@ -95,6 +95,7 @@
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="125dp"
             android:layout_height="50dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_selector"
             android:text="@string/aceptar"
