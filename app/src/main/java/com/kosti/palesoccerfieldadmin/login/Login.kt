@@ -125,7 +125,7 @@ class Login : AppCompatActivity() {
         editTextEmail = findViewById(R.id.email)
         editTextPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.btn_login)
-        btnGoogle = findViewById(R.id.btn_google)
+        //btnGoogle = findViewById(R.id.btn_google)
         progressBar = findViewById(R.id.progress_bar_login)
 
         auth = Firebase.auth
