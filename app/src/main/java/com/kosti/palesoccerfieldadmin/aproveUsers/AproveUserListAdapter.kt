@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 class AproveUserListAdapter (private val context: Context, private val data: MutableList<JugadoresDataModel>):
     RecyclerView.Adapter<AproveUserListAdapter.ViewHolder>() {
@@ -48,7 +49,7 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
             builder.setTitle("Aprobar usuario")
             builder.setMessage("¿Estás seguro de que quieres aprobar este usuario?")
             builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
-                val userApproved = db.collection("jugadores").document(item.Id)
+                val userApproved = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
                 val currentPosition = holder.adapterPosition // Guarda la posición actual
                 db.runBatch() { batch ->
                     batch.update(userApproved, "estado", true)
@@ -77,7 +78,7 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
             builder.setTitle("Denegar usuario")
             builder.setMessage("¿Estás seguro de que quieres denegar este usuario?")
             builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
-                val userEliminated = db.collection("jugadores").document(item.Id)
+                val userEliminated = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
                 val currentPosition = holder.adapterPosition // Guarda la posición actual
                 db.runBatch() { batch ->
                     batch.delete(userEliminated)
@@ -98,64 +99,6 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
             builder.show()
         }
     }
-
-
-//    override fun onBindViewHolder(holder: AproveUserListAdapter.ViewHolder, position: Int) {
-//        val item = data[position]
-//        holder.userName.text = item.Name
-//        holder.userNickname.text = buildString {
-//        append("( ")
-//        append(item.Nickname)
-//        append(" )")
-//    }
-//        //TODO: to add the photo we use Glide.with()
-//        holder.btnAprove.setOnClickListener {
-//            db = FirebaseFirestore.getInstance()
-//            val activity = it.context as AppCompatActivity
-//            val builder = AlertDialog.Builder(activity)
-//            builder.setTitle("Aprobar usuario")
-//            builder.setMessage("¿Estas seguro de que quieres aprobar este usuario?")
-//            builder.setPositiveButton("Si")
-//            { dialogInterface : DialogInterface, i:Int ->
-//                val userApproved = db.collection("jugadores").document(item.Id)
-//                db.runBatch() { batch ->
-//                    batch.update(userApproved, "estado", true)
-//                }.addOnCompleteListener() {
-//                    Toast.makeText(context, "Usuario aprobado", Toast.LENGTH_SHORT).show()
-//                    data.toMutableList().removeAt(position)
-//                    notifyItemRemoved(position)
-//                }.addOnFailureListener() {
-//                    Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//        }
-//        holder.btnDeny.setOnClickListener {
-//            db = FirebaseFirestore.getInstance()
-//            val activity = it.context as AppCompatActivity
-//            val builder = AlertDialog.Builder(activity)
-//            builder.setTitle("Denegar usuario")
-//            builder.setMessage("¿Estas seguro de que quieres denegar este usuario?")
-//            builder.setPositiveButton("Si")
-//            { dialogInterface : DialogInterface, i:Int ->
-//                val userEliminated = db.collection("jugadores").document(item.Id)
-//                db.runBatch() { batch ->
-//                    batch.delete(userEliminated)
-//                }.addOnCompleteListener() {
-//                    Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show()
-//                    data.toMutableList().removeAt(position)
-//                    notifyItemRemoved(position)
-//                }.addOnFailureListener() {
-//                    Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//            builder.setNegativeButton("Cancelar")
-//            { dialogInterface : DialogInterface, i:Int ->
-//                //TODO: do nothing
-//            }
-//        }
-//    }
-
 
 
     override fun getItemId(position: Int): Long {

@@ -154,13 +154,35 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        if (dialog != null) {
-            var bottomSheet: View =
-                dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        val dialog = dialog
+        dialog?.let {
+            val bottomSheet = it.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { sheet ->
+                val layoutParams = sheet.layoutParams
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                sheet.layoutParams = layoutParams
 
+                val behavior = BottomSheetBehavior.from(sheet)
+                behavior.isHideable = false
+                behavior.skipCollapsed = true
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+                    }
 
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                        // No action needed
+                    }
+                })
+            }
         }
+    }
+
+    override fun getTheme(): Int {
+        return R.style.AppBottomSheetDialogTheme
     }
 
     private fun closeBottomSheet() {
