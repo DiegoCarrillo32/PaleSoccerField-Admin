@@ -198,12 +198,12 @@ class ProfileScreen : BottomSheetDialogFragment() {
             this.context?.let {
                 ArrayAdapter(
                     it,
-                    android.R.layout.simple_spinner_item,
+                    R.layout.spinner_item_profile,
                     elementos
                 )
             }
 
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter?.setDropDownViewResource(R.layout.spinner_item_profile)
         spinner.adapter = adapter
 
     }
@@ -219,12 +219,12 @@ class ProfileScreen : BottomSheetDialogFragment() {
             this.context?.let {
                 ArrayAdapter(
                     it,
-                    android.R.layout.simple_spinner_item,
+                    R.layout.spinner_item_clasification,
                     elementos
                 )
             }
 
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter?.setDropDownViewResource(R.layout.spinner_item_clasification)
         spinner.adapter = adapter
 
         spinner.setSelection(ratesList.indexOf(classification), false)

@@ -245,6 +245,11 @@
                             android:layout_weight="1"
                             android:text="@string/classification" />
 
+                        <Space
+                            android:layout_width="10dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1" />
+
                         <Spinner
                             android:id="@+id/clasificacionSpinner"
                             android:layout_width="wrap_content"
