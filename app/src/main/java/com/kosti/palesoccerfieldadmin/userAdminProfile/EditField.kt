@@ -42,32 +42,32 @@ class EditField : AppCompatActivity() {
             tvTittle.setText(type)
             editTextData.requestFocus()
 
-
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(editTextData, InputMethodManager.SHOW_IMPLICIT)
 
             val btnEditData = findViewById<Button>(R.id.btnEditData)
-            btnEditData.setOnClickListener{
+            btnEditData.setOnClickListener {
                 println(data)
                 println(editTextData.text.toString())
-                if (editTextData.text.toString() == data){
+                if (editTextData.text.toString() == data) {
                     println("gg")
-                    Toast.makeText(applicationContext, "El ${type} debe ser diferente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "El ${type} debe ser diferente",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    if (type == "Nombre"){
+                    if (type == "Nombre") {
                         updateData("nombre")
-                    } else if (type == "Apodo"){
+                    } else if (type == "Apodo") {
                         updateData("apodo")
-                    } else if (type == "Teléfono"){
+                    } else if (type == "Teléfono") {
                         updateData("telefono")
                     }
                 }
             }
-
         }
-
         backButton.setOnClickListener { finish() }
-
     }
 
     fun updateData(field: String){

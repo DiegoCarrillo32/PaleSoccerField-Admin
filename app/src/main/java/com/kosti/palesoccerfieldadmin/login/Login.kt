@@ -67,7 +67,11 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         /* ----------sign in with google ---------- start */
-/*
+        val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        userViewModel.userId = "89289992992"
+        val userId = userViewModel.userId
+        println("El id es: $userId")
+
         oneTapClient = Identity.getSignInClient(this)
         signUpRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
@@ -215,6 +219,9 @@ class Login : AppCompatActivity() {
                                                 "Authentication Successful. Usuario: ${elem["nombre"]}",
                                                 Toast.LENGTH_SHORT,
                                             ).show()
+                                            currentUserID = elem["id"].toString()
+                                            userViewModel.userId = currentUserID
+
                                             toMain()
                                         } else {
                                             progressBar.visibility = View.GONE

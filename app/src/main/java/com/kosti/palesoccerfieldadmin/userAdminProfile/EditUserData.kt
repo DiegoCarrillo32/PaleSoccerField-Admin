@@ -13,7 +13,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.models.UserViewModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -71,6 +74,21 @@ class EditUserData : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user_data)
 
+        val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        // Acceder al ID del usuario desde el ViewModel
+        val userId = userViewModel.userId
+
+
+
+        // Haz lo que necesites con el ID del usuario (por ejemplo, mostrarlo en la vista)
+        if (userId != null) {
+            // Hacer algo con el ID del usuario, como mostrarlo en un TextView
+           println("Usuario ID: $userId")
+        }else {
+            println("El user id esta vacio")
+        }
+
         currentUserId = "QNLLg9OhQ1z8uc2yELWn"
 
         loadData()
@@ -118,12 +136,7 @@ class EditUserData : AppCompatActivity() {
 //            }
 //        }
 
-        //val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        //userViewModel.userId.observe(this, Observer { userId ->
-
-       //    Toast.makeText(applicationContext, userId, Toast.LENGTH_SHORT).show()
-       // }
 
 
         //Layouts asignations
