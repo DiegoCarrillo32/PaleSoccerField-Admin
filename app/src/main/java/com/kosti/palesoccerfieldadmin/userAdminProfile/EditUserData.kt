@@ -13,10 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.models.UserViewModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -56,8 +53,6 @@ class EditUserData : AppCompatActivity() {
     private var age: String? = null
 
 
-
-
     fun epochToDateWithFormat(epoch: String) : String {
         val epoch = epoch.toLong()
         val date = Date(epoch * 1000L)
@@ -73,21 +68,6 @@ class EditUserData : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user_data)
-
-        val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        // Acceder al ID del usuario desde el ViewModel
-        val userId = userViewModel.userId
-
-
-
-        // Haz lo que necesites con el ID del usuario (por ejemplo, mostrarlo en la vista)
-        if (userId != null) {
-            // Hacer algo con el ID del usuario, como mostrarlo en un TextView
-           println("Usuario ID: $userId")
-        }else {
-            println("El user id esta vacio")
-        }
 
         currentUserId = "QNLLg9OhQ1z8uc2yELWn"
 
@@ -137,8 +117,6 @@ class EditUserData : AppCompatActivity() {
 //        }
 
 
-
-
         //Layouts asignations
         linearLayoutPositions = findViewById(R.id.layoutPositions)
         linearLayoutName = findViewById(R.id.layoutName)
@@ -161,8 +139,6 @@ class EditUserData : AppCompatActivity() {
         btnEditAge.setOnClickListener { editAge() }
 
 
-
-        // Opcional: Agrega un oyente de selección para manejar las selecciones del usuario
 
     }
 
