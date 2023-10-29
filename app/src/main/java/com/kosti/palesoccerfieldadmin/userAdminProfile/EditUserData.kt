@@ -53,8 +53,6 @@ class EditUserData : AppCompatActivity() {
     private var age: String? = null
 
 
-
-
     fun epochToDateWithFormat(epoch: String) : String {
         val epoch = epoch.toLong()
         val date = Date(epoch * 1000L)
@@ -118,13 +116,6 @@ class EditUserData : AppCompatActivity() {
 //            }
 //        }
 
-        //val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        //userViewModel.userId.observe(this, Observer { userId ->
-
-       //    Toast.makeText(applicationContext, userId, Toast.LENGTH_SHORT).show()
-       // }
-
 
         //Layouts asignations
         linearLayoutPositions = findViewById(R.id.layoutPositions)
@@ -148,8 +139,6 @@ class EditUserData : AppCompatActivity() {
         btnEditAge.setOnClickListener { editAge() }
 
 
-
-        // Opcional: Agrega un oyente de selección para manejar las selecciones del usuario
 
     }
 
