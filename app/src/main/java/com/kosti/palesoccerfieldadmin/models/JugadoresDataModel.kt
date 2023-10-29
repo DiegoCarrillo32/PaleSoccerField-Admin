@@ -34,59 +34,80 @@ public class JugadoresDataModel() {
     lateinit var Role: String
     lateinit var Phone: String
     lateinit var Id: String
+    lateinit var UID: String
 
-    constructor(nick: String,
-                bannedList: MutableList<String>,
-                clasf:String,
-                password: String,
-                email: String,
-                status: Boolean,
-                name: String,
-                pos: MutableList<String>,
-                role: String,
-                phone: String,
-                date: String,
-                id: String
-    ): this () {
+    constructor(
+        nick: String,
+        bannedList: MutableList<String>,
+        clasf: String,
+        password: String,
+        email: String,
+        status: Boolean,
+        name: String,
+        pos: MutableList<String>,
+        role: String,
+        phone: String,
+        date: String,
+        id: String,
+        uid: String
+    ) : this() {
 
-         Nickname = nick
-         BannedList = bannedList
-         Clasification = clasf
-         Password= password
-         Email = email
-         Status = status
-         Age = date
-         Name = name
-         Positions = pos
-         Role = role
-         Phone = phone
-         Id = id
+        Nickname = nick
+        BannedList = bannedList
+        Clasification = clasf
+        Password = password
+        Email = email
+        Status = status
+        Age = date
+        Name = name
+        Positions = pos
+        Role = role
+        Phone = phone
+        Id = id
+        UID = uid
     }
 
-    constructor(name: String,
-                clasf:String,
-                pos: MutableList<String>,
-                nick: String,
-                phone: String,
-                date: String,
-                id: String
-                ): this () {
+    constructor(
+        name: String,
+        clasf: String,
+        pos: MutableList<String>,
+        nick: String,
+        phone: String,
+        date: String,
+        id: String
+    ) : this() {
 
-         Nickname  = nick
-         Clasification = clasf
-         Age = date
-         Name= name
-         Positions = pos
-         Phone = phone
-         Id = id
+        Nickname = nick
+        Clasification = clasf
+        Age = date
+        Name = name
+        Positions = pos
+        Phone = phone
+        Id = id
     }
-    constructor(name: String,
-                nick: String,
-                id: String
-    ): this () {
 
-         Nickname  = nick
-         Name= name
-         Id = id
+    constructor(
+        name: String,
+        nick: String,
+        id: String
+    ) : this() {
+
+        Nickname = nick
+        Name = name
+        Id = id
     }
+
+    constructor(
+        nombre: String,
+        nickname: String,
+        uid: String,
+        id: String
+    ) : this() {
+        Name = nombre
+        Nickname = nickname
+        UID = uid
+        Id = id
+    }
+
+
 }

@@ -1,7 +1,9 @@
 package com.kosti.palesoccerfieldadmin.otherUsersProfile
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +12,11 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
@@ -45,7 +49,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var nickname: String? = null
     private var id: String? = null
     private lateinit var positions: MutableList<String>
-    private var ratesList = listOf("malo", "bueno", "regular")
+    private var ratesList = listOf("Malo", "Bueno", "Regular")
     private var onDismissListener: OnDismissListener? = null
     private var didEditClassification: Boolean = false
     private lateinit var  bottomSheetBehaviour: BottomSheetBehavior<View>;
@@ -64,6 +68,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
             id = it.getString(ARG_PARAM7)
 
         }
+
+
     }
 
     override fun onCreateView(
@@ -73,8 +79,11 @@ class ProfileScreen : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile_screen, container, false)
         spinnerPositions(view,)
+        spinnerClassification(view)
         return view
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,6 +96,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val editClasiBtn: ImageButton = view.findViewById(R.id.editClassBtn)
         val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
         val closeButton: ImageButton = view.findViewById(R.id.backButton)
+        val bloquedPeopleButton: ImageButton = view.findViewById(R.id.bloquedPeopleButton)
+
 
         //Sheet behaviour
         bottomSheetBehaviour = BottomSheetBehavior.from( view.parent as View);
@@ -97,17 +108,25 @@ class ProfileScreen : BottomSheetDialogFragment() {
             closeBottomSheet()
         }
 
+        bloquedPeopleButton.setOnClickListener {
+            val intent = Intent(context, BlockedUsersList::class.java)
+            Log.d("Usercito", "$id")
+            intent.putExtra("textParameter", id.toString())
+            context?.startActivity(intent)
+        }
+
         rateAdapter.setDropDownViewResource(
             android.R.layout.simple_spinner_dropdown_item
         )
 
-        ageTV.text = age.toString()
-        plyrNTV.text = name
+        // The age is a string in a epoch format, so we need to convert it to a date
+        // and then calculate the age
+
         phoneTV.text = phone
         nicknameTV.text = nickname
-        classTV.isEnabled = false
-        classTV.isClickable = false
-
+        val transformedAge = age?.let { FirebaseUtils().transformEpochToAge(it) }
+        ageTV.text = transformedAge.toString()
+        plyrNTV.text = name
 
         editClasiBtn.setOnClickListener {
             if (isEditingClassification) {
@@ -127,21 +146,43 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
             }
         }
-        classTV.adapter = rateAdapter
-        classTV.setSelection(rateAdapter.getPosition(classification))
+
+
 
 
     }
 
     override fun onStart() {
         super.onStart()
-        if (dialog != null) {
-            var bottomSheet: View =
-                dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        val dialog = dialog
+        dialog?.let {
+            val bottomSheet = it.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { sheet ->
+                val layoutParams = sheet.layoutParams
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                sheet.layoutParams = layoutParams
 
+                val behavior = BottomSheetBehavior.from(sheet)
+                behavior.isHideable = false
+                behavior.skipCollapsed = true
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+                    }
 
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                        // No action needed
+                    }
+                })
+            }
         }
+    }
+
+    override fun getTheme(): Int {
+        return R.style.AppBottomSheetDialogTheme
     }
 
     private fun closeBottomSheet() {
@@ -157,13 +198,39 @@ class ProfileScreen : BottomSheetDialogFragment() {
             this.context?.let {
                 ArrayAdapter(
                     it,
-                    android.R.layout.simple_spinner_item,
+                    R.layout.spinner_item_profile,
                     elementos
                 )
             }
 
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter?.setDropDownViewResource(R.layout.spinner_item_profile)
         spinner.adapter = adapter
+
+    }
+
+    private fun spinnerClassification(view: View) {
+        val elementos = ratesList
+        val spinner: Spinner? = view.findViewById(R.id.clasificacionSpinner)
+        if(spinner == null){
+            Toast.makeText(requireContext(), "Spinner is null", Toast.LENGTH_LONG).show()
+            return
+        }
+        val adapter =
+            this.context?.let {
+                ArrayAdapter(
+                    it,
+                    R.layout.spinner_item_clasification,
+                    elementos
+                )
+            }
+
+        adapter?.setDropDownViewResource(R.layout.spinner_item_clasification)
+        spinner.adapter = adapter
+
+        spinner.setSelection(ratesList.indexOf(classification), false)
+        adapter?.notifyDataSetChanged()
+        spinner.isEnabled = false
+        spinner.isClickable = false
 
     }
 
@@ -177,6 +244,9 @@ class ProfileScreen : BottomSheetDialogFragment() {
             onDismissListener?.onDismissOnActivity()
             didEditClassification = false
         }
+
+
+
 
     }
 

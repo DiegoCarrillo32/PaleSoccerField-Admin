@@ -1,8 +1,12 @@
 package com.kosti.palesoccerfieldadmin.utils
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.Date
 
 class FirebaseUtils {
     private val db = Firebase.firestore
@@ -23,6 +27,11 @@ class FirebaseUtils {
                 Log.w("Error getting documents.", exception)
                 callback(Result.failure(exception))
             }
+    }
+
+    fun getDocumentReferenceById(collectionName: String, idCollection: String): DocumentReference {
+        return db.collection(collectionName).document(idCollection)
+
     }
 
 
@@ -113,6 +122,13 @@ class FirebaseUtils {
             .addOnFailureListener { exception ->
                 callback(Result.failure(exception))
             }
+    }
+
+    fun transformEpochToAge(it: Long): Int {
+        val date = Date(it)
+        val currentDate = Date()
+        return currentDate.year - date.year
+
     }
 
 }

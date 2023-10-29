@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PaleSoccerFieldAdmin</string>
+    <string name="app_name">Pale Soccer Field - Admin</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Profile -->
@@ -64,6 +64,12 @@
     </string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="no_hay_personas_bloqueadas">No hay personas bloqueadas</string>
+    <string name="cargando">Cargando...</string>
+    <string name="personas_bloqueadas">Personas Bloqueadas</string>
+    <string name="todas_las_personas">Todas las Personas</string>
+    <string name="desbloquear">Desbloquear</string>
+    <string name="bloquear">Bloquear</string>
 
 
 </resources>

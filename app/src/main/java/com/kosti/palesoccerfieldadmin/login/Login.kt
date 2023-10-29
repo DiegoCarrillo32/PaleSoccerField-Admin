@@ -12,12 +12,10 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -27,7 +25,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.models.UserViewModel
 import com.kosti.palesoccerfieldadmin.utils.CryptograpyPasswordClass
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
@@ -40,18 +37,20 @@ class Login : AppCompatActivity() {
     lateinit var btnLogin: Button
     lateinit var btnGoogle: ImageButton
     lateinit var progressBar: ProgressBar
-    lateinit var currentUserID: String
 
     private lateinit var auth: FirebaseAuth
 
     /* ----------sign in with google ---------- start */
 
+    /*
     private lateinit var oneTapClient: SignInClient
     private lateinit var signUpRequest: BeginSignInRequest
     private val REQ_ONE_TAP = 2
     private var showOneTapUI = true
     private lateinit var emailFromGoogle: String
     private lateinit var passwordFromGoogle: String
+    */
+
     /* ----------sign in with google ---------- end */
     /*
     public override fun onStart() {
@@ -69,6 +68,9 @@ class Login : AppCompatActivity() {
 
         /* ----------sign in with google ---------- start */
         val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        userViewModel.userId = "89289992992"
+        val userId = userViewModel.userId
+        println("El id es: $userId")
 
         oneTapClient = Identity.getSignInClient(this)
         signUpRequest = BeginSignInRequest.builder()
@@ -119,16 +121,20 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
+
+            */
+
         /* ---------- sign in with google ---------- end */
 
         editTextEmail = findViewById(R.id.email)
         editTextPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.btn_login)
-        btnGoogle = findViewById(R.id.btn_google)
+        //btnGoogle = findViewById(R.id.btn_google)
         progressBar = findViewById(R.id.progress_bar_login)
 
         auth = Firebase.auth
 
+        /*
         btnGoogle.setOnClickListener {
             oneTapClient.beginSignIn(signUpRequest)
                 .addOnSuccessListener(this) { result ->
@@ -158,7 +164,8 @@ class Login : AppCompatActivity() {
                 "Boton de Google.",
                 Toast.LENGTH_SHORT,
             ).show()
-        }
+        }*/
+
         btnLogin.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             val email: String = editTextEmail.text.toString()
@@ -176,7 +183,7 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            autentificacion(email,password,userViewModel)
+            autentificacion(email,password)
         }
     }
 
@@ -188,7 +195,7 @@ class Login : AppCompatActivity() {
         finish()
     }
 
-    fun autentificacion(email:String, password:String, userViewModel: UserViewModel){
+    fun autentificacion(email:String, password:String){
         val cryptClass = CryptograpyPasswordClass()
 
         auth.signInWithEmailAndPassword(email, password)
@@ -213,7 +220,7 @@ class Login : AppCompatActivity() {
                                                 Toast.LENGTH_SHORT,
                                             ).show()
                                             currentUserID = elem["id"].toString()
-                                            userViewModel.setUserId(currentUserID)
+                                            userViewModel.userId = currentUserID
 
                                             toMain()
                                         } else {
