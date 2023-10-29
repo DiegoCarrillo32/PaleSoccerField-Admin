@@ -67,62 +67,58 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         /* ----------sign in with google ---------- start */
-        val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        userViewModel.userId = "89289992992"
-        val userId = userViewModel.userId
-        println("El id es: $userId")
-
-        oneTapClient = Identity.getSignInClient(this)
-        signUpRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    // Your server's client ID, not your Android client ID.
-                    .setServerClientId(getString(R.string.web_client_id))
-                    // Show all accounts on the device.
-                    .setFilterByAuthorizedAccounts(false)
+        /*
+                oneTapClient = Identity.getSignInClient(this)
+                signUpRequest = BeginSignInRequest.builder()
+                    .setGoogleIdTokenRequestOptions(
+                        BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                            .setSupported(true)
+                            // Your server's client ID, not your Android client ID.
+                            .setServerClientId(getString(R.string.web_client_id))
+                            // Show all accounts on the device.
+                            .setFilterByAuthorizedAccounts(false)
+                            .build()
+                    )
                     .build()
-            )
-            .build()
 
 
-        var activityResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()
-            ) {
-                if (it.resultCode == Activity.RESULT_OK) {
-                    try {
-                        val credential = oneTapClient.getSignInCredentialFromIntent(it.data)
-                        val idToken = credential.googleIdToken
-                        when {
-                            idToken != null -> {
-                                emailFromGoogle = credential.id
-                                passwordFromGoogle = credential.password.toString()
-                                Log.d(TAG, "Got ID token.")
-                                Toast.makeText(
-                                    this@Login,
-                                    "Email: $emailFromGoogle",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                                Toast.makeText(
-                                    this@Login,
-                                    "Pass: $passwordFromGoogle",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                                toMain()
-                            }
+                var activityResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+                    registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()
+                    ) {
+                        if (it.resultCode == Activity.RESULT_OK) {
+                            try {
+                                val credential = oneTapClient.getSignInCredentialFromIntent(it.data)
+                                val idToken = credential.googleIdToken
+                                when {
+                                    idToken != null -> {
+                                        emailFromGoogle = credential.id
+                                        passwordFromGoogle = credential.password.toString()
+                                        Log.d(TAG, "Got ID token.")
+                                        Toast.makeText(
+                                            this@Login,
+                                            "Email: $emailFromGoogle",
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+                                        Toast.makeText(
+                                            this@Login,
+                                            "Pass: $passwordFromGoogle",
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+                                        toMain()
+                                    }
 
-                            else -> {
-                                // Shouldn't happen.
-                                Log.d(TAG, "No ID token!")
+                                    else -> {
+                                        // Shouldn't happen.
+                                        Log.d(TAG, "No ID token!")
+                                    }
+                                }
+                            } catch (e: ApiException) {
+                                e.printStackTrace()
                             }
                         }
-                    } catch (e: ApiException) {
-                        e.printStackTrace()
                     }
-                }
-            }
 
-            */
+                    */
 
         /* ---------- sign in with google ---------- end */
 
@@ -219,9 +215,6 @@ class Login : AppCompatActivity() {
                                                 "Authentication Successful. Usuario: ${elem["nombre"]}",
                                                 Toast.LENGTH_SHORT,
                                             ).show()
-                                            currentUserID = elem["id"].toString()
-                                            userViewModel.userId = currentUserID
-
                                             toMain()
                                         } else {
                                             progressBar.visibility = View.GONE
