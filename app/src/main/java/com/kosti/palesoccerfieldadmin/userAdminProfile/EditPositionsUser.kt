@@ -17,13 +17,14 @@ import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 class EditPositionsUser : AppCompatActivity() {
 
     lateinit var tvTittle: TextView
+    lateinit var userId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_positions_user)
 
         val userPositions = intent.getStringArrayListExtra("positions")
         val type = intent.getStringExtra("type")
-
+        userId = intent.getStringExtra("userId").toString()
 
         tvTittle = findViewById(R.id.tvTittle)
 
@@ -68,7 +69,7 @@ class EditPositionsUser : AppCompatActivity() {
         listo.setOnClickListener {
             if (userPositions != null) {
                 if (userPositions.size != 0) {
-                    FirebaseUtils().updateProperty("jugadores","QNLLg9OhQ1z8uc2yELWn","posiciones", userPositions)
+                    FirebaseUtils().updateProperty("jugadores", userId,"posiciones", userPositions)
                     Toast.makeText(applicationContext, "Las posiciones han sido editadas", Toast.LENGTH_SHORT).show()
                     val intent = Intent()
                     intent.putExtra("posiciones", userPositions)

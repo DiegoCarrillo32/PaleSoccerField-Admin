@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
 import java.util.Date
 
 class FirebaseUtils {
@@ -129,6 +130,12 @@ class FirebaseUtils {
         val currentDate = Date()
         return currentDate.year - date.year
 
+    }
+
+    fun transformEpochToDateWithFormat(it: Long): String {
+        val date = Date(it)
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
+        return formatter.format(date).toString()
     }
 
 }

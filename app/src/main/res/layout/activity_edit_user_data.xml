@@ -326,7 +326,7 @@
                             android:textAppearance="@style/profileAttributesText" />
 
                         <ImageButton
-                            android:id="@+id/btnEditAge"
+                            android:id="@+id/btnEditDOB"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
