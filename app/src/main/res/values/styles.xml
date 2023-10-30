@@ -74,5 +74,10 @@
         <item name="behavior_peekHeight">0dp</item>
     </style>
 
+    <style name="TextInputLayoutStyle">
+        <item name="boxBackgroundColor">#80FFFFFF</item> <!-- Cambia el color de fondo -->
+        <item name="android:background">@drawable/edit_text_layout</item>
+    </style>
+
 
 </resources>
