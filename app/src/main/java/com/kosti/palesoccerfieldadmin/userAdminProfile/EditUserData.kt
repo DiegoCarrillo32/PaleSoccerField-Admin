@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
-import java.text.SimpleDateFormat
 
 
 class EditUserData : AppCompatActivity() {
@@ -25,10 +24,8 @@ class EditUserData : AppCompatActivity() {
         const val REQUEST_CODE_EDIT_FIELD = 1
     }
 
-    private lateinit var currentUserId: String
-    private val userList = mutableListOf<HashMap<String, Any>>()
-
-
+    private lateinit var userId: String
+    
     //Layouts declarations
     private lateinit var linearLayoutPositions: LinearLayout
     private lateinit var linearLayoutName: LinearLayout
@@ -41,81 +38,25 @@ class EditUserData : AppCompatActivity() {
     private lateinit var btnEditName: ImageButton
     private lateinit var btnEditNickname: ImageButton
     private lateinit var btnEditPhone: ImageButton
-    private lateinit var btnEditAge: ImageButton
+    private lateinit var btnEditDOB: ImageButton
+    private lateinit var btnBack: ImageButton
 
     //User data declarations
     private var positions: MutableList<String> = mutableListOf()
     private var name: String? = null
     private var nickname: String? = null
     private var phone: String? = null
-    private var fechaNacimiento: Date? = null
-    private var fechaNacimientoV: String? = null
-    private var age: String? = null
-
-
-    fun epochToDateWithFormat(epoch: String) : String {
-        val epoch = epoch.toLong()
-        val date = Date(epoch * 1000L)
-        val formatter = SimpleDateFormat("dd/MM/yyyy")
-        return formatter.format(date).toString()
-    }
-
-    fun epochToDate(epoch: String) : Date {
-        val epochInt = epoch.toLong()
-        return Date(epochInt * 1000L)
-    }
+    private var dateDOB: String? = null
+    private var timesTampString: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user_data)
 
-        currentUserId = "QNLLg9OhQ1z8uc2yELWn"
+        userId = intent.getStringExtra("userId").toString()
 
-        loadData()
 
-//        FirebaseUtils().getDocumentById("jugadores" , currentUserId) { user ->
-//            user.onSuccess {
-//                val userData: HashMap<String, Any> = user.getOrThrow()
-//
-//                name = userData["nombre"].toString()
-//                nickname = userData["apodo"].toString()
-//                phone = userData["telefono"].toString()
-//                val timestamp: String = userData["fecha_nacimiento"].toString()
-//                fechaNacimiento = epochToDate(timestamp)
-//
-//                fechaNacimientoV = epochToDateWithFormat(timestamp)
-//                val list = userData["posiciones"] as List<String>?
-//                if (list != null) {
-//                    for (item in list) {
-//                        if (item !in positions){
-//                            positions.add(item)
-//                        }
-//                        println(item)
-//                    }
-//                } else {
-//                    println("El campo 'miLista' está vacío o no contiene una lista de cadenas.")
-//                }
-//
-//                nameTV.text = name
-//                nicknameTV.text = nickname
-//                phoneTV.text = phone
-//                fechaNtoTV.text = fechaNacimientoV
-//
-//
-//                val adaptador = ArrayAdapter(this, android.R.layout.simple_spinner_item, positions)
-//
-//                // Establece el diseño que se usará cuando se despliegue la lista de opciones
-//                adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//
-//                // Asigna el adaptador al Spinner
-//                spinner.adapter = adaptador
-//
-//            }
-//            user.onFailure {
-//                Toast.makeText(applicationContext, "Error al cargar el usuario", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
+        loadData() // Carga todos los datos desde firebase
 
         //Layouts asignations
         linearLayoutPositions = findViewById(R.id.layoutPositions)
@@ -129,25 +70,24 @@ class EditUserData : AppCompatActivity() {
         btnEditName = findViewById(R.id.btnEditName)
         btnEditNickname = findViewById(R.id.btnEditNickname)
         btnEditPhone = findViewById(R.id.btnEditPhone)
-        btnEditAge = findViewById(R.id.btnEditAge)
+        btnEditDOB = findViewById(R.id.btnEditDOB)
+        btnBack = findViewById(R.id.backButton)
 
         //Events setClickOnListener
         btnEditPositions.setOnClickListener { editPositions() }
         btnEditName.setOnClickListener { editName() }
         btnEditNickname.setOnClickListener { editNickname() }
         btnEditPhone.setOnClickListener { editPhone() }
-        btnEditAge.setOnClickListener { editAge() }
-
-
+        btnEditDOB.setOnClickListener { editDOB() }
+        btnBack.setOnClickListener { finish() }
 
     }
 
-
-    fun loadData(){
+    private fun loadData(){
 
         val spinner = findViewById<Spinner>(R.id.spinnerPositions)
 
-        FirebaseUtils().getDocumentById("jugadores" , currentUserId) { user ->
+        FirebaseUtils().getDocumentById("jugadores" , userId) { user ->
             user.onSuccess {
                 val userData: HashMap<String, Any> = user.getOrThrow()
 
@@ -160,10 +100,7 @@ class EditUserData : AppCompatActivity() {
                 name = userData["nombre"].toString()
                 nickname = userData["apodo"].toString()
                 phone = userData["telefono"].toString()
-                val timestamp: String = userData["fecha_nacimiento"].toString()
-                fechaNacimiento = epochToDate(timestamp)
-
-                fechaNacimientoV = epochToDateWithFormat(timestamp)
+                timesTampString = userData["fecha_nacimiento"].toString()
                 positions.clear()
                 val list = userData["posiciones"] as List<String>?
                 if (list != null) {
@@ -178,7 +115,9 @@ class EditUserData : AppCompatActivity() {
                 nameTV.text = name
                 nicknameTV.text = nickname
                 phoneTV.text = phone
-                fechaNtoTV.text = fechaNacimientoV
+                dateDOB = timesTampString!!.toLong()?.let { FirebaseUtils().transformEpochToDateWithFormat(it) }
+
+                fechaNtoTV.text = dateDOB
 
 
                 val adaptador = ArrayAdapter(this, android.R.layout.simple_spinner_item, positions)
@@ -216,39 +155,34 @@ class EditUserData : AppCompatActivity() {
     }
 
 
-    fun activityEditField(type: String, data: String){
+    private fun activityEditField(type: String, data: String){
         val intent = Intent(this, EditField::class.java)
 
         // Agregar datos al Intent
         intent.putExtra("type", type)
         intent.putExtra("data", data)
+        intent.putExtra("userId", userId)
 
         // Iniciar la nueva actividad
         startActivityForResult(intent, REQUEST_CODE_EDIT_FIELD)
     }
 
-    fun activityEditPositions(type: String){
+    private fun activityEditPositions(type: String){
         val intent = Intent(this, EditPositionsUser::class.java)
 
         // Agregar datos al Intent
         intent.putStringArrayListExtra("positions", ArrayList(positions))
         intent.putExtra("type", type)
+        intent.putExtra("userId", userId)
         startActivityForResult(intent, REQUEST_CODE_EDIT_FIELD)
     }
 
-    fun editPositions() {
-        // Cambia el fondo del LinearLayout cuando se hace clic en el botón
-        linearLayoutPositions.setBackgroundResource(R.drawable.edit_field_layout) // Cambia el color de fondo según tu preferencia
-        val handler = Handler()
-        handler.postDelayed({
-            linearLayoutPositions.setBackgroundColor(Color.TRANSPARENT) // Restaura el fondo al estado original (transparente)
-        }, 200)
-
+    private fun editPositions() {
         activityEditPositions("Posiciones");
     }
 
 
-    fun editName() {
+    private fun editName() {
         // Cambia el fondo del LinearLayout cuando se hace clic en el botón
         linearLayoutName.setBackgroundResource(R.drawable.edit_field_layout) // Cambia el color de fondo según tu preferencia
         val handler = Handler()
@@ -259,7 +193,7 @@ class EditUserData : AppCompatActivity() {
         name?.let { activityEditField("Nombre" , it) };
     }
 
-    fun editNickname() {
+    private fun editNickname() {
         // Cambia el fondo del LinearLayout cuando se hace clic en el botón
         linearLayoutNickname.setBackgroundResource(R.drawable.edit_field_layout) // Cambia el color de fondo según tu preferencia
         val handler = Handler()
@@ -270,7 +204,7 @@ class EditUserData : AppCompatActivity() {
         nickname?.let { activityEditField("Apodo" , it) };
     }
 
-    fun editPhone() {
+    private fun editPhone() {
         // Cambia el fondo del LinearLayout cuando se hace clic en el botón
         linearLayoutPhone.setBackgroundResource(R.drawable.edit_field_layout) // Cambia el color de fondo según tu preferencia
         val handler = Handler()
@@ -281,7 +215,7 @@ class EditUserData : AppCompatActivity() {
         phone?.let { activityEditField("Teléfono" , it) };
     }
 
-    fun editAge() {
+    private fun editDOB() {
         // Cambia el fondo del LinearLayout cuando se hace clic en el botón
         linearLayoutAge.setBackgroundResource(R.drawable.edit_field_layout) // Cambia el color de fondo según tu preferencia
         val handler = Handler()
@@ -289,6 +223,6 @@ class EditUserData : AppCompatActivity() {
             linearLayoutAge.setBackgroundColor(Color.TRANSPARENT) // Restaura el fondo al estado original (transparente)
         }, 200)
 
-        age?.let { activityEditField("Edad" , it) };
+        dateDOB?.let { activityEditField("Fecha de Nacimiento" , it) };
     }
 }

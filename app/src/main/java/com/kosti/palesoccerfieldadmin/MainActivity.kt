@@ -21,6 +21,9 @@ class MainActivity : AppCompatActivity() {
 
         btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
 
+        val userId = intent.getStringExtra("userId").toString()
+
+
         val btnNavegar = findViewById<Button>(R.id.btnBuscarUsuarios)
         btnNavegar.setOnClickListener {
             val intent = Intent(this, UserList::class.java)
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         val btnCuenta = findViewById<Button>(R.id.btnCuenta)
         btnCuenta.setOnClickListener {
             val intent = Intent(this, EditUserData::class.java)
+            intent.putExtra("userId", userId)
             startActivity(intent)
         }
 

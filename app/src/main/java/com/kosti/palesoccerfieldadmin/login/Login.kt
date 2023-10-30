@@ -184,9 +184,11 @@ class Login : AppCompatActivity() {
     }
 
 
-    fun toMain() {
+    fun toMain(userId: String) {
         progressBar.visibility = View.GONE
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("userId", userId)
+        println("El id de usuario es: $userId")
         startActivity(intent)
         finish()
     }
@@ -215,7 +217,7 @@ class Login : AppCompatActivity() {
                                                 "Authentication Successful. Usuario: ${elem["nombre"]}",
                                                 Toast.LENGTH_SHORT,
                                             ).show()
-                                            toMain()
+                                            toMain(elem["id"].toString())
                                         } else {
                                             progressBar.visibility = View.GONE
                                             Toast.makeText(
