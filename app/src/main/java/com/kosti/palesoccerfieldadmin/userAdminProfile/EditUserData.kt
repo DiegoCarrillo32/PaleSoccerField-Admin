@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -14,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.changePassword.ChangePassword
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 
@@ -39,6 +41,7 @@ class EditUserData : AppCompatActivity() {
     private lateinit var btnEditPhone: ImageButton
     private lateinit var btnEditDOB: ImageButton
     private lateinit var btnBack: ImageButton
+    private lateinit var btnChangePassword: Button
 
     //User data declarations
     private var positions: MutableList<String> = mutableListOf()
@@ -71,6 +74,7 @@ class EditUserData : AppCompatActivity() {
         btnEditPhone = findViewById(R.id.btnEditPhone)
         btnEditDOB = findViewById(R.id.btnEditDOB)
         btnBack = findViewById(R.id.backButton)
+        btnChangePassword = findViewById(R.id.btnChangePassword)
 
         //Events setClickOnListener
         btnEditPositions.setOnClickListener { editPositions() }
@@ -79,6 +83,7 @@ class EditUserData : AppCompatActivity() {
         btnEditPhone.setOnClickListener { editPhone() }
         btnEditDOB.setOnClickListener { editDOB() }
         btnBack.setOnClickListener { finish() }
+        btnChangePassword.setOnClickListener { activityChangePassword() }
 
     }
 
@@ -153,7 +158,6 @@ class EditUserData : AppCompatActivity() {
         }
     }
 
-
     private fun activityEditField(type: String, data: String){
         val intent = Intent(this, EditField::class.java)
 
@@ -175,6 +179,13 @@ class EditUserData : AppCompatActivity() {
         intent.putExtra("userId", userId)
         startActivityForResult(intent, REQUEST_CODE_EDIT_FIELD)
     }
+
+    private fun activityChangePassword(){
+        val intent = Intent(this, ChangePassword::class.java)
+        intent.putExtra("userId", userId)
+        startActivity(intent)
+    }
+
 
     private fun editPositions() {
         activityEditPositions("Posiciones");
