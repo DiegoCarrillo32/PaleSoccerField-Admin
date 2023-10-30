@@ -17,7 +17,6 @@ import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 
-
 class EditUserData : AppCompatActivity() {
 
     companion object {
