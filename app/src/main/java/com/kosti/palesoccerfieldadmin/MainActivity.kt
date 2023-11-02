@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
+import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
@@ -42,6 +43,15 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("userId", userId)
             startActivity(intent)
         }
+
+        val btnDeleteAccount = findViewById<Button>(R.id.btnDeleteAccount)
+        btnDeleteAccount.setOnClickListener {
+            val intent = Intent(this, DeleteAccount::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
+
+
 
         btnRegistrarUsuario.setOnClickListener{
             toRegister()
