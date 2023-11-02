@@ -28,5 +28,31 @@
         Portero
     </string>
 
+    <string name="currentPassword">
+        Contraseña Actual
+    </string>
+
+    <string name="newPassword">
+        Nueva Contraseña
+    </string>
+
+    <string name="confirmNewPassword">
+        Confirmar Nueva Contraseña
+    </string>
+
+    <string name="warningPasswordMessage">
+        Por favor asegúrese de recordar
+        su nueva contraseña
+    </string>
+    <string name="updatedPassword">
+        ¡Contraseña Actualizada!
+    </string>
+    <string name="updatedPasswordMessage">
+        La contraseña de tu cuenta a sido actualizada correctamente, ahora puedes iniciar sesión con tú nueva contraseña.
+    </string>
+
+
+
+
 
 </resources>
