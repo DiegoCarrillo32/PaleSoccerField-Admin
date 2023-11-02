@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="warningDeleteAccountMessage">
+       Si eliminas tu cuenta, se borrará:
+    </string>
+
+    <string name="cosidetarionOne">
+       Tu cuenta de Pale
+    </string>
+
+    <string name="cosidetarionTwo">
+       Toda la información de Pale relacionada a tu correo
+    </string>
+
+    <string name="confirmDeleteAccountMessage">
+       Para eliminar tu cuenta, confirma con tu contraseña actual
+    </string>
+
+    <string name="confirmDeleteAccountCheckboxMessage">
+       Sí, quiero eliminar mi cuenta y todos los datos relacionados
+    </string>
+
+    <string name="btnDeleteAccountMessage">
+       Eliminar mi cuenta
+    </string>
+
+</resources>

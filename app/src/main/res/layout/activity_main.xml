@@ -151,13 +151,14 @@
     </LinearLayout>
 
     <Button
-        android:backgroundTint="@color/white"
+        android:id="@+id/btnDeleteAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="Eliminar mi cuenta"
         android:textColor="#FF0000"
-        android:textSize="20sp"
-        android:text="Eliminar mi cuenta"/>
+        android:textSize="20sp" />
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
