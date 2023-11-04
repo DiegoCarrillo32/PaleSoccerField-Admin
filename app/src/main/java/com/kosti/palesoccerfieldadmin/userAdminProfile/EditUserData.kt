@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.changePassword.ChangePassword
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
-import java.util.Date
 
 class EditUserData : AppCompatActivity() {
 
@@ -74,7 +73,7 @@ class EditUserData : AppCompatActivity() {
         btnEditPhone = findViewById(R.id.btnEditPhone)
         btnEditDOB = findViewById(R.id.btnEditDOB)
         btnBack = findViewById(R.id.backButton)
-        btnChangePassword = findViewById(R.id.btnChangePassword)
+        btnChangePassword = findViewById(R.id.btnDeleteAccount)
 
         //Events setClickOnListener
         btnEditPositions.setOnClickListener { editPositions() }
@@ -84,7 +83,6 @@ class EditUserData : AppCompatActivity() {
         btnEditDOB.setOnClickListener { editDOB() }
         btnBack.setOnClickListener { finish() }
         btnChangePassword.setOnClickListener { activityChangePassword() }
-
     }
 
     private fun loadData(){
