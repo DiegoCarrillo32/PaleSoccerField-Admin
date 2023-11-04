@@ -1,7 +1,6 @@
 package com.kosti.palesoccerfieldadmin.changePassword
 
 import android.graphics.Typeface
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
@@ -22,6 +21,8 @@ class ChangePassword : AppCompatActivity() {
 
     private lateinit var btnRecoveryPassword: Button
     private lateinit var btnChange: Button
+    private lateinit var btnBack: ImageButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +31,14 @@ class ChangePassword : AppCompatActivity() {
         btnToggleVisibilityCurrentPassword = findViewById(R.id.btnViewCurrentPassword)
         btnToggleVisibilityNewPassword = findViewById(R.id.btnViewNewPassword)
         btnToggleVisibilityConfirmNewPassword = findViewById(R.id.btnViewConfirmNewPassword)
+        btnBack = findViewById(R.id.backButton)
 
 
         edtCurrentPassword = findViewById(R.id.edtCurrentPassword)
         edtNewPassword = findViewById(R.id.edtNewPassword)
         edtConfirmNewPassword = findViewById(R.id.edtConfirmNewPassword)
 
-        btnChange = findViewById(R.id.btnChangePassword)
+        btnChange = findViewById(R.id.btnDeleteAccount)
         btnRecoveryPassword = findViewById(R.id.btnRecoveryPassword)
 
         btnToggleVisibilityCurrentPassword.setOnClickListener {
@@ -59,10 +61,12 @@ class ChangePassword : AppCompatActivity() {
 
         btnChange.setOnClickListener {
             val successDialog = ChangedPasswordDialog()
-            successDialog.show(supportFragmentManager, "dialog_changed_password") }
+            successDialog.show(supportFragmentManager, "dialog_changed_password")
+        }
 
         btnRecoveryPassword.setOnClickListener {  }
 
+        btnBack.setOnClickListener { finish() }
     }
 
     private fun togglePasswordVisibility(edtPassword: EditText, btnVisibilityPassword: ImageButton){

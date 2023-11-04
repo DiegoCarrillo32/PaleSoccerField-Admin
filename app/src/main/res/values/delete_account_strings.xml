@@ -25,4 +25,20 @@
        Eliminar mi cuenta
     </string>
 
+    <string name="deletedAccountMessage">
+       ¡Cuenta eliminada!
+    </string>
+
+    <string name="deletedAccountMessageTwo">
+       Vuelve al inicio para crear una nueva cuenta o iniciar sesión en otra cuenta
+    </string>
+
+    <string name="btnBackMessage">
+       Volver
+    </string>
+
+    <string name="deleteAccountTittle">
+       Eliminar Cuenta
+    </string>
+
 </resources>

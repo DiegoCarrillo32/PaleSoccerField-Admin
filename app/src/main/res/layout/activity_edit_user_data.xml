@@ -342,7 +342,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnChangePassword"
+            android:id="@+id/btnDeleteAccount"
             style="@style/ButtonAsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

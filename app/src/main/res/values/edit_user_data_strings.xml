@@ -44,11 +44,17 @@
         Por favor asegúrese de recordar
         su nueva contraseña
     </string>
+
     <string name="updatedPassword">
         ¡Contraseña Actualizada!
     </string>
+
     <string name="updatedPasswordMessage">
         La contraseña de tu cuenta a sido actualizada correctamente, ahora puedes iniciar sesión con tú nueva contraseña.
+    </string>
+
+    <string name="changePasswordTittleActivity">
+        Cambiar Contraseña
     </string>
 
 

@@ -8,7 +8,7 @@
     tools:context=".changePassword.ChangePassword">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -20,11 +20,14 @@
             android:contentDescription="@string/backButtonDescription"
             android:src="@drawable/arrow_back" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"></View>
-
+        <TextView
+            android:id="@+id/tvTittle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="67dp"
+            android:gravity="center"
+            android:text="@string/deleteAccountTittle"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,7 +67,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="@string/warningDeleteAccountMessage"
                     android:textColor="#D71515"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -119,7 +122,7 @@
                 android:text="@string/confirmDeleteAccountMessage"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/lyCurrentPassword"
@@ -175,16 +178,16 @@
             android:paddingBottom="30dp">
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/checkBoxDeleteAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/confirmDeleteAccountCheckboxMessage"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="17sp" />
+                android:textSize="16sp" />
 
             <Button
-                android:id="@+id/btnChangePassword"
+                android:id="@+id/btnDeleteAccount"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
