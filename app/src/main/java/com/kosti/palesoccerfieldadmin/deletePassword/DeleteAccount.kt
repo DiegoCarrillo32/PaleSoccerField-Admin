@@ -9,11 +9,11 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import com.google.firebase.auth.EmailAuthProvider
 import com.kosti.palesoccerfieldadmin.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
-import com.kosti.palesoccerfieldadmin.utils.CryptograpyPasswordClass
 
 class DeleteAccount : AppCompatActivity() {
 
@@ -22,7 +22,7 @@ class DeleteAccount : AppCompatActivity() {
     private lateinit var btnToggleVisibilityCurrentPassword: ImageButton
     private lateinit var checkBox: CheckBox
     private lateinit var edtPassword: EditText
-    private lateinit var inputPassword: String
+    private lateinit var edtEmail: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,35 +30,23 @@ class DeleteAccount : AppCompatActivity() {
 
         val userId = intent.getStringExtra("userId").toString()
 
-        btnDelete = findViewById(R.id.btnDeleteAccount)
+        btnDelete = findViewById(R.id.btnSend)
         btnBack = findViewById(R.id.backButton)
         btnToggleVisibilityCurrentPassword = findViewById(R.id.btnViewCurrentPassword)
 
         checkBox = findViewById(R.id.checkBoxDeleteAccount)
 
         edtPassword = findViewById(R.id.edtCurrentPassword)
+        edtEmail = findViewById(R.id.edtEmail)
 
         btnBack.setOnClickListener { finish() }
 
         btnDelete.setOnClickListener {
-            inputPassword = edtPassword.text.toString()
-            if (inputPassword != "") {
-                println("La contra actual es: ${inputPassword}")
+            val password = edtPassword.text.toString()
+            val email = edtEmail.text.toString()
+            if (password != "" && email != "") {
                 if (checkBox.isChecked) {
-                    FirebaseUtils().getUserPassword(userId) { userPassword ->
-                        val cryptClass = CryptograpyPasswordClass()
-                        if (cryptClass.decrypt(userPassword) == inputPassword) {
-                            val auth = FirebaseAuth.getInstance()
-                            val user = auth.currentUser
-                            deleteAccount(user, userId)
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                "La contraseña no es correcta",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                    reauthenticateUser(email, password, userId)
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -69,7 +57,7 @@ class DeleteAccount : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     applicationContext,
-                    "Escriba su contraseña actual",
+                    "Escriba sus credenciales",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -80,6 +68,19 @@ class DeleteAccount : AppCompatActivity() {
                 togglePasswordVisibility(edtPassword, btnToggleVisibilityCurrentPassword)
             }
         }
+    }
+
+    private fun reauthenticateUser(email: String, password: String, userId: String){
+        val user = FirebaseAuth.getInstance().currentUser
+        val credential = EmailAuthProvider.getCredential(email, password)
+        user?.reauthenticate(credential)
+            ?.addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+                    deleteAccount(user, userId)
+                } else {
+                    Toast.makeText(applicationContext, "Los credenciales son incorrectos", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     private fun deleteAccount(user: FirebaseUser?, userId: String) {

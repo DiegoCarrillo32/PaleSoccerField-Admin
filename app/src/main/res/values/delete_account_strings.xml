@@ -14,7 +14,7 @@
     </string>
 
     <string name="confirmDeleteAccountMessage">
-       Para eliminar tu cuenta, confirma con tu contraseña actual
+       Para eliminar tu cuenta, confirma con tus credenciales
     </string>
 
     <string name="confirmDeleteAccountCheckboxMessage">
@@ -39,6 +39,10 @@
 
     <string name="deleteAccountTittle">
        Eliminar Cuenta
+    </string>
+
+    <string name="emailMessage">
+       Correo
     </string>
 
 </resources>
