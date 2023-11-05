@@ -32,32 +32,26 @@
         Contraseña Actual
     </string>
 
-    <string name="newPassword">
-        Nueva Contraseña
-    </string>
-
-    <string name="confirmNewPassword">
-        Confirmar Nueva Contraseña
-    </string>
-
-    <string name="warningPasswordMessage">
-        Por favor asegúrese de recordar
-        su nueva contraseña
-    </string>
-
-    <string name="updatedPassword">
-        ¡Contraseña Actualizada!
-    </string>
-
-    <string name="updatedPasswordMessage">
-        La contraseña de tu cuenta a sido actualizada correctamente, ahora puedes iniciar sesión con tú nueva contraseña.
-    </string>
-
     <string name="changePasswordTittleActivity">
         Cambiar Contraseña
     </string>
 
 
+    <string name="recoveryPasswordMessage">
+        Recibirá un correo electrónico con un enlace para cambiar su contraseña actual
+    </string>
+
+    <string name="successEmail">
+        Correo enviado con éxito
+    </string>
+
+    <string name="successEmailMessage">
+        Ha recibido un correo electrónico con un enlace para cambiar su contraseña
+    </string>
+
+    <string name="btnSend">
+        Enviar
+    </string>
 
 
 

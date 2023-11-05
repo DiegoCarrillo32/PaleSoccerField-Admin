@@ -156,17 +156,16 @@ class FirebaseUtils {
             }
     }
 
-    fun getUserPassword(documentId: String, callback: (String) -> Unit){
-
+    fun getUserEmail(documentId: String, callback: (String) -> Unit){
         val query = db.collection("jugadores").document(documentId)
 
         query
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
-                    val password = documentSnapshot.getString("contrasena")
-                    if (password != null) {
-                        callback(password)
+                    val response = documentSnapshot.getString("correo")
+                    if (response != null) {
+                        callback(response)
                     } else {
                         callback("")
                     }

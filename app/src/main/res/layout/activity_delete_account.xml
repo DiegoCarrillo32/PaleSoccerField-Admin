@@ -125,6 +125,36 @@
                 android:textSize="16sp" />
 
             <LinearLayout
+                android:id="@+id/lyEmail"
+                style="@style/TextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+
+                <EditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:hint="@string/emailMessage"
+                    android:inputType="textPassword"
+                    android:minHeight="45dp"
+                    android:textSize="14sp"
+                    android:typeface="sans" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/lyCurrentPassword"
                 style="@style/TextInputLayoutStyle"
                 android:layout_width="match_parent"
@@ -187,7 +217,7 @@
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/btnDeleteAccount"
+                android:id="@+id/btnSend"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
