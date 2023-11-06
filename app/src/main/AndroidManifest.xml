@@ -15,6 +15,9 @@
         android:theme="@style/Base.Theme.PaleSoccerFieldAdmin"
         tools:targetApi="s">
         <activity
+            android:name=".schedules.Schedules"
+            android:exported="false" />
+        <activity
             android:name=".deletePassword.DeleteAccount"
             android:exported="false" />
         <activity

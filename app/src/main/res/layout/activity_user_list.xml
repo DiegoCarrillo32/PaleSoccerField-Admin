@@ -21,11 +21,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Lista de jugadores"
+            android:text="@string/lista_de_jugadores"
             android:textColor="@color/black"
             android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/nombre_o_apodo"/>
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewUserList"
         android:layout_width="match_parent"
@@ -49,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Clasificación"/>
+                android:text="@string/clasf"/>
             <Spinner
                 android:id="@+id/rateSpinner"
                 android:layout_width="match_parent"
@@ -68,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Posición"/>
+                android:text="@string/pos"/>
             <Spinner
                 android:id="@+id/positionSpinner"
                 android:layout_width="match_parent"

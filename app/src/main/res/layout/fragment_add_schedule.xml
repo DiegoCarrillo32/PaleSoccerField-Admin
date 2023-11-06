@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/selectDate"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Fecha de horario"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="15dp"
+        android:paddingEnd="18dp"
+        android:paddingStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rectangle_fecha_nacimiento"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora de inicio"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/selectTimeStart"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Hora de inicio"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="15dp"
+        android:paddingEnd="18dp"
+        android:paddingStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rectangle_fecha_nacimiento"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora de finalizacion"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/selectTimeEnd"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Hora de finalizacion"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="15dp"
+        android:paddingEnd="18dp"
+        android:paddingStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rectangle_fecha_nacimiento"/>
+
+
+    <Button
+        android:id="@+id/btn_addSchedule"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/aceptar"
+        android:textColor="@color/principal"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

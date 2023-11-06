@@ -8,6 +8,7 @@ import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.registro.Register
+import com.kosti.palesoccerfieldadmin.schedules.Schedules
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.userListPackage.UserList
 
@@ -46,6 +47,13 @@ class MainActivity : AppCompatActivity() {
         val btnDeleteAccount = findViewById<Button>(R.id.btnSend)
         btnDeleteAccount.setOnClickListener {
             val intent = Intent(this, DeleteAccount::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
+
+        val btnRegisterSchedule = findViewById<Button>(R.id.registerSchedule)
+        btnRegisterSchedule.setOnClickListener {
+            val intent = Intent(this, Schedules::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
         }
