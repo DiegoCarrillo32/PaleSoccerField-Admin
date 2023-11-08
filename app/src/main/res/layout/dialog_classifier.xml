@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="¿Cómo califica a este Jugador?"
+        android:text="@string/c_mo_califica_a_este_jugador"
         android:textAlignment="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@+id/imageButtonBad"
@@ -33,6 +33,7 @@
             android:backgroundTint="#fffbfe"
             android:src="@drawable/baseline_sports_soccer_24_regular" />
 
+
         <ImageButton
             android:id="@+id/imageButtonGood"
             android:layout_width="wrap_content"
@@ -40,5 +41,33 @@
             android:layout_weight="1"
             android:backgroundTint="#fffbfe"
             android:src="@drawable/baseline_sports_soccer_24_good" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewClassifierBad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:text="@string/malo"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textViewClassifierRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/regular"
+            android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textViewClassifierGood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/bueno"
+            android:textAlignment="center" />
     </LinearLayout>
 </LinearLayout>
