@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lista_de_jugadores">Lista de jugadores</string>
+    <string name="clasf">Clasificación</string>
+    <string name="pos">Posición</string>
+    <string name="nombre_o_apodo">Nombre o apodo</string>
+</resources>

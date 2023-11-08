@@ -244,10 +244,6 @@ class ProfileScreen : BottomSheetDialogFragment() {
             onDismissListener?.onDismissOnActivity()
             didEditClassification = false
         }
-
-
-
-
     }
 
     interface OnDismissListener {

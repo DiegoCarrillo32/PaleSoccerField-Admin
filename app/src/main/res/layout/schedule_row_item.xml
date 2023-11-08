@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/dateTV"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Fecha de la tanda"/>
+
+    <TextView
+        android:id="@+id/startTimeTV"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hora de inicio"/>
+
+    <TextView
+        android:id="@+id/endTimeTV"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hora de fin"/>
+
+    <Button
+
+        android:id="@+id/editBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Editar"
+        />
+
+    <Button
+
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eliminar"
+        />
+
+</LinearLayout>

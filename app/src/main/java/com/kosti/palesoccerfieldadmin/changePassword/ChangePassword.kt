@@ -55,15 +55,5 @@ class ChangePassword : AppCompatActivity() {
         }
         btnBack.setOnClickListener { finish() }
     }
-
-    private fun email() {
-        FirebaseUtils().getUserEmail(userId) { email ->
-            if (email.isNotEmpty()) {
-
-            } else {
-
-            }
-        }
-    }
 }
 
