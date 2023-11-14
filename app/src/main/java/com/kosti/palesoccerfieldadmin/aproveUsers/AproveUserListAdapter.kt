@@ -164,7 +164,7 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
                 val db = FirebaseFirestore.getInstance()
                 val userApproved = db.collection("jugadores").document(playerId)
                 db.runBatch() { batch ->
-                    batch.update(userApproved, "clasificacion", "Good")
+                    batch.update(userApproved, "clasificacion", "Bueno")
                 }.addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         data.removeAll { it.Id == playerId }
