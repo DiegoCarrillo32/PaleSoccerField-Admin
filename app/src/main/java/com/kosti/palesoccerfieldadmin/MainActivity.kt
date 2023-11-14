@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //val btnAproverReservation = findViewById<Button>(R)
+
 
 
         btnRegistrarUsuario.setOnClickListener{
