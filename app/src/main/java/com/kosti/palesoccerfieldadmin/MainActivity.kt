@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.kosti.palesoccerfieldadmin.aproveReservations.AproveReservations
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
@@ -58,7 +59,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //val btnAproverReservation = findViewById<Button>(R)
+        val btnAproveReservation = findViewById<Button>(R.id.btnAproveReservations)
+        btnAproveReservation.setOnClickListener {
+            val intent = Intent(this, AproveReservations::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
 
 
 

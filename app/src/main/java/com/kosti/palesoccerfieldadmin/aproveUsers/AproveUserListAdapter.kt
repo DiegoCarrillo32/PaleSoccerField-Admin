@@ -15,7 +15,10 @@ import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
-class AproveUserListAdapter (private val context: Context, private val data: MutableList<JugadoresDataModel>):
+class AproveUserListAdapter(
+    private val context: Context,
+    private val data: MutableList<JugadoresDataModel>
+) :
     RecyclerView.Adapter<AproveUserListAdapter.ViewHolder>() {
     private lateinit var userName: TextView
     private lateinit var userNickname: TextView
@@ -27,7 +30,8 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
         viewType: Int
     ): AproveUserListAdapter.ViewHolder {
         return AproveUserListAdapter.ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.aprove_user_list_item, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.aprove_user_list_item, parent, false)
         )
     }
 
@@ -61,7 +65,8 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
                         notifyItemRemoved(currentPosition)
                         showDialogClassifier()
                     } else {
-                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -70,34 +75,34 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
             builder.show()
         }
 
-        // Deny Button Click
-        holder.btnDeny.setOnClickListener {
-            val db = FirebaseFirestore.getInstance()
-
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle("Denegar usuario")
-            builder.setMessage("¿Estás seguro de que quieres denegar este usuario?")
-            builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
-                val userEliminated = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
-                val currentPosition = holder.adapterPosition // Guarda la posición actual
-                db.runBatch() { batch ->
-                    batch.delete(userEliminated)
-                }.addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show()
-                        playerToApproveOrDeny = null
-                        data.removeAt(currentPosition)
-                        notifyItemRemoved(currentPosition)
-                    } else {
-                        Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
-                // TODO: do nothing or handle cancel action
-            }
-            builder.show()
-        }
+//        // Deny Button Click
+//        holder.btnDeny.setOnClickListener {
+//            val db = FirebaseFirestore.getInstance()
+//
+//            val builder = AlertDialog.Builder(context)
+//            builder.setTitle("Denegar usuario")
+//            builder.setMessage("¿Estás seguro de que quieres denegar este usuario?")
+//            builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
+//                val userEliminated = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
+//                val currentPosition = holder.adapterPosition // Guarda la posición actual
+//                db.runBatch() { batch ->
+//                    batch.delete(userEliminated)
+//                }.addOnCompleteListener() { task ->
+//                    if (task.isSuccessful) {
+//                        Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show()
+//                        playerToApproveOrDeny = null
+//                        data.removeAt(currentPosition)
+//                        notifyItemRemoved(currentPosition)
+//                    } else {
+//                        Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//            builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
+//                // TODO: do nothing or handle cancel action
+//            }
+//            builder.show()
+//        }
     }
 
 
@@ -113,8 +118,9 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
         val userName: TextView = itemView.findViewById(R.id.tvUserName)
         val userNickname: TextView = itemView.findViewById(R.id.tvUserNickname)
         val btnAprove: ImageButton = itemView.findViewById(R.id.acceptBtn)
-        val btnDeny: ImageButton = itemView.findViewById(R.id.denyBtn)
+//        val btnDeny: ImageButton = itemView.findViewById(R.id.denyBtn)
     }
+
     fun showDialogClassifier() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_classifier, null)
         val builder = AlertDialog.Builder(context)
@@ -138,7 +144,8 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
                         Toast.makeText(context, "Usuario calificado", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                     } else {
-                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -155,7 +162,8 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
                         Toast.makeText(context, "Usuario calificado", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                     } else {
-                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -172,12 +180,14 @@ class AproveUserListAdapter (private val context: Context, private val data: Mut
                         Toast.makeText(context, "Usuario calificado", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                     } else {
-                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error al aprobar el usuario", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
         } else {
-            Toast.makeText(context, "No hay usuario para aprobar/denegar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "No hay usuario para aprobar/denegar", Toast.LENGTH_SHORT)
+                .show()
         }
 
         dialog.show()
