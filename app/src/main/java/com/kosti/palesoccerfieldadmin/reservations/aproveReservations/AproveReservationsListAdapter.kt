@@ -1,4 +1,4 @@
-package com.kosti.palesoccerfieldadmin.aproveReservations
+package com.kosti.palesoccerfieldadmin.reservations.aproveReservations
 
 import android.content.Context
 import android.content.DialogInterface
@@ -30,7 +30,7 @@ class AproveReservationsListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return AproveReservationsListAdapter.ViewHolder(
+        return ViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.aprove_reservation_list_item, parent, false)
         )

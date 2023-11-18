@@ -18,7 +18,7 @@
             android:name=".reservations.Reservations"
             android:exported="false" />
         <activity
-            android:name=".aproveReservations.AproveReservations"
+            android:name=".reservations.aproveReservations.AproveReservations"
             android:exported="false" />
         <activity
             android:name=".schedules.Schedules"
