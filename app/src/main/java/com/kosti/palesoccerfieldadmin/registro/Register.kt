@@ -2,7 +2,6 @@ package com.kosti.palesoccerfieldadmin.registro
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
@@ -14,20 +13,14 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.login.Login
-import com.kosti.palesoccerfieldadmin.utils.CryptograpyPasswordClass
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
-import java.time.LocalDate
-import java.time.ZoneOffset
 import java.util.Locale
 
 class Register : AppCompatActivity() {
@@ -214,7 +207,7 @@ class Register : AppCompatActivity() {
                             "Authentication successful.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        createUser(nombre, email, password,apodo, telefono, fechaCovertida, clasificacion, rol)
+                        createUser(nombre, email,apodo, telefono, fechaCovertida, clasificacion, rol)
                         toMain()
                     } else {
                         // If sign in fails, display a message to the user.
@@ -232,15 +225,12 @@ class Register : AppCompatActivity() {
 
     private fun createUser(nombre: String,
                            email: String,
-                           password: String,
                            apodo: String,
                            telefono: String,
                            fechaNac: String,
                            clasf: String,
                            rol: String
     ) {
-        val cryptClass = CryptograpyPasswordClass()
-        val passEncrypt = cryptClass.encrypt(password)
         val jugadorPorDefecto: HashMap<String, Any> = HashMap<String, Any>()
         val bloqueosList = mutableListOf<String>()
         val posicionesList = mutableListOf<String>()
@@ -248,7 +238,6 @@ class Register : AppCompatActivity() {
         jugadorPorDefecto["apodo"] = apodo.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["bloqueos"] = bloqueosList
         jugadorPorDefecto["clasificacion"] = clasf.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-        jugadorPorDefecto["contrasena"] = passEncrypt
         jugadorPorDefecto["correo"] = email
         jugadorPorDefecto["estado"] = true
         jugadorPorDefecto["fecha_nacimiento"] = fechaNac
