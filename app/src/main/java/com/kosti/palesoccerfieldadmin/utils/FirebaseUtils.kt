@@ -4,7 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -39,8 +39,19 @@ class FirebaseUtils {
 
     }
 
+    // Función para realizar la consulta con filtros en Firestore
+    fun getDocumentBasedOnProperties(colection: String, filtro1: String, valorFiltro1: Any, filtro2: String, valorFiltro2: Any): Task<QuerySnapshot> {
+        // Obtiene una referencia a la colección
+        val ref = db.collection(colection)
 
-    fun readCollectionFilter(
+        // Realiza la consulta con los filtros
+        return ref.whereEqualTo(filtro1, valorFiltro1)
+            .whereEqualTo(filtro2, valorFiltro2)
+            .get()
+    }
+
+
+    fun readCollectionStateFalse(
         collectionName: String,
         callback: (Result<MutableList<HashMap<String, Any>>>) -> Unit
     ) {
