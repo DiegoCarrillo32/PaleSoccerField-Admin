@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="spinnerHorario" type="id" />
+    <item name="btnSeleccionarEncargado" type="id" />
+    <item name="switchPublicoPrivado" type="id" />
+    <item name="listJugadoresEquipo" type="id" />
+    <item name="listJugadoresRetadores" type="id" />
+    <item name="checkTengoEquipo" type="id" />
+    <item name="btnAgregarJugadorEquipo" type="id" />
+    <item name="btnAgregarJugadorRetador" type="id" />
+    <item name="recyclerJugadoresEquipo" type="id" />
+    <item name="recyclerJugadoresRetadores" type="id" />
+</resources>
