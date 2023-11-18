@@ -45,7 +45,7 @@ class AproveReservationsListAdapter(
 
 
         holder.reservationName.text = item.Manager
-        val date = Date(item.hour.seconds * 1000)
+        val date = Date(item.Date.seconds * 1000)
         val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
         val formattedDate = dateFormat.format(date)
         holder.reservationSchedule.text = formattedDate

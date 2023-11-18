@@ -9,6 +9,7 @@ import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.registro.Register
+import com.kosti.palesoccerfieldadmin.reservations.Reservations
 import com.kosti.palesoccerfieldadmin.schedules.Schedules
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.userListPackage.UserList
@@ -16,12 +17,14 @@ import com.kosti.palesoccerfieldadmin.userListPackage.UserList
 class MainActivity : AppCompatActivity() {
 
     lateinit var btnRegistrarUsuario: Button
+    lateinit var btnGestionDeReservas: Button
     lateinit var btnLogOut: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
+        btnGestionDeReservas = findViewById(R.id.btnGestionDeReservas)
 
         val userId = intent.getStringExtra("userId").toString()
 
@@ -72,12 +75,21 @@ class MainActivity : AppCompatActivity() {
             toRegister()
         }
 
+        btnGestionDeReservas.setOnClickListener {
+            toGestionDeReservas()
+        }
+
         btnLogOut = findViewById(R.id.btnLogOut)
         btnLogOut.setOnClickListener {
             // TODO: Hacer el logout en firebase o lo que sea
             toLogin()
         }
 
+    }
+    fun toGestionDeReservas() {
+        val intent = Intent(this, Reservations::class.java)
+        startActivity(intent)
+        finish()
     }
 
     fun toRegister() {
