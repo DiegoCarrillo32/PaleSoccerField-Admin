@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.kosti.palesoccerfieldadmin.R
 
-class CreateReservations : AppCompatActivity() {
+class Reservations : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_reservations)
+        setContentView(R.layout.activity_reservations)
     }
 }
