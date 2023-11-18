@@ -34,7 +34,7 @@
             android:layout_height="48dp"
             android:background="@null"
             android:contentDescription="@string/peopleButtonDescription"
-            android:src="@drawable/people_icon" />
+            android:src="@drawable/baseline_people_24" />
     </LinearLayout>
 
     <ScrollView
