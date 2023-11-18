@@ -4,9 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.kosti.palesoccerfieldadmin.aproveReservations.AproveReservations
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
+import com.kosti.palesoccerfieldadmin.macthBookings.MatchBookings
 import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.schedules.Schedules
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
@@ -24,6 +26,11 @@ class MainActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("userId").toString()
 
+        val btnBooking = findViewById<Button>(R.id.btnReservas)
+        btnBooking.setOnClickListener {
+            val intent = Intent(this, MatchBookings::class.java)
+            startActivity(intent)
+        }
 
         val btnNavegar = findViewById<Button>(R.id.btnBuscarUsuarios)
         btnNavegar.setOnClickListener {
@@ -54,6 +61,13 @@ class MainActivity : AppCompatActivity() {
         val btnRegisterSchedule = findViewById<Button>(R.id.registerSchedule)
         btnRegisterSchedule.setOnClickListener {
             val intent = Intent(this, Schedules::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
+
+        val btnAproveReservation = findViewById<Button>(R.id.btnAproveReservations)
+        btnAproveReservation.setOnClickListener {
+            val intent = Intent(this, AproveReservations::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
         }

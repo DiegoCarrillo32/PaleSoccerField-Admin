@@ -57,6 +57,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:src="@drawable/check_icon"
+                app:tint="@color/black" />
+
+            <Button
+                android:id="@+id/btnReservas"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/white"
+                android:text="Reservas"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/person_icon"
                 app:tint="@color/black" />
 
@@ -167,6 +191,29 @@
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/check_icon"
+                app:tint="@color/black" />
+
+            <Button
+                android:id="@+id/btnAproveReservations"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/white"
+                android:text="Aprobar Reservas"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
         </LinearLayout>
 
 
