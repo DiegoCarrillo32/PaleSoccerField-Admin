@@ -7,7 +7,9 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 
 class FirebaseUtils {
@@ -19,6 +21,43 @@ class FirebaseUtils {
     ) {
         val documents = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val documentData = document.data as HashMap<String, Any>
+                    documentData["id"] = document.id
+                    documents.add(documentData)
+                }
+                callback(Result.success(documents))
+            }
+            .addOnFailureListener { exception ->
+                Log.w("Error getting documents.", exception)
+                callback(Result.failure(exception))
+            }
+    }
+
+    fun readCollectionByDate(
+        collectionName: String,
+        year: Int,
+        month: Int,
+        day: Int,
+        callback: (Result<MutableList<HashMap<String, Any>>>) -> Unit
+    ) {
+        val documents = mutableListOf<HashMap<String, Any>>()
+
+        // Crear el objeto Timestamp para la fecha de inicio (medianoche del día seleccionado)
+        val fechaInicio = com.google.firebase.Timestamp(Date(year - 1900, month, day, 0, 0, 0))
+
+        // Crear el objeto Timestamp para la fecha de fin (medianoche del día siguiente)
+        val calendarFin = Calendar.getInstance().apply {
+            set(year, month, day + 1, 0, 0, 0)
+            add(Calendar.MILLISECOND, -1) // Restar 1 milisegundo para tener la fecha de fin exclusiva
+        }
+        val fechaFin = com.google.firebase.Timestamp(calendarFin.time)
+
+        db.collection(collectionName)
+            .whereGreaterThanOrEqualTo("fecha", fechaInicio)
+            .whereLessThan("fecha", fechaFin)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
