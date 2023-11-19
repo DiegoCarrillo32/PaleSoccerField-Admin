@@ -1,5 +1,6 @@
 package com.kosti.palesoccerfieldadmin.reservations
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
+import com.kosti.palesoccerfieldadmin.reservations.aproveReservations.AproveReservations
+import com.kosti.palesoccerfieldadmin.reservations.createReservations.CreateReservations
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 class Reservations : AppCompatActivity() {
@@ -42,8 +45,8 @@ class Reservations : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add -> {
-                // Acción para el elemento de búsqueda
-                // funcion que levante la vista de agregar
+                val intent = Intent(this, CreateReservations::class.java)
+                startActivity(intent)
                 true
             }
 
