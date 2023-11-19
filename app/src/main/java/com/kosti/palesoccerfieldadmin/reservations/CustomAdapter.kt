@@ -11,11 +11,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 import java.util.Locale
 
 
-class CustomAdapter(private var dataSet: List<ReservasDataModel>, private val context: Context) :
+class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private val context: Context) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
 
@@ -67,10 +68,14 @@ class CustomAdapter(private var dataSet: List<ReservasDataModel>, private val co
         }
 
         viewHolder.btnEliminar.setOnClickListener {
+            FirebaseUtils().deleteDocument("reservas", dataSet[position].id.toString())
+            dataSet.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, dataSet.size)
 
             Toast.makeText(
                 viewHolder.itemView.context,
-                "Eliminar.",
+                "Reserva eliminada.",
                 Toast.LENGTH_SHORT,
             ).show()
 

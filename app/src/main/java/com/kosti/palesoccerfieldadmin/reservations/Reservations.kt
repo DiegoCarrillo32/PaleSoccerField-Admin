@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
 import com.kosti.palesoccerfieldadmin.reservations.aproveReservations.AproveReservations
@@ -31,10 +32,13 @@ class Reservations : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbarGestionDeReservas)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         consultarDatosReservasFirebase()
 
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        toolbar.setNavigationOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -53,15 +57,6 @@ class Reservations : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    /*
-    fun actualizarCustomAdapter(){
-
-        // falta lista nueva
-        customAdapter = CustomAdapter(datasetProductos,this)
-        customAdapter.notifyDataSetChanged()
-        recyclerView.adapter = customAdapter
-    }
-    */
 
     fun consultarDatosReservasFirebase() {
         FirebaseUtils().readCollection("reservas") { result ->
