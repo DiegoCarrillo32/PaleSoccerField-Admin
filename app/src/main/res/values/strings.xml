@@ -77,6 +77,7 @@
     <string name="i_have_team_label" />
     <string name="add_player_to_team" />
     <string name="add_player_to_challenger" />
+    <string name="fecha">Fecha:</string>
 
 
 </resources>
