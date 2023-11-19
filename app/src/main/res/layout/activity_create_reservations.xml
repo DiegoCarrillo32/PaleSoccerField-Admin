@@ -137,8 +137,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
         android:layout_marginBottom="5dp"
+        android:paddingLeft="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -157,18 +157,17 @@
                 android:id="@+id/btnAgregarJugadorEquipo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_player_to_team"
+                android:text="@string/agregar"
                 tools:text="Agregar" />
-
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerJugadoresEquipo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
-
+            android:layout_weight="2"
+            android:minHeight="50dp"
+            android:visibility="visible"/>
     </LinearLayout>
 
     <LinearLayout
@@ -195,18 +194,17 @@
                 android:id="@+id/btnAgregarJugadorRetador"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_player_to_challenger"
+                android:text="@string/agregar"
                 tools:text="Agregar" />
-
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerJugadoresRetadores"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
-
+            android:layout_weight="2"
+            android:minHeight="50dp"
+            android:visibility="visible" />
     </LinearLayout>
 
     <Button
@@ -214,5 +212,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/crear" />
-
 </LinearLayout>

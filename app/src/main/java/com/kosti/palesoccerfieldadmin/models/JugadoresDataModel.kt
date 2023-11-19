@@ -108,6 +108,18 @@ public class JugadoresDataModel() {
         UID = uid
         Id = id
     }
-
+    constructor(
+        name: String,
+        nickname: String,
+        clasification: String,
+        pos: MutableList<String>,
+        id: String
+    ) : this() {
+        Name = name
+        Nickname = nickname
+        Clasification = clasification
+        Positions= pos
+        Id = id
+    }
 
 }
