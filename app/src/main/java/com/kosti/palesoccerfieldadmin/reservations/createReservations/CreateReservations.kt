@@ -1,18 +1,38 @@
 package com.kosti.palesoccerfieldadmin.reservations.createReservations
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import com.kosti.palesoccerfieldadmin.R
+import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
+import com.kosti.palesoccerfieldadmin.reservations.addUsersToReservations.AddUsersToReservation
 
 class CreateReservations : AppCompatActivity() {
 
-
+    private var usersForProposalTeam: ArrayList<JugadoresDataModel> = ArrayList()
+    private var usersForChallengingTeam: ArrayList<JugadoresDataModel> = ArrayList()
     private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_reservations)
-
+        val userIds = intent.getStringArrayListExtra("jugadoresIds")
+        // Hacer algo con la lista de IDs recibidos
+        Log.d("ReceivedUserIds", "wtf${userIds.toString()}")
+        val btnAgregarJugadores: Button = findViewById(R.id.btnAgregarJugadorEquipo)
+        val btnAgregarRetadpres: Button = findViewById(R.id.btnAgregarJugadorRetador)
+        btnAgregarJugadores.setOnClickListener {
+            val intent = Intent(this, AddUsersToReservation::class.java)
+            intent.putExtra("textParameter", "proposalTeam")
+            this.startActivity(intent)
+        }
+        btnAgregarRetadpres.setOnClickListener {
+            val intent = Intent(this, AddUsersToReservation::class.java)
+            intent.putExtra("textParameter", "challengingTeam")
+            this.startActivity(intent)
+        }
         toolbar = findViewById(R.id.toolbarCreateReservations)
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
