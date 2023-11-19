@@ -71,13 +71,14 @@
     <string name="desbloquear">Desbloquear</string>
     <string name="bloquear">Bloquear</string>
     <string name="c_mo_califica_a_este_jugador">¿Cómo califica a este Jugador?</string>
-    <string name="select_time" />
-    <string name="select_manager" />
+    <string name="select_time">Seleccionar horario</string>
+    <string name="select_manager">Seleccionar</string>
     <string name="public_private_switch_label" />
     <string name="i_have_team_label" />
     <string name="add_player_to_team" />
     <string name="add_player_to_challenger" />
     <string name="fecha">Fecha:</string>
+    <string name="crear">Crear</string>
 
 
 </resources>
