@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lista_de_reservas">Lista de Reservas</string>
+    <string name="add">add</string>
+    <string name="encargado">Encargado:</string>
+</resources>
