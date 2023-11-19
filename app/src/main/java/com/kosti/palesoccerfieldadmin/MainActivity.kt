@@ -4,12 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import com.kosti.palesoccerfieldadmin.aproveReservations.AproveReservations
+import android.widget.TextView
+import com.kosti.palesoccerfieldadmin.reservations.aproveReservations.AproveReservations
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.macthBookings.MatchBookings
 import com.kosti.palesoccerfieldadmin.registro.Register
+import com.kosti.palesoccerfieldadmin.reservations.Reservations
 import com.kosti.palesoccerfieldadmin.schedules.Schedules
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.userListPackage.UserList
@@ -17,14 +19,25 @@ import com.kosti.palesoccerfieldadmin.userListPackage.UserList
 class MainActivity : AppCompatActivity() {
 
     lateinit var btnRegistrarUsuario: Button
+    lateinit var btnGestionDeReservas: Button
     lateinit var btnLogOut: Button
+    lateinit var usuarioNombreTV:TextView
+    lateinit var usuarioCorreoTV: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
-
         val userId = intent.getStringExtra("userId").toString()
+        val userName = intent.getStringExtra("userName").toString()
+        val userMail = intent.getStringExtra("userMail").toString()
+        btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
+        btnGestionDeReservas = findViewById(R.id.btnGestionDeReservas)
+
+        usuarioNombreTV = findViewById(R.id.nombreUsuarioTV)
+        usuarioNombreTV.text = userName
+        usuarioCorreoTV = findViewById(R.id.correoUsuarioTV)
+        usuarioCorreoTV.text = userMail
+
 
         val btnBooking = findViewById<Button>(R.id.btnReservas)
         btnBooking.setOnClickListener {
@@ -78,12 +91,21 @@ class MainActivity : AppCompatActivity() {
             toRegister()
         }
 
+        btnGestionDeReservas.setOnClickListener {
+            toGestionDeReservas()
+        }
+
         btnLogOut = findViewById(R.id.btnLogOut)
         btnLogOut.setOnClickListener {
             // TODO: Hacer el logout en firebase o lo que sea
             toLogin()
         }
 
+    }
+    fun toGestionDeReservas() {
+        val intent = Intent(this, Reservations::class.java)
+        startActivity(intent)
+        finish()
     }
 
     fun toRegister() {

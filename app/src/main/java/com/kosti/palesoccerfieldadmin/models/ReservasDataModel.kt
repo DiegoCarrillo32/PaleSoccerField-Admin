@@ -6,14 +6,15 @@ import kotlin.properties.Delegates
 /*
     Datos de una reserva
 
-    - id -> id
+    - idReserva -> id
     - encargado -> Manager
     - equipo -> Team
     - estado -> Status
-    - hour -> reservation time
-    - horario -> ScheduleID (ID del horario)
+    - fecha -> Date
+    - IDhorario -> ScheduleID (ID del horario)
     - retadores -> opponents
-    - tipo -> Type (publica / privada)
+    - jugadores -> players
+    - tipo -> Type (Publica / Privada)
  */
 class ReservasDataModel() {
 
@@ -21,38 +22,42 @@ class ReservasDataModel() {
     lateinit var Manager: String
     var Team: Boolean by Delegates.notNull()
     var Status: Boolean by Delegates.notNull()
-    lateinit var hour: Timestamp
+    lateinit var Date: Timestamp
     lateinit var ScheduleID: String
-    lateinit var Opponents: Array<Int>
-    var Type: Boolean by Delegates.notNull()
+    lateinit var Opponents: Array<JugadoresDataModel>
+    lateinit var Players: Array<JugadoresDataModel>
+    lateinit var Type: String
+
     constructor(
         id: String,
         manager: String,
         team: Boolean,
         status: Boolean,
-        hourTime: Timestamp,
+        date: Timestamp,
         scheduleID: String,
-        opponents: Array<Int>,
-        type: Boolean
+        opponents: Array<JugadoresDataModel>,
+        players: Array<JugadoresDataModel>,
+        type: String
     ) : this(){
         this.id = id
         Manager= manager
         Team = team
         Status = status
-        hour = hourTime
+        Date = date
         ScheduleID= scheduleID
         Opponents = opponents
+        Players = players
         Type = type
     }
 
     constructor(
         id:String,
         manager: String,
-        scheduleHour: Timestamp
+        date: Timestamp
     ) : this() {
         this.id = id
         Manager= manager
-        hour = scheduleHour
+        Date = date
     }
 
 

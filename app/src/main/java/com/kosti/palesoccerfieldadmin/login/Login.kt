@@ -63,10 +63,12 @@ class Login : AppCompatActivity() {
     }
 
 
-    fun toMain(userId: String) {
+    fun toMain(userId: String, userName: String, userMail:String) {
         progressBar.visibility = View.GONE
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("userId", userId)
+        intent.putExtra("userName", userName)
+        intent.putExtra("userMail", userMail)
         println("El id de usuario es: $userId")
         startActivity(intent)
         finish()
@@ -89,7 +91,9 @@ class Login : AppCompatActivity() {
                                 for (elem in it) {
                                     // que sea usuario y que sea admin
                                     if (elem["rol"] == "Administrador" && elem["UID"] == auth.currentUser?.uid ) {
-                                        toMain(elem["id"].toString())
+                                        toMain(elem["id"].toString(),
+                                            elem["nombre"].toString(),
+                                            elem["correo"].toString())
                                     } else {
                                         progressBar.visibility = View.GONE
                                         Toast.makeText(
