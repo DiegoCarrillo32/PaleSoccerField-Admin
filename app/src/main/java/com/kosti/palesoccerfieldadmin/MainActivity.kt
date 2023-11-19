@@ -105,13 +105,13 @@ class MainActivity : AppCompatActivity() {
     fun toGestionDeReservas() {
         val intent = Intent(this, Reservations::class.java)
         startActivity(intent)
-        finish()
+        //finish()
     }
 
     fun toRegister() {
         val intent = Intent(this, Register::class.java)
         startActivity(intent)
-        finish()
+        //finish()
     }
 
     fun toLogin() {

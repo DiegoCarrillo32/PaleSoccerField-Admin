@@ -17,10 +17,8 @@ import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 import java.util.Locale
 
-
 class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private val context: Context) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
-
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tV_encargado: TextView
@@ -58,7 +56,6 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
         val formattedDate = dateFormat.format(date)
         viewHolder.tV_fecha.text = formattedDate
 
-
         viewHolder.btnEditar.setOnClickListener {
 
             Toast.makeText(
@@ -72,8 +69,6 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
         viewHolder.btnEliminar.setOnClickListener {
 
             mostrarDialogConfirmarEliminarReserva(dataSet[position].Manager.toString(),formattedDate,position)
-
-
         }
     }
 

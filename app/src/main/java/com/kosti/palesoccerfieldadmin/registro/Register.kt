@@ -252,8 +252,8 @@ class Register : AppCompatActivity() {
 
     private fun toMain() {
         progressBar.visibility = View.GONE
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        //val intent = Intent(this, MainActivity::class.java)
+        //startActivity(intent)
         finish()
     }
 
