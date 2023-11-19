@@ -1,37 +1,33 @@
-package com.kosti.palesoccerfieldadmin.reservations
+package com.kosti.palesoccerfieldadmin.macthBookings
 
 import android.content.Context
-import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
-import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 
-class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private val context: Context) :
-    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class MatchBookingsCustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private val context: Context) :
+    RecyclerView.Adapter<MatchBookingsCustomAdapter.ViewHolder>() {
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tV_encargado: TextView
         val tV_fecha: TextView
-        val btnEditar: ImageButton
-        val btnEliminar: ImageButton
+        val tV_estado: TextView
+
 
         init {
             // Define click listener for the ViewHolder's View
             tV_encargado = view.findViewById(R.id.tVNombreTR)
             tV_fecha = view.findViewById(R.id.tVFechaTR)
-            btnEditar = view.findViewById(R.id.btn_editarReserva)
-            btnEliminar = view.findViewById(R.id.btn_eliminarReserva)
+            tV_estado = view.findViewById(R.id.tVEstadoTR)
         }
     }
 
@@ -39,7 +35,7 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.activity_reservation_item, viewGroup, false)
+            .inflate(R.layout.list_item_booking, viewGroup, false)
 
         return ViewHolder(view)
     }
@@ -56,29 +52,11 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
         val formattedDate = dateFormat.format(date)
         viewHolder.tV_fecha.text = formattedDate
 
-
-        viewHolder.btnEditar.setOnClickListener {
-
-            Toast.makeText(
-                viewHolder.itemView.context,
-                "Editar",
-                Toast.LENGTH_SHORT,
-            ).show()
-
-        }
-
-        viewHolder.btnEliminar.setOnClickListener {
-            FirebaseUtils().deleteDocument("reservas", dataSet[position].id.toString())
-            dataSet.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, dataSet.size)
-
-            Toast.makeText(
-                viewHolder.itemView.context,
-                "Reserva eliminada.",
-                Toast.LENGTH_SHORT,
-            ).show()
-
+        viewHolder.tV_estado.text = if (dataSet[position].Status) {
+            "Activa"
+        } else {
+            // Puedes asignar otro texto en caso de que la condición sea falsa
+            "Inactiva"
         }
     }
 
