@@ -68,7 +68,7 @@
             android:layout_marginHorizontal="4dp"
             android:layout_weight="0"
             android:contentDescription="TODO"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/edit_new_icon" />
 
         <ImageButton
             android:id="@+id/btn_eliminarReserva"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:contentDescription="TODO"
-            android:src="@android:drawable/ic_menu_delete" />
+            android:src="@drawable/delete_icon" />
     </LinearLayout>
 
 
