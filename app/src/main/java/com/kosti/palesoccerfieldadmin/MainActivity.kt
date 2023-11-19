@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import com.kosti.palesoccerfieldadmin.reservations.aproveReservations.AproveReservations
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
@@ -20,14 +21,23 @@ class MainActivity : AppCompatActivity() {
     lateinit var btnRegistrarUsuario: Button
     lateinit var btnGestionDeReservas: Button
     lateinit var btnLogOut: Button
+    lateinit var usuarioNombreTV:TextView
+    lateinit var usuarioCorreoTV: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val userId = intent.getStringExtra("userId").toString()
+        val userName = intent.getStringExtra("userName").toString()
+        val userMail = intent.getStringExtra("userMail").toString()
         btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
         btnGestionDeReservas = findViewById(R.id.btnGestionDeReservas)
 
-        val userId = intent.getStringExtra("userId").toString()
+        usuarioNombreTV = findViewById(R.id.nombreUsuarioTV)
+        usuarioNombreTV.text = userName
+        usuarioCorreoTV = findViewById(R.id.correoUsuarioTV)
+        usuarioCorreoTV.text = userMail
+
 
         val btnBooking = findViewById<Button>(R.id.btnReservas)
         btnBooking.setOnClickListener {
