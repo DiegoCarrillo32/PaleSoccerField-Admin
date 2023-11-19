@@ -8,6 +8,7 @@ import com.kosti.palesoccerfieldadmin.reservations.aproveReservations.AproveRese
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
+import com.kosti.palesoccerfieldadmin.macthBookings.MatchBookings
 import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.reservations.Reservations
 import com.kosti.palesoccerfieldadmin.schedules.Schedules
@@ -28,6 +29,11 @@ class MainActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("userId").toString()
 
+        val btnBooking = findViewById<Button>(R.id.btnReservas)
+        btnBooking.setOnClickListener {
+            val intent = Intent(this, MatchBookings::class.java)
+            startActivity(intent)
+        }
 
         val btnNavegar = findViewById<Button>(R.id.btnBuscarUsuarios)
         btnNavegar.setOnClickListener {

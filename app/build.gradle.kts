@@ -1,3 +1,5 @@
+
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -54,6 +56,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.4.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("com.github.islandparadise14:Mintable:x.y.z")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
