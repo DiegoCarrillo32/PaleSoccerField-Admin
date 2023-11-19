@@ -82,7 +82,7 @@ class Schedules : AppCompatActivity(), AddScheduleFragment.OnDismissListener {
                     scheduleList.add(scheduleData)
 
                 }
-                val adapter = ScheduleAdapter(scheduleList)
+                val adapter = ScheduleAdapter(scheduleList, this)
                 recyclerview.adapter = adapter
             }
             result.onFailure {
