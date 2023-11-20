@@ -6,7 +6,7 @@ class ScheduleDataModel {
     var id: String = ""
     var fecha: Timestamp? = null
     var tanda: MutableList<Timestamp>? = null
-    private var reservado: Boolean = false
+    var reservado: Boolean = false
     private var textoHorario: String = ""
 
     constructor(ID: String, date: Timestamp?, round: MutableList<Timestamp>?, state:Boolean, txt:String) {
@@ -17,10 +17,11 @@ class ScheduleDataModel {
         textoHorario = txt
     }
 
-    constructor(ID: String, date: Timestamp?, round: MutableList<Timestamp>?) {
+    constructor(ID: String, date: Timestamp?, round: MutableList<Timestamp>?, state:Boolean) {
         id = ID
         fecha = date
         tanda = round
+        reservado = state
     }
 
     fun getTextoHorario() = textoHorario
