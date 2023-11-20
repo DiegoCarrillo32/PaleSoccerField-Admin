@@ -77,12 +77,13 @@ class Schedules : AppCompatActivity(), AddScheduleFragment.OnDismissListener {
                     val scheduleData = ScheduleDataModel(
                         schedule["id"] as String,
                         schedule["fecha"] as Timestamp,
-                        schedule["tanda"] as MutableList<Timestamp>
+                        schedule["tanda"] as MutableList<Timestamp>,
+                        schedule["reservado"] as Boolean,
                     )
                     scheduleList.add(scheduleData)
 
                 }
-                val adapter = ScheduleAdapter(scheduleList)
+                val adapter = ScheduleAdapter(scheduleList, this)
                 recyclerview.adapter = adapter
             }
             result.onFailure {
@@ -103,7 +104,8 @@ class Schedules : AppCompatActivity(), AddScheduleFragment.OnDismissListener {
                     val scheduleData = ScheduleDataModel(
                         schedule["id"] as String,
                         schedule["fecha"] as Timestamp,
-                        schedule["tanda"] as MutableList<Timestamp>
+                        schedule["tanda"] as MutableList<Timestamp>,
+                        schedule["reservado"] as Boolean,
                     )
                     scheduleList.add(scheduleData)
 

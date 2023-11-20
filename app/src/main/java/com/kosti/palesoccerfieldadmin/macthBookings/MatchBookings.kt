@@ -120,5 +120,10 @@ class MatchBookings : AppCompatActivity() {
         }
     }
 
+
+    fun getReservasFromFirebase(){
+
+    }
+
 }
 

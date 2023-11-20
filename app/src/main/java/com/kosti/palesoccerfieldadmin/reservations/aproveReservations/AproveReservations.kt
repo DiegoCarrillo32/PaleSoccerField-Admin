@@ -62,7 +62,7 @@ class AproveReservations : AppCompatActivity() {
             .show()
         reservationList.clear()
         reservationListProgressBar.visibility = View.VISIBLE
-        FirebaseUtils().readCollectionStateFalse(reservationNameCollection) { result ->
+        FirebaseUtils().readCollectionStateFalse(reservationNameCollection, "estado") { result ->
             result.onSuccess { it ->
 
 

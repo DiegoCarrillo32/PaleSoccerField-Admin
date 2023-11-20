@@ -2,6 +2,7 @@ package com.kosti.palesoccerfieldadmin.reservations
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -32,13 +33,14 @@ class Reservations : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbarGestionDeReservas)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        consultarDatosReservasFirebase()
+
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            //val intent = Intent(this, MainActivity::class.java)
+            //startActivity(intent)
             finish()
         }
+        consultarDatosReservasFirebase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,16 +50,14 @@ class Reservations : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_add -> {
+            R.id.addReservation -> {
                 val intent = Intent(this, CreateReservations::class.java)
                 startActivity(intent)
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
-
     fun consultarDatosReservasFirebase() {
         FirebaseUtils().readCollection("reservas") { result ->
             result.onSuccess {
