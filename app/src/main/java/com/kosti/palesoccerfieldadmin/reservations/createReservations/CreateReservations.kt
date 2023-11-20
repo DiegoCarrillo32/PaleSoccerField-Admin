@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ListView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
 import com.kosti.palesoccerfieldadmin.reservations.CustomSpinnerAdapter
+import com.kosti.palesoccerfieldadmin.reservations.addUsersToReservations.AddBossToReservationAdapter
 import com.kosti.palesoccerfieldadmin.reservations.addUsersToReservations.AddUsersToReservation
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
@@ -52,7 +54,9 @@ class CreateReservations : AppCompatActivity() {
     private lateinit var spinnerTipoReserva: Spinner
     private lateinit var checkTengoEquipo: CheckBox
     private lateinit var scheduleSelected:ScheduleDataModel
+    private lateinit var tvBoss: TextView
 
+    private lateinit var boss: JugadoresDataModel
     private var tengoEquipoChecked = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -346,36 +350,53 @@ class CreateReservations : AppCompatActivity() {
 
     private fun mostrarDialogo() {
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_select_boss) // Reemplazar con el layout correcto
+        dialog.setContentView(R.layout.dialog_select_boss) // Asegúrate de reemplazar con el layout correcto
 
-        val listView = dialog.findViewById<ListView>(R.id.listViewSelectBoss)
+        val recyclerViewD = dialog.findViewById<RecyclerView>(R.id.recyclerSelectBoss)
         val searchView = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.searchViewSelectBoss)
-
-        // Configurar la lista y cargar los jugadores desde Firebase
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ArrayList())
-        listView.adapter = adapter
+        recyclerViewD.layoutManager = LinearLayoutManager(this)
+        // Configurar el RecyclerView y cargar los jugadores desde Firebase
+        val adapter = AddBossToReservationAdapter(ArrayList()) { jugadorSeleccionado ->
+            Log.d("JugadorSeleccionado", jugadorSeleccionado.Name)
+            boss = jugadorSeleccionado
+            tvBoss = findViewById(R.id.tvBoss)
+            tvBoss.text = boss.Name
+            dialog.dismiss()
+        }
+        recyclerViewD.adapter = adapter
 
         // Configurar la lógica para cargar los jugadores desde Firebase
         cargarJugadoresDesdeFirebase(adapter, searchView)
 
-        // Establecer la lógica de clic en la lista
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val jugadorSeleccionado = adapter.getItem(position)
-            Log.d("JugadorSeleccionado", jugadorSeleccionado ?: "N/A")
-            // Agregar aquí la lógica que deseas al tocar un jugador
-        }
-
         // Mostrar el diálogo
         dialog.show()
     }
-    private fun cargarJugadoresDesdeFirebase(adapter: ArrayAdapter<String>, searchView: androidx.appcompat.widget.SearchView) {
-        // Configurar la lógica para cargar los jugadores desde Firebase
-        // Utiliza Firebase para obtener los datos de los jugadores y luego actualiza el adaptador
-        // Puedes usar una consulta de Firebase para filtrar los jugadores según sea necesario
 
-        // Ejemplo: Llenar el adaptador con nombres de jugadores ficticios
-        val jugadoresFicticios = listOf("Jugador 1", "Jugador 2", "Jugador 3")
-        adapter.addAll(jugadoresFicticios)
+    private fun cargarJugadoresDesdeFirebase(adapter: AddBossToReservationAdapter, searchView: androidx.appcompat.widget.SearchView) {
+        val db = Firebase.firestore
+        val usersCollectionRef = db.collection("jugadores")
+        val userList: ArrayList<JugadoresDataModel> = ArrayList()
+
+        usersCollectionRef
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val user = JugadoresDataModel(
+                        document["nombre"].toString(),
+                        document["apodo"].toString(),
+                        document["clasificacion"].toString(),
+                        document["posiciones"] as MutableList<String>,
+                        document.id
+                    )
+                    userList.add(user)
+                }
+                Log.d("JugadorSeleccionado", "Nombre.${userList}" )
+                // Actualizar el adaptador con la lista de usuarios obtenida de Firebase
+                adapter.setData(userList)
+            }
+            .addOnFailureListener { exception ->
+                Log.w("Firebase", "Error getting documents.", exception)
+            }
 
         // Configurar la lógica de búsqueda si es necesario
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -386,11 +407,13 @@ class CreateReservations : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 // Lógica de búsqueda mientras se escribe
-                adapter.filter.filter(newText)
+                adapter.filter(newText ?: "")
                 return true
             }
         })
     }
+
+
 
     private fun limpiarListaYRecycler() {
         if (checkTengoEquipo.isChecked) {
