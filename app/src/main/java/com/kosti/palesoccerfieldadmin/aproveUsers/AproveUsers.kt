@@ -60,6 +60,8 @@ class AproveUsers : AppCompatActivity() {
                     if(user["posiciones"] == null ||
                         user["nombre"] == null ||
                         user["apodo"] == null ||
+                        user["UID"] == null ||
+                        user["correo"] == null ||
                         user["id"] == null
                         ){
                         Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
@@ -69,7 +71,9 @@ class AproveUsers : AppCompatActivity() {
                         JugadoresDataModel(
                             user["nombre"].toString(),
                             user["apodo"].toString(),
-                            user["id"].toString()
+                            user["UID"].toString(),
+                            user["id"].toString(),
+                            user["correo"].toString()
                         )
                     )
                 }

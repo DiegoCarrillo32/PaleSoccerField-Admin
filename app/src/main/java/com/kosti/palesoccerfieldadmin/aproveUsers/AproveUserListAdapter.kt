@@ -55,6 +55,29 @@ class AproveUserListAdapter(
             builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
                 val userApproved = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
                 val currentPosition = holder.adapterPosition // Guarda la posición actual
+                FirebaseUtils().getCollectionByProperty("lista_bloqueos", "correo", item.Email){
+                    result ->
+
+                        result.onSuccess {
+
+                            if(it.isNotEmpty()){
+                                val userBloqued = FirebaseUtils().getDocumentReferenceById("lista_bloqueos", it[0]["id"].toString())
+                                db.runBatch() { batch ->
+                                    batch.delete(userBloqued)
+                                }.addOnCompleteListener() { task ->
+                                    if (task.isSuccessful) {
+                                        Toast.makeText(context, "Usuario Desbloqueado", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(context, "Error al desbloquear usuario", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+
+                        }
+                }
+
+
+
                 db.runBatch() { batch ->
                     batch.update(userApproved, "estado", true)
                 }.addOnCompleteListener() { task ->
@@ -76,33 +99,36 @@ class AproveUserListAdapter(
         }
 
 //        // Deny Button Click
-//        holder.btnDeny.setOnClickListener {
-//            val db = FirebaseFirestore.getInstance()
-//
-//            val builder = AlertDialog.Builder(context)
-//            builder.setTitle("Denegar usuario")
-//            builder.setMessage("¿Estás seguro de que quieres denegar este usuario?")
-//            builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
-//                val userEliminated = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
-//                val currentPosition = holder.adapterPosition // Guarda la posición actual
-//                db.runBatch() { batch ->
-//                    batch.delete(userEliminated)
-//                }.addOnCompleteListener() { task ->
-//                    if (task.isSuccessful) {
-//                        Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show()
-//                        playerToApproveOrDeny = null
-//                        data.removeAt(currentPosition)
-//                        notifyItemRemoved(currentPosition)
-//                    } else {
-//                        Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//            builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
-//                // TODO: do nothing or handle cancel action
-//            }
-//            builder.show()
-//        }
+        holder.btnDeny.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Denegar usuario")
+            builder.setMessage("¿Estás seguro de que quieres denegar este usuario?")
+            builder.setPositiveButton("Si") { dialogInterface: DialogInterface, i: Int ->
+                var bloquedMail : HashMap<String, Any>
+                        = HashMap()
+                bloquedMail["correo"] = item.Email
+                val currentPosition = holder.adapterPosition
+                FirebaseUtils().getCollectionByProperty("lista_bloqueos", "correo", item.Email){ result ->
+                    result.onSuccess {
+                        if(it.isEmpty()){
+                            FirebaseUtils().createDocument("lista_bloqueos", bloquedMail)
+                        }
+                    }
+                    result.onFailure {
+                        Toast.makeText(context, "Error al rechazar el usuario", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                data.removeAt(currentPosition)
+                notifyItemRemoved(currentPosition)
+            }
+            builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
+                // TODO: do nothing or handle cancel action
+            }
+            builder.show()
+        }
     }
 
 
@@ -118,7 +144,7 @@ class AproveUserListAdapter(
         val userName: TextView = itemView.findViewById(R.id.tvUserName)
         val userNickname: TextView = itemView.findViewById(R.id.tvUserNickname)
         val btnAprove: ImageButton = itemView.findViewById(R.id.acceptBtn)
-//        val btnDeny: ImageButton = itemView.findViewById(R.id.denyBtn)
+        val btnDeny: ImageButton = itemView.findViewById(R.id.denyBtn)
     }
 
     fun showDialogClassifier() {

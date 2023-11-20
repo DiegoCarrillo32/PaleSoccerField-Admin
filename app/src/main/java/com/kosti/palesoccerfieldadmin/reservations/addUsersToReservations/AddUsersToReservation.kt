@@ -23,12 +23,13 @@ class AddUsersToReservation : AppCompatActivity() {
     private val playersNameCollection = "jugadores"
     private lateinit var idUser: String
 
-
+    private var playersIds: ArrayList<String> = ArrayList()
+    private var challengersIds: ArrayList<String> = ArrayList()
     private lateinit var searchView: androidx.appcompat.widget.SearchView
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
 
     //This have users
-    private var userList: ArrayList<JugadoresDataModel> = ArrayList()
+    private var userList: MutableList<JugadoresDataModel> = ArrayList()
 
     private var usersForProposalTeam: ArrayList<JugadoresDataModel> = ArrayList()
     private var usersForChallengingTeam: ArrayList<JugadoresDataModel> = ArrayList()
@@ -42,7 +43,8 @@ class AddUsersToReservation : AppCompatActivity() {
         toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarAddUserToReservation)
         val btnAddPlayers:Button = findViewById(R.id.btnAddPlayersToReservation)
         whereAdd = intent.getStringExtra("textParameter").toString()
-
+                playersIds = intent.getStringArrayListExtra("playersIds") ?: ArrayList()
+                challengersIds = intent.getStringArrayListExtra("challengersIds") ?: ArrayList()
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapterAddUsers = AddUsersToReservationAdapter(ArrayList(), this::addUserToReservation)
         recyclerView.adapter = adapterAddUsers
@@ -80,13 +82,36 @@ class AddUsersToReservation : AppCompatActivity() {
                             document["posiciones"] as MutableList<String>,
                             document["id"].toString()
                         )
+                        findUserIdByNameAndNickname(user.Name, user.Nickname) { userId ->
+                            if (userId != null) {
+                                if(whereAdd=="proposalTeam") {
+                                    if(playersIds.isNotEmpty()){
+                                        if (userId in playersIds) {
+                                            //
+                                        } else {
+                                            Log.d("encuentraID", "#$userId")
+                                            userList.add(user)
+                                        }
+                                    }else{
+                                        userList.add(user)
+                                    }
 
-                        userList.add(user)
-                        Log.d("Usercito", "asd $userList")
+                                }else if(whereAdd=="challengingTeam"){
+                                    if(challengersIds.isNotEmpty()){
+                                        if (userId in challengersIds) {
+                                            //
+                                        } else {
+                                            Log.d("encuentraID", "#$userId")
+                                            userList.add(user)
+                                        }
+                                    }else{
+                                        userList.add(user)
+                                    }
+                                }
+                            }
+                            updateAdapterData(userList)
+                        }
                     }
-
-                    // Llama a la función para actualizar los datos en el adaptador
-                    updateAdapterData(userList)
                 } else {
                     Log.d("Usercito", "No se encontraron documentos en la colección $collectionName")
                 }
@@ -121,11 +146,23 @@ class AddUsersToReservation : AppCompatActivity() {
                 if (responsesReceived == selectedUsers.size) {
                     // Todas las respuestas han sido recibidas, puedes continuar con el código
                     val intent = Intent(this, CreateReservations::class.java)
-                    intent.putStringArrayListExtra("jugadoresIds", ArrayList(userIds))
-                    Log.d("SelectedUserIds", "Aqui?${userIds.toString()}")
+
+                    when (whereAdd) {
+                        "proposalTeam" -> {
+                            intent.putExtra("textParameter", "proposalTeam")
+                            playersIds = playersIds.plus(userIds) as ArrayList<String>
+                            intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
+                            intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
+
+                        }
+                        "challengingTeam" -> {
+                            intent.putExtra("textParameter", "challengingTeam")
+                            challengersIds = challengersIds.plus(userIds) as ArrayList<String>
+                            intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
+                            intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
+                        }
+                    }
                     startActivity(intent)
-                    // Hacer algo con la lista de IDs de usuarios seleccionados
-                    Log.d("SelectedUserIds", userIds.toString())
                 }
             }
         }
@@ -166,11 +203,6 @@ class AddUsersToReservation : AppCompatActivity() {
                 // Agregar usuario a usersForChallengingTeam
                 usersForChallengingTeam.add(userData)
             }
-            else -> {
-                // Lógica adicional si es necesario
-            }
         }
-        // Aquí puedes implementar la lógica para añadir un usuario a la reserva
-        Log.d("Reservation", "+")
     }
 }
