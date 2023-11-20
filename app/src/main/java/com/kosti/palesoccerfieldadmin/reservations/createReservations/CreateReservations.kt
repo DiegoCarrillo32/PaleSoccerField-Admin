@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
+import com.kosti.palesoccerfieldadmin.reservations.CustomSpinnerAdapter
 import com.kosti.palesoccerfieldadmin.reservations.addUsersToReservations.AddUsersToReservation
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
@@ -98,10 +99,10 @@ class CreateReservations : AppCompatActivity() {
 
 
     private fun spinnerTypeReservation() {
-        val types = resources.getStringArray(R.array.typesOfReservation)
+        val types = resources.getStringArray(R.array.typesOfReservation).toList()
         val spinnerTypesOfRsrv: Spinner = findViewById(R.id.spinnerTipoReserva)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, types)
+        val adapter = CustomSpinnerAdapter(this,R.layout.custom_spinner, types)
 
         // Especifica el diseño que se usará cuando se desplieguen las opciones
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -169,7 +170,7 @@ class CreateReservations : AppCompatActivity() {
                 }
 
                 // Crear un ArrayAdapter y establecerlo en el Spinner
-                val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, scheduleText)
+                val adapter = CustomSpinnerAdapter(this,R.layout.custom_spinner, scheduleText)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerSchedules.adapter = adapter
 
