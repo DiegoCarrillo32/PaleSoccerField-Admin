@@ -54,7 +54,7 @@ class AproveUsers : AppCompatActivity() {
             .show()
         userList.clear()
         userListProgressBar.visibility = View.VISIBLE
-        FirebaseUtils().readCollectionStateFalse(playersNameCollection) { result ->
+        FirebaseUtils().readCollectionStateFalse(playersNameCollection, "estado") { result ->
             result.onSuccess {
                 for (user in it){
                     if(user["posiciones"] == null ||

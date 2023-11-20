@@ -52,12 +52,12 @@ class FirebaseUtils {
 
 
     fun readCollectionStateFalse(
-        collectionName: String,
+        collectionName: String,state: String,
         callback: (Result<MutableList<HashMap<String, Any>>>) -> Unit
     ) {
         val documents = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName)
-            .whereEqualTo("estado", false)
+            .whereEqualTo(state, false)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
