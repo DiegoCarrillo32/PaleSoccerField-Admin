@@ -145,8 +145,28 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
                 // Create a new Calendar instance to hold the selected time
                 val selectedTime = Calendar.getInstance()
                 // Set the selected time using the values received from the TimePicker dialog
+                if(!select_flag && selectedTimeStart != null && selectedTimeStart!!.toDate().hours > hourOfDay){
+                    Toast.makeText(context, "La hora final no puede ser menor a la hora inicial", Toast.LENGTH_SHORT).show()
+                    return@TimePickerDialog
+
+                }
+
+                if(!select_flag && selectedTimeStart == null) {
+                    Toast.makeText(context, "Por favor seleccione la hora inicial", Toast.LENGTH_SHORT).show()
+                    return@TimePickerDialog
+                }
+
+
+
+                // if the selected time is 1 hour or less than the selected start time, show an error message
+                if(!select_flag && hourOfDay < selectedTimeStart!!.toDate().hours+1){
+                    Toast.makeText(context, "La cantidad minima de reserva es 1 hora", Toast.LENGTH_SHORT).show()
+                    return@TimePickerDialog
+
+                }
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 selectedTime.set(Calendar.MINUTE, minute)
+
                 // Create a SimpleDateFormat to format the time as "HH:mm"
                 val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                 // Format the selected time into a string
@@ -167,6 +187,16 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
             calendar.get(Calendar.MINUTE),
             true
         )
+
+
+        if(selectedTimeStart != null && !select_flag)
+            selectedTimeStart?.toDate()
+                ?.let {
+                    timePickerDialog.updateTime(it.hours+1, selectedTimeStart!!.toDate().minutes)
+
+                }
+
+
         timePickerDialog.show()
     }
 
@@ -196,6 +226,7 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
         }
+
         // Show the DatePicker dialog
         datePickerDialog?.show()
     }
@@ -214,7 +245,9 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
             "tanda" to mutableListOf(
                 selectedTimeStart,
                 selectedTimeEnd
-            )
+            ),
+            "reservado" to false
+
         ))
     }
 
