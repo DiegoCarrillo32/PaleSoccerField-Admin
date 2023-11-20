@@ -110,6 +110,13 @@ class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, priva
         tvHoraI.text = horaInicio
 
         btnEliminar.setOnClickListener {
+            //TODO: si el horario reservacion es true, entonces cancele los cambios
+
+            if(dataSet[position].reservado){
+                Toast.makeText(context, "No se puede eliminar el horario porque una reserva depende de el", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+                return@setOnClickListener
+            }
 
             FirebaseUtils().getCollectionByProperty("reservas", "horario", dataSet[position].id){
                     result ->
@@ -148,7 +155,8 @@ class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, priva
                     val scheduleData = ScheduleDataModel(
                         schedule["id"] as String,
                         schedule["fecha"] as Timestamp,
-                        schedule["tanda"] as MutableList<Timestamp>
+                        schedule["tanda"] as MutableList<Timestamp>,
+                        schedule["reservado"] as Boolean,
                     )
                     dataSet.add(scheduleData)
 
