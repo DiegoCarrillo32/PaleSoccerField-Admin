@@ -1,6 +1,7 @@
 
 package com.kosti.palesoccerfieldadmin.reservations.addUsersToReservations
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -43,8 +44,8 @@ class AddUsersToReservation : AppCompatActivity() {
         toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarAddUserToReservation)
         val btnAddPlayers:Button = findViewById(R.id.btnAddPlayersToReservation)
         whereAdd = intent.getStringExtra("textParameter").toString()
-                playersIds = intent.getStringArrayListExtra("playersIds") ?: ArrayList()
-                challengersIds = intent.getStringArrayListExtra("challengersIds") ?: ArrayList()
+        playersIds = intent.getStringArrayListExtra("playersIds") ?: ArrayList()
+        challengersIds = intent.getStringArrayListExtra("challengersIds") ?: ArrayList()
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapterAddUsers = AddUsersToReservationAdapter(ArrayList(), this::addUserToReservation)
         recyclerView.adapter = adapterAddUsers
@@ -68,7 +69,9 @@ class AddUsersToReservation : AppCompatActivity() {
         val usersCollectionRef = db.collection(collectionName)
 
         // Limpiar la lista antes de agregar los nuevos usuarios
-        userList.clear()
+        if (userList.isNotEmpty()) {
+            userList.clear()
+        }
 
         usersCollectionRef
             .get()
@@ -146,7 +149,6 @@ class AddUsersToReservation : AppCompatActivity() {
                 if (responsesReceived == selectedUsers.size) {
                     // Todas las respuestas han sido recibidas, puedes continuar con el código
                     val intent = Intent(this, CreateReservations::class.java)
-
                     when (whereAdd) {
                         "proposalTeam" -> {
                             intent.putExtra("textParameter", "proposalTeam")
@@ -162,7 +164,9 @@ class AddUsersToReservation : AppCompatActivity() {
                             intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
                         }
                     }
-                    startActivity(intent)
+                    Log.d("seguimiento","challengersIds $challengersIds \nplayersIds $playersIds")
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
                 }
             }
         }

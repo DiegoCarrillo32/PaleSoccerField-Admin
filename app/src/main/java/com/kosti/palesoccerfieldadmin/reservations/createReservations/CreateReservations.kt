@@ -1,5 +1,6 @@
 package com.kosti.palesoccerfieldadmin.reservations.createReservations
 
+import android.app.Dialog
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +11,18 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.ListView
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
@@ -26,9 +34,19 @@ import java.util.Locale
 
 class CreateReservations : AppCompatActivity() {
 
+    private lateinit var adapterRemoveUsersPlayersTeamAdapter: RemoveUsersPlayersTeamAdapter
+    private lateinit var adapterRemoveUsersChallengingTeamAdapter: RemoveUsersChallengingTeamAdapter
+    private var playersIds: ArrayList<String> = ArrayList()
+    private var challengersIds: ArrayList<String> = ArrayList()
     private var usersForProposalTeam: ArrayList<JugadoresDataModel> = ArrayList()
     private var usersForChallengingTeam: ArrayList<JugadoresDataModel> = ArrayList()
+    private lateinit var startForResult : ActivityResultLauncher<Intent>
+    private lateinit var whereAdd: String
+
+    private lateinit var recyclerViewPlayers: RecyclerView
+    private lateinit var recyclerViewChallenging: RecyclerView
     private lateinit var toolbar: Toolbar
+    private lateinit var btnSelectBoss:Button
     private lateinit var btnAgregarJugadores: Button
     private lateinit var btnAgregarRetadores: Button
     private lateinit var spinnerTipoReserva: Spinner
@@ -39,20 +57,57 @@ class CreateReservations : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_reservations)
-        val userIds = intent.getStringArrayListExtra("jugadoresIds")
-        // Hacer algo con la lista de IDs recibidos
-        Log.d("ReceivedUserIds", "wtf${userIds.toString()}")
+
+        recyclerViewPlayers = findViewById(R.id.recyclerJugadoresEquipo)
+        recyclerViewPlayers.layoutManager = LinearLayoutManager(this)
+        adapterRemoveUsersPlayersTeamAdapter = RemoveUsersPlayersTeamAdapter(ArrayList(), this::userPlayersTeam)
+        recyclerViewPlayers.adapter = adapterRemoveUsersPlayersTeamAdapter
+        recyclerViewChallenging = findViewById(R.id.recyclerJugadoresRetadores)
+        recyclerViewChallenging.layoutManager = LinearLayoutManager(this)
+        adapterRemoveUsersChallengingTeamAdapter = RemoveUsersChallengingTeamAdapter(ArrayList(), this::userChallengingTeam)
+        recyclerViewChallenging.adapter = adapterRemoveUsersChallengingTeamAdapter
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                usersForProposalTeam.clear()
+                usersForChallengingTeam.clear()
+                whereAdd = data?.getStringExtra("textParameter").toString()
+                playersIds = data?.getStringArrayListExtra("playersIds") ?: ArrayList()
+                challengersIds = data?.getStringArrayListExtra("challengersIds") ?: ArrayList()
+
+                // Limpia las listas y vuelve a cargar desde Firebase
+                usersForProposalTeam.clear()
+                usersForChallengingTeam.clear()
+                loadTeamsFromFirebase(playersIds, isProposalTeam = true)
+                loadTeamsFromFirebase(challengersIds, isProposalTeam = false)
+            }
+        }
+        Log.d("playersIds","$playersIds")
         btnAgregarJugadores = findViewById(R.id.btnAgregarJugadorEquipo)
         btnAgregarRetadores = findViewById(R.id.btnAgregarJugadorRetador)
+        // Reemplaza tu código actual donde inicias la actividad AddUsersToReservation
         btnAgregarJugadores.setOnClickListener {
             val intent = Intent(this, AddUsersToReservation::class.java)
             intent.putExtra("textParameter", "proposalTeam")
-            this.startActivity(intent)
+            Log.d("seguimiento","challengersIds $challengersIds \nplayersIds $playersIds")
+            intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
+            intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
+            startForResult.launch(intent)
         }
+
         btnAgregarRetadores.setOnClickListener {
             val intent = Intent(this, AddUsersToReservation::class.java)
             intent.putExtra("textParameter", "challengingTeam")
-            this.startActivity(intent)
+            intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
+            intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
+            startForResult.launch(intent)
+        }
+
+        btnSelectBoss = findViewById(R.id.btnSeleccionarEncargado)
+
+        btnSelectBoss.setOnClickListener{
+            mostrarDialogo()
         }
 
         checkTengoEquipo = findViewById(R.id.checkTengoEquipo)
@@ -63,6 +118,11 @@ class CreateReservations : AppCompatActivity() {
             tengoEquipoChecked = isChecked
             // Desactivar el botón si el CheckBox está marcado
             btnAgregarJugadores.isEnabled = !isChecked
+
+            // Limpiar el RecyclerView y la lista cuando el CheckBox se marca
+            if (isChecked) {
+                limpiarListaYRecycler()
+            }
         }
 
 
@@ -96,7 +156,6 @@ class CreateReservations : AppCompatActivity() {
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
     }
-
 
     private fun spinnerTypeReservation() {
         val types = resources.getStringArray(R.array.typesOfReservation).toList()
@@ -224,7 +283,7 @@ class CreateReservations : AppCompatActivity() {
         btn.isEnabled = tipoReserva != "Privada" && !tengoEquipoChecked
         btn2.isEnabled = tipoReserva != "Privada" && !tengoEquipoChecked
         chckBox.isEnabled = tipoReserva != "Privada"
-
+        limpiarListaYRecycler()
     }
 
     //TODO: METER LOGICA PARA QUE DEPENDIENDO DE LAS OPCIONES QUE SE SELECCIONEN SE DESACTIVEN UNAS U OTRAS EN EL UI lista
@@ -243,5 +302,127 @@ class CreateReservations : AppCompatActivity() {
 
     //TODO: IMPORTANTEEEEEE FUNCIONALIDAD PARA EL BOTON DE CREAR RESERVA METER LAS 100000 VALIDACIONES
 
+    private fun loadTeamsFromFirebase(list: ArrayList<String>, isProposalTeam: Boolean) {
+        // Verificar si la carga desde Firebase ya se realizó
+        val usersList = if (isProposalTeam) usersForProposalTeam else usersForChallengingTeam
+        if ((isProposalTeam && usersForProposalTeam.isNotEmpty()) || (!isProposalTeam && usersForChallengingTeam.isNotEmpty())) {
+            return
+        }
 
+        val db = Firebase.firestore
+        val jugadoresCollection = db.collection("jugadores")
+
+        for (playerId in list) {
+            db.collection("jugadores").document(playerId).get().addOnSuccessListener { document ->
+            }
+            jugadoresCollection.document(playerId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userData = JugadoresDataModel(
+                            document["nombre"].toString(),
+                            document["apodo"].toString(),
+                            document["clasificacion"].toString(),
+                            document["posiciones"] as MutableList<String>,
+                            document.id
+                        )
+
+                        usersList.add(userData)
+
+                        if (isProposalTeam) {
+                            adapterRemoveUsersPlayersTeamAdapter.setData(usersList)
+                        } else {
+                            adapterRemoveUsersChallengingTeamAdapter.setData(usersList)
+                        }
+                    } else {
+                        Log.d("Firestore", "No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("Firestore", "Error getting document", exception)
+                }
+        }
+    }
+
+    private fun mostrarDialogo() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_select_boss) // Reemplazar con el layout correcto
+
+        val listView = dialog.findViewById<ListView>(R.id.listViewSelectBoss)
+        val searchView = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.searchViewSelectBoss)
+
+        // Configurar la lista y cargar los jugadores desde Firebase
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ArrayList())
+        listView.adapter = adapter
+
+        // Configurar la lógica para cargar los jugadores desde Firebase
+        cargarJugadoresDesdeFirebase(adapter, searchView)
+
+        // Establecer la lógica de clic en la lista
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val jugadorSeleccionado = adapter.getItem(position)
+            Log.d("JugadorSeleccionado", jugadorSeleccionado ?: "N/A")
+            // Agregar aquí la lógica que deseas al tocar un jugador
+        }
+
+        // Mostrar el diálogo
+        dialog.show()
+    }
+    private fun cargarJugadoresDesdeFirebase(adapter: ArrayAdapter<String>, searchView: androidx.appcompat.widget.SearchView) {
+        // Configurar la lógica para cargar los jugadores desde Firebase
+        // Utiliza Firebase para obtener los datos de los jugadores y luego actualiza el adaptador
+        // Puedes usar una consulta de Firebase para filtrar los jugadores según sea necesario
+
+        // Ejemplo: Llenar el adaptador con nombres de jugadores ficticios
+        val jugadoresFicticios = listOf("Jugador 1", "Jugador 2", "Jugador 3")
+        adapter.addAll(jugadoresFicticios)
+
+        // Configurar la lógica de búsqueda si es necesario
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Lógica de búsqueda si se envía el texto
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Lógica de búsqueda mientras se escribe
+                adapter.filter.filter(newText)
+                return true
+            }
+        })
+    }
+
+    private fun limpiarListaYRecycler() {
+        if (checkTengoEquipo.isChecked) {
+            usersForProposalTeam.clear()
+            playersIds.clear()
+            adapterRemoveUsersPlayersTeamAdapter.setData(usersForProposalTeam)
+        }
+        if (!checkTengoEquipo.isEnabled){
+            usersForProposalTeam.clear()
+            playersIds.clear()
+            usersForChallengingTeam.clear()
+            challengersIds.clear()
+            adapterRemoveUsersPlayersTeamAdapter.setData(usersForProposalTeam)
+            adapterRemoveUsersChallengingTeamAdapter.setData(usersForChallengingTeam)
+        }
+
+
+    }
+    private fun userPlayersTeam(userData: JugadoresDataModel) {
+        if (userData.Id in playersIds) {
+            playersIds.remove(userData.Id)
+        }
+        usersForProposalTeam.remove(userData)
+
+        adapterRemoveUsersPlayersTeamAdapter.setData(usersForProposalTeam)
+    }
+
+    private fun userChallengingTeam(userData: JugadoresDataModel) {
+        if(userData.Id in challengersIds){
+            challengersIds.remove(userData.Id)
+        }
+        usersForChallengingTeam.remove(userData)
+        adapterRemoveUsersChallengingTeamAdapter.setData(usersForChallengingTeam)
+    }
 }

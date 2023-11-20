@@ -140,83 +140,93 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:paddingLeft="10dp"
-        android:orientation="horizontal">
-
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvEquipoReserva"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Equipo propuesta: "
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btnAgregarJugadorEquipo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/agregar"
-                tools:text="Agregar" />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerJugadoresEquipo"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:minHeight="64dp"
-            android:visibility="visible"/>
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="10dp"
+            android:orientation="horizontal">
 
-    <LinearLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvEquipoReserva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Equipo propuesta: "
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnAgregarJugadorEquipo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/agregar"
+                    tools:text="Agregar" />
+            </LinearLayout>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerJugadoresEquipo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:minHeight="64dp"
+                android:visibility="visible"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:paddingLeft="10dp"
-        android:orientation="horizontal">
-
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvEquipoRetador"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Equipo retador:      "
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btnAgregarJugadorRetador"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/agregar"
-                tools:text="Agregar" />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerJugadoresRetadores"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:minHeight="64dp"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="10dp"
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvEquipoRetador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Equipo retador:      "
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnAgregarJugadorRetador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/agregar"
+                    tools:text="Agregar" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerJugadoresRetadores"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:minHeight="64dp"
+                android:visibility="visible" />
+        </LinearLayout>
+    </ScrollView>
     <Button
         android:id="@+id/btn_aceptar"
         android:layout_width="match_parent"
