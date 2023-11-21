@@ -180,7 +180,7 @@ class CreateReservations : AppCompatActivity() {
         val reservacion: HashMap<String, Any> = HashMap<String, Any>()
 
         if(boss!=null && scheduleSelected!=null){//Validamos que haya un encargado y un horario seleccionado
-            reservacion["encargado"] = boss.Id
+            reservacion["encargado"] = boss.UID
             reservacion["horario"] = scheduleSelected.id
             reservacion["fecha"] = scheduleSelected.fecha as Timestamp
             reservacion["jugadores"] = playersIds
@@ -194,6 +194,8 @@ class CreateReservations : AppCompatActivity() {
                 reservacion["equipo"] = false
             }
             FirebaseUtils().createDocument("reservas", reservacion)
+            Toast.makeText(this,"Se creó la reserva exitosamente",Toast.LENGTH_LONG).show()
+            finish()
         }else{
             Toast.makeText(this,"Por favor llenar todos los campos",Toast.LENGTH_LONG).show()
         }
