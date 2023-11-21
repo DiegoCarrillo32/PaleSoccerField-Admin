@@ -7,6 +7,7 @@
     <item name="listJugadoresRetadores" type="id" />
     <item name="checkTengoEquipo" type="id" />
     <item name="btnAgregarJugadorEquipo" type="id" />
+    <item name="btnCrearReserva" type="id" />
     <item name="btnAgregarJugadorRetador" type="id" />
     <item name="recyclerJugadoresEquipo" type="id" />
     <item name="recyclerJugadoresRetadores" type="id" />

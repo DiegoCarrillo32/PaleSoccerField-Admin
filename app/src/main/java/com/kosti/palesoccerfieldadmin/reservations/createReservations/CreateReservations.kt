@@ -24,6 +24,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.type.DateTime
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
@@ -40,8 +41,8 @@ class CreateReservations : AppCompatActivity() {
     private lateinit var adapterRemoveUsersChallengingTeamAdapter: RemoveUsersChallengingTeamAdapter
     private var playersIds: ArrayList<String> = ArrayList()
     private var challengersIds: ArrayList<String> = ArrayList()
-    private var usersForProposalTeam: ArrayList<JugadoresDataModel> = ArrayList()
-    private var usersForChallengingTeam: ArrayList<JugadoresDataModel> = ArrayList()
+    private var usersForProposalTeam: MutableList<JugadoresDataModel> = ArrayList()
+    private var usersForChallengingTeam: MutableList<JugadoresDataModel> = ArrayList()
     private lateinit var startForResult : ActivityResultLauncher<Intent>
     private lateinit var whereAdd: String
 
@@ -51,6 +52,7 @@ class CreateReservations : AppCompatActivity() {
     private lateinit var btnSelectBoss:Button
     private lateinit var btnAgregarJugadores: Button
     private lateinit var btnAgregarRetadores: Button
+    private lateinit var btnCrearReserva: Button
     private lateinit var spinnerTipoReserva: Spinner
     private lateinit var checkTengoEquipo: CheckBox
     private lateinit var scheduleSelected:ScheduleDataModel
@@ -87,14 +89,13 @@ class CreateReservations : AppCompatActivity() {
                 loadTeamsFromFirebase(challengersIds, isProposalTeam = false)
             }
         }
-        Log.d("playersIds","$playersIds")
+
         btnAgregarJugadores = findViewById(R.id.btnAgregarJugadorEquipo)
         btnAgregarRetadores = findViewById(R.id.btnAgregarJugadorRetador)
         // Reemplaza tu código actual donde inicias la actividad AddUsersToReservation
         btnAgregarJugadores.setOnClickListener {
             val intent = Intent(this, AddUsersToReservation::class.java)
             intent.putExtra("textParameter", "proposalTeam")
-            Log.d("seguimiento","challengersIds $challengersIds \nplayersIds $playersIds")
             intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
             intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
             startForResult.launch(intent)
@@ -106,6 +107,10 @@ class CreateReservations : AppCompatActivity() {
             intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
             intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
             startForResult.launch(intent)
+        }
+        btnCrearReserva = findViewById(R.id.btnCrearReserva)
+        btnCrearReserva.setOnClickListener{
+            createReservation()
         }
 
         btnSelectBoss = findViewById(R.id.btnSeleccionarEncargado)
@@ -159,6 +164,39 @@ class CreateReservations : AppCompatActivity() {
 
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    private fun createReservation(){
+        /*Todo
+            * encargado: id
+            * equipo: boolean
+            * estado:boolean
+            * fecha:timestamp
+            * horarioID: id
+            * jugadores: ?
+            * retadores: ?
+            * tipo: "Publica" o "Privada"
+            * */
+        val reservacion: HashMap<String, Any> = HashMap<String, Any>()
+
+        if(boss!=null && scheduleSelected!=null){//Validamos que haya un encargado y un horario seleccionado
+            reservacion["encargado"] = boss.Id
+            reservacion["horario"] = scheduleSelected.id
+            reservacion["fecha"] = scheduleSelected.fecha as Timestamp
+            reservacion["jugadores"] = playersIds
+            reservacion["retadores"] = challengersIds
+            reservacion["estado"] = true
+            if(checkTengoEquipo.isEnabled){//Validamos que esté disponible el check para decir que tengo equipo
+                reservacion["tipo"] = "Publica"
+                reservacion["equipo"] = checkTengoEquipo.isChecked
+            }else{
+                reservacion["tipo"] = "Privada"
+                reservacion["equipo"] = false
+            }
+            FirebaseUtils().createDocument("reservas", reservacion)
+        }else{
+            Toast.makeText(this,"Por favor llenar todos los campos",Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun spinnerTypeReservation() {
@@ -328,7 +366,8 @@ class CreateReservations : AppCompatActivity() {
                             document["apodo"].toString(),
                             document["clasificacion"].toString(),
                             document["posiciones"] as MutableList<String>,
-                            document.id
+                            document.id,
+                            document["UID"].toString()
                         )
 
                         usersList.add(userData)
@@ -357,7 +396,6 @@ class CreateReservations : AppCompatActivity() {
         recyclerViewD.layoutManager = LinearLayoutManager(this)
         // Configurar el RecyclerView y cargar los jugadores desde Firebase
         val adapter = AddBossToReservationAdapter(ArrayList()) { jugadorSeleccionado ->
-            Log.d("JugadorSeleccionado", jugadorSeleccionado.Name)
             boss = jugadorSeleccionado
             tvBoss = findViewById(R.id.tvBoss)
             tvBoss.text = boss.Name
@@ -386,11 +424,13 @@ class CreateReservations : AppCompatActivity() {
                         document["apodo"].toString(),
                         document["clasificacion"].toString(),
                         document["posiciones"] as MutableList<String>,
-                        document.id
+                        document.id,
+                        document["UID"].toString()
                     )
                     userList.add(user)
+
                 }
-                Log.d("JugadorSeleccionado", "Nombre.${userList}" )
+
                 // Actualizar el adaptador con la lista de usuarios obtenida de Firebase
                 adapter.setData(userList)
             }
@@ -412,9 +452,6 @@ class CreateReservations : AppCompatActivity() {
             }
         })
     }
-
-
-
     private fun limpiarListaYRecycler() {
         if (checkTengoEquipo.isChecked) {
             usersForProposalTeam.clear()

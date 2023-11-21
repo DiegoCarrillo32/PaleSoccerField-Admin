@@ -83,6 +83,7 @@ class AddUsersToReservation : AppCompatActivity() {
                             document["apodo"].toString(),
                             document["clasificacion"].toString(),
                             document["posiciones"] as MutableList<String>,
+                            document.id,
                             document["id"].toString()
                         )
                         findUserIdByNameAndNickname(user.Name, user.Nickname) { userId ->
