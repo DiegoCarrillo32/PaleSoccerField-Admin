@@ -53,9 +53,10 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
 
-                android:src="@drawable/profile"
+                android:src="@drawable/pales_logo"
                 app:shapeAppearanceOverlay="@style/circular"
-                app:strokeColor="#FFF"
+                android:background="#FFF"
+                app:strokeColor="#03105E"
                 app:strokeWidth="3dp" />
 
             <TextView

@@ -173,7 +173,7 @@ class CreateReservations : AppCompatActivity() {
         // Une el ArrayAdapter al Spinner
         spinnerTypesOfRsrv.adapter = adapter
 
-        // Opcionalmente, puedes configurar un escuchador para detectar la selección del usuario
+
         spinnerTypesOfRsrv.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -202,7 +202,7 @@ class CreateReservations : AppCompatActivity() {
         val spinnerSchedules: Spinner = findViewById(R.id.spinnerHorario)
 
         // Configurar Firestore
-        val db = FirebaseFirestore.getInstance()
+        FirebaseFirestore.getInstance()
 
 
         FirebaseUtils().readCollectionStateFalse("horario", "reservado") { result ->
@@ -237,7 +237,7 @@ class CreateReservations : AppCompatActivity() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerSchedules.adapter = adapter
 
-                // Opcionalmente, puedes configurar un escuchador para detectar la selección del usuario
+
                 spinnerSchedules.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                        scheduleSelected = reservationsSchedules[position]
@@ -245,7 +245,7 @@ class CreateReservations : AppCompatActivity() {
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
-                        // No es necesario implementar nada aquí si no se selecciona nada
+
                     }
                 }
             }
