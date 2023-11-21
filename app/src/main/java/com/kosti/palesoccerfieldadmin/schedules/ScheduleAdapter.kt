@@ -98,7 +98,6 @@ class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, priva
         builder.setView(dialogView)
         val dialog = builder.create()
 
-
         val btnCancelar: Button = dialogView.findViewById(R.id.btn_dialog_cancelar)
         val btnEliminar: Button = dialogView.findViewById(R.id.btn_dialog_eliminar)
         val tvFechaHorario: TextView = dialogView.findViewById(R.id.dialog_tVFecha)
@@ -110,7 +109,6 @@ class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, priva
         tvHoraI.text = horaInicio
 
         btnEliminar.setOnClickListener {
-            //TODO: si el horario reservacion es true, entonces cancele los cambios
 
             if(dataSet[position].reservado){
                 Toast.makeText(context, "No se puede eliminar el horario porque una reserva depende de el", Toast.LENGTH_SHORT).show()

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import com.kosti.palesoccerfieldadmin.approveReview.AprobarResenia
 import com.kosti.palesoccerfieldadmin.reservations.aproveReservations.AproveReservations
 import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
@@ -81,6 +82,13 @@ class MainActivity : AppCompatActivity() {
         val btnAproveReservation = findViewById<Button>(R.id.btnAproveReservations)
         btnAproveReservation.setOnClickListener {
             val intent = Intent(this, AproveReservations::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
+
+        val btnApproveReviews = findViewById<Button>(R.id.btnApproveReviews)
+        btnApproveReviews.setOnClickListener {
+            val intent = Intent(this, AprobarResenia::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
         }
