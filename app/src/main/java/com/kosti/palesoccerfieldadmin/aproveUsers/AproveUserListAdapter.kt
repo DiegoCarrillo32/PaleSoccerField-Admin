@@ -109,7 +109,20 @@ class AproveUserListAdapter(
                 var bloquedMail : HashMap<String, Any>
                         = HashMap()
                 bloquedMail["correo"] = item.Email
+                val reservationEliminated = FirebaseUtils().getDocumentReferenceById("reservas", item.Id)
                 val currentPosition = holder.adapterPosition
+                db.runBatch() { batch ->
+                    batch.delete(reservationEliminated)
+                }.addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "Reserva eliminada", Toast.LENGTH_SHORT).show()
+                        data.removeAt(currentPosition)
+                        notifyItemRemoved(currentPosition)
+                    } else {
+                        Toast.makeText(context, "Error al eliminar la reserva", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
                 FirebaseUtils().getCollectionByProperty("lista_bloqueos", "correo", item.Email){ result ->
                     result.onSuccess {
                         if(it.isEmpty()){
