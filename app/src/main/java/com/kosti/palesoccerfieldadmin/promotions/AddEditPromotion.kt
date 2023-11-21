@@ -1,6 +1,7 @@
 package com.kosti.palesoccerfieldadmin.promotions
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.PromotionDataModel
+import com.kosti.palesoccerfieldadmin.schedules.AddScheduleFragment
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -45,6 +47,9 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
     private var selectedTimeStart: Timestamp = Timestamp(Date())
     private var selectedTimeEnd: Timestamp = Timestamp(Date())
+
+    private var onDismissListener: OnDismissListener? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +107,7 @@ class AddEditPromotion : BottomSheetDialogFragment() {
                 AddToDb(btnName, btnDescription)
             }
 
-            dismiss()
+
         }
 
 
@@ -111,6 +116,16 @@ class AddEditPromotion : BottomSheetDialogFragment() {
     private fun EditToDb(btnName: EditText?, btnDescription: EditText?) {
         val name = btnName?.text.toString()
         val desc = btnDescription?.text.toString()
+
+        if(name.isEmpty() || desc.isEmpty()){
+            Toast.makeText(context, "Por favor llene todos los campos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if(selectedTimeStart.seconds > selectedTimeEnd.seconds){
+            Toast.makeText(context, "La fecha de inicio no puede ser mayor a la fecha de fin", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         FirebaseUtils().updateDocument(
             "promocion", id!!, hashMapOf(
@@ -122,12 +137,22 @@ class AddEditPromotion : BottomSheetDialogFragment() {
                 "imagen_url" to ""
             )
         )
+        dismiss()
         Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
     }
 
     private fun AddToDb(btnName: EditText, btnDescription: EditText) {
         val name = btnName.text.toString()
         val desc = btnDescription.text.toString()
+        if(name.isEmpty() || desc.isEmpty()){
+            Toast.makeText(context, "Por favor llene todos los campos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if(selectedTimeStart.seconds > selectedTimeEnd.seconds){
+            Toast.makeText(context, "La fecha de inicio no puede ser mayor a la fecha de fin", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         FirebaseUtils().createDocument(
             "promocion", hashMapOf(
@@ -139,6 +164,7 @@ class AddEditPromotion : BottomSheetDialogFragment() {
                 "imagen_url" to ""
             )
         )
+        dismiss()
         Toast.makeText(context, "Promocion agregada", Toast.LENGTH_SHORT).show()
     }
 
@@ -177,6 +203,20 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
         // Show the DatePicker dialog
         datePickerDialog?.show()
+    }
+
+    fun setOnDismissListener(listener: OnDismissListener) {
+        onDismissListener = listener
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListener?.onDismissOnActivity()
+    }
+
+    interface OnDismissListener {
+        fun onDismissOnActivity()
+
     }
 
 }

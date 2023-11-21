@@ -15,7 +15,7 @@ import com.kosti.palesoccerfieldadmin.schedules.AddScheduleFragment
 import com.kosti.palesoccerfieldadmin.schedules.ScheduleAdapter
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
-class Promotions : AppCompatActivity() {
+class Promotions : AppCompatActivity(), AddEditPromotion.OnDismissListener {
 
     private val COLLECTION_NAME = "promocion"
     private lateinit var recyclerview: RecyclerView
@@ -29,7 +29,6 @@ class Promotions : AppCompatActivity() {
         recyclerview.layoutManager = LinearLayoutManager(this)
         promotionList = mutableListOf()
         getPromotionData()
-
 
         val toolbar: Toolbar = findViewById(R.id.toolbarPromotions)
         setSupportActionBar(toolbar)
@@ -50,7 +49,7 @@ class Promotions : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_add -> {
                 val bottomSheetFragment = AddEditPromotion()
-                //bottomSheetFragment.setOnDismissListener(this)
+                bottomSheetFragment.setOnDismissListener(this)
                 bottomSheetFragment.show(supportFragmentManager, "AEPDialogFragment")
                 true
             }
@@ -62,6 +61,7 @@ class Promotions : AppCompatActivity() {
         FirebaseUtils().readCollection(COLLECTION_NAME) {
                 result ->
             result.onSuccess {
+                promotionList.clear()
                 for (promotion in it){
                     if(promotion["estado"] != true) continue
 
@@ -79,6 +79,7 @@ class Promotions : AppCompatActivity() {
                 }
                 val adapter = PromotionAdapter(promotionList, this)
                 recyclerview.adapter = adapter
+                recyclerview.adapter?.notifyDataSetChanged()
             }
             result.onFailure {
 
@@ -86,5 +87,9 @@ class Promotions : AppCompatActivity() {
 
         }
 
+    }
+
+    override fun onDismissOnActivity() {
+        getPromotionData()
     }
 }

@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.time.Duration.Companion.hours
 
-val COLLECTION_NAME = "horario"
+private val COLLECTION_NAME = "horario"
 class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, private val context: Context) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(), AddScheduleFragment.OnDismissListener {
     //TODO: Validar los campos, revisar por que las horas se ven raro, verificar bien las fechas
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

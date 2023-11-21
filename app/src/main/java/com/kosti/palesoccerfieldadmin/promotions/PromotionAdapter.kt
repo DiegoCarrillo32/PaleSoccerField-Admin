@@ -9,14 +9,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.PromotionDataModel
+import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 import java.util.Locale
 
+private val COLLECTION_NAME = "promocion"
+
 class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
-                       private val context: Context) : RecyclerView.Adapter<PromotionAdapter.ViewHolder>(){
+                       private val context: Context) : RecyclerView.Adapter<PromotionAdapter.ViewHolder>(), AddEditPromotion.OnDismissListener {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameTV : TextView
@@ -84,6 +88,8 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             // open the fragment to edit the promotion data
             val bundle = Bundle()
             val addEditPromotion = AddEditPromotion()
+            addEditPromotion.setOnDismissListener(this)
+
             bundle.putString("id", dataSet[position].Id)
             bundle.putString("name", dataSet[position].Name)
             bundle.putString("description", dataSet[position].Description)
@@ -92,11 +98,42 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             bundle.putSerializable("endDate", dataSet[position].EndDate.toDate())
             bundle.putString("imageUrl", dataSet[position].ImageUrl)
             addEditPromotion.arguments = bundle
+
+
             addEditPromotion.show((context as Promotions).supportFragmentManager, "BSDialogFragment")
 
 
         }
 
+    }
+
+    override fun onDismissOnActivity() {
+        FirebaseUtils().readCollection(COLLECTION_NAME) {
+                result ->
+            result.onSuccess {
+                dataSet.clear()
+                for (promotion in it){
+                    if(promotion["estado"] != true) continue
+
+                    val promotionData = PromotionDataModel(
+                        promotion["id"].toString(),
+                        promotion["descripcion"].toString(),
+                        promotion["estado"] as Boolean,
+                        promotion["fecha_final"] as Timestamp,
+                        promotion["fecha_inicio"] as Timestamp,
+                        promotion["imagen_url"].toString(),
+                        promotion["nombre"].toString(),
+                    )
+                    dataSet.add(promotionData)
+
+                }
+                notifyDataSetChanged()
+            }
+            result.onFailure {
+
+            }
+
+        }
     }
 
 }
