@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Visitar Aprobar Usuarios?"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="¿Desea visitar la lista de usuarios por aprobar?"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="24dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btn_dialog_cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:textColor="@android:color/black"
+            android:background="@drawable/rectangle_fecha_nacimiento"
+            android:layout_marginEnd="8dp"
+            />
+
+        <Button
+            android:id="@+id/btn_dialog_visitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Visitar"
+            android:textColor="@android:color/black"
+            android:background="@drawable/rectangle_fecha_nacimiento"
+            />
+
+    </LinearLayout>
+</LinearLayout>
