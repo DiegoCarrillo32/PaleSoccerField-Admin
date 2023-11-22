@@ -58,7 +58,8 @@ class SpecialEvents : AppCompatActivity() {
         FirebaseUtils().readCollection("evento_especial") { result ->
             result.onSuccess {
                 for(eventoEspecial in it){
-                    if (eventoEspecial["nombre"] == null ||
+                    if (eventoEspecial["id"] == null ||
+                        eventoEspecial["nombre"] == null ||
                         eventoEspecial["fecha"] == null ||
                         eventoEspecial["descripcion"] == null ||
                         eventoEspecial["estado"] == null
@@ -68,6 +69,7 @@ class SpecialEvents : AppCompatActivity() {
                     }
                     listaEventosEspeciales.add(
                         EventoEspecialDataModel(
+                            eventoEspecial["id"].toString(),
                             eventoEspecial["descripcion"].toString(),
                             eventoEspecial["estado"] as Boolean,
                             eventoEspecial["fecha"] as Timestamp,

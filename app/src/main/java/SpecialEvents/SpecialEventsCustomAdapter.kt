@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.EventoEspecialDataModel
+import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import com.squareup.picasso.Picasso
 import java.util.Date
 import java.util.Locale
 
@@ -67,7 +69,7 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
         }
         viewHolder.tV_descripcion.text = dataSet[position].Description
 
-        //viewHolder.imagen.
+        if(dataSet[position].ImageUrl != "")Picasso.get().load(dataSet[position].ImageUrl).into(viewHolder.imagen)
 
         viewHolder.btnEditar.setOnClickListener {
 
@@ -80,12 +82,22 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
         }
 
         viewHolder.btnEliminar.setOnClickListener {
-            Toast.makeText(
-                viewHolder.itemView.context,
-                "Eliminar",
-                Toast.LENGTH_SHORT,
-            ).show()
+            val builder = android.app.AlertDialog.Builder(context)
+            builder.setTitle("Eliminar evento especial")
+            builder.setMessage("¿Estas seguro que deseas eliminar este evento especial?")
+            builder.setPositiveButton("Si") { dialog, which ->
+                FirebaseUtils().deleteImage(dataSet[position].ImageUrl);
+                FirebaseUtils().deleteDocument("evento_especial", dataSet[position].id)
+                dataSet.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, dataSet.size)
+            }
+            builder.setNeutralButton("Cancelar") {_,_ ->
+                //Toast.makeText(context,"You cancelled the dialog.",Toast.LENGTH_SHORT).show()
+            }
+            builder.show()
         }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
