@@ -1,13 +1,10 @@
 package com.kosti.palesoccerfieldadmin.macthBookings
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MotionEvent
 import android.widget.CalendarView
-import android.widget.EditText
-import android.widget.ListView
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,19 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
-import com.kosti.palesoccerfieldadmin.reservations.CustomAdapter
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
-
 
 class MatchBookings : AppCompatActivity() {
 
     private lateinit var customAdapter: MatchBookingsCustomAdapter
     private lateinit var listaReservas: MutableList<ReservasDataModel>
-    private lateinit var reservasDelDia: MutableList<ReservasDataModel>
     private lateinit var recyclerView: RecyclerView
 
     init {
+        listaReservas = mutableListOf()
         getReservasFromFirebase()
     }
 
@@ -36,39 +31,51 @@ class MatchBookings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_bookings)
 
-        listaReservas = mutableListOf()
-
-        reservasDelDia = mutableListOf()
-
         val calendarView = findViewById<CalendarView>(R.id.calendarView)
         val noReservationsMessage = findViewById<TextView>(R.id.noReservationsMessage)
         recyclerView = findViewById(R.id.recycler)
 
 
-
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
 
 
-            // Aquí debes cargar las reservas para la fecha seleccionada
-            // Puedes utilizar una función o una llamada a una API, dependiendo de tu implementación
+            val reservasFiltradas = filtrarReservas(year, month, dayOfMonth)
 
-            // Ejemplo de cómo mostrar o ocultar el ListView y el mensaje según si hay reservas o no
-
-            if (listaReservas.size > 0) {
+            if (reservasFiltradas.size > 0) {
                 recyclerView.visibility = android.view.View.VISIBLE
                 noReservationsMessage.visibility = android.view.View.GONE
                 // Aquí deberías cargar las reservas en el listView
-                cargarReservas()
+                cargarReservas(reservasFiltradas)
 
             } else {
                 recyclerView.visibility = android.view.View.GONE
                 noReservationsMessage.visibility = android.view.View.VISIBLE
             }
         }
+
+        val btnBack = findViewById<ImageButton>(R.id.backButton)
+        btnBack.setOnClickListener { finish() }
     }
 
-    fun cargarReservas(){
-        customAdapter = MatchBookingsCustomAdapter(listaReservas, this)
+
+    fun filtrarReservas(year: Int, month: Int, dayOfMonth: Int): MutableList<ReservasDataModel> {
+        val fechaFiltrada = listaReservas.filter { reserva ->
+            val reservaDate = reserva.Date.toDate()
+            val reservaCalendar = Calendar.getInstance().apply {
+                time = reservaDate
+            }
+
+            // Comparar año, mes y día
+            reservaCalendar.get(Calendar.YEAR) == year &&
+                    reservaCalendar.get(Calendar.MONTH) == month &&
+                    reservaCalendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth
+        }.toMutableList()
+
+        return fechaFiltrada
+    }
+
+    fun cargarReservas(reservasFiltradas: MutableList<ReservasDataModel>){
+        customAdapter = MatchBookingsCustomAdapter(reservasFiltradas, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = customAdapter
     }
@@ -106,7 +113,6 @@ class MatchBookings : AppCompatActivity() {
                             ).show()
                         }
                     }
-
                 }
             }
             result.onFailure {
