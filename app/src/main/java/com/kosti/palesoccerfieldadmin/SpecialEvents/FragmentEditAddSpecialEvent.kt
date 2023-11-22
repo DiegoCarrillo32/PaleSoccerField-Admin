@@ -1,4 +1,4 @@
-package SpecialEvents
+package com.kosti.palesoccerfieldadmin.SpecialEvents
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -117,7 +117,7 @@ class FragmentEditAddSpecialEvent : BottomSheetDialogFragment() {
                 group, checkedId ->
 
             radioButton = view.findViewById(checkedId)
-            if (radioButton.text == "Activo"){
+            if (radioButton.text == "Activo") {
                 estado =true
             }else {
                 estado =false
@@ -182,10 +182,6 @@ class FragmentEditAddSpecialEvent : BottomSheetDialogFragment() {
             return
         }
 
-        if(imageUri == Uri.EMPTY){
-            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
-            return
-        }
 
         // disable the isDraggable bottom sheet to avoid errors
 
@@ -193,34 +189,50 @@ class FragmentEditAddSpecialEvent : BottomSheetDialogFragment() {
             (dialog as BottomSheetDialog).behavior.isDraggable = false
 
         }
+
         isCancelable = false
 
         if(imageUrl != ""){
             FirebaseUtils().deleteImage(imageUrl)
         }
 
-
         radioGroup.checkedRadioButtonId
-        FirebaseUtils().saveImage(imageUri, sd) {
-                result ->
-            result.onSuccess {res ->
-                imageUrl = res
-                FirebaseUtils().updateDocument(
-                    "evento_especial", id!!, hashMapOf(
-                        "nombre" to name,
-                        "descripcion" to desc,
-                        "estado" to estado,
-                        "fecha" to selectedTime,
-                        "imagen_url" to imageUrl
+        if(imageUri != Uri.EMPTY && sd != "") {
+            FirebaseUtils().saveImage(imageUri, sd) {
+                    result ->
+                result.onSuccess {res ->
+                    imageUrl = res
+                    FirebaseUtils().updateDocument(
+                        "evento_especial", id!!, hashMapOf(
+                            "nombre" to name,
+                            "descripcion" to desc,
+                            "estado" to estado,
+                            "fecha" to selectedTime,
+                            "imagen_url" to imageUrl
+                        )
                     )
+                    dismiss()
+                    Toast.makeText(context, "Evento editado", Toast.LENGTH_SHORT).show()
+                }
+                result.onFailure {
+                    Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else{
+            FirebaseUtils().updateDocument(
+                "evento_especial", id!!, hashMapOf(
+                    "nombre" to name,
+                    "descripcion" to desc,
+                    "estado" to estado,
+                    "fecha" to selectedTime,
+                    "imagen_url" to imageUrl
                 )
-                dismiss()
-                Toast.makeText(context, "Evento editado", Toast.LENGTH_SHORT).show()
-            }
-            result.onFailure {
-                Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
-            }
+            )
+            dismiss()
+            Toast.makeText(context, "Evento editado", Toast.LENGTH_SHORT).show()
         }
+
+
 
     }
 

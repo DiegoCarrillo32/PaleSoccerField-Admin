@@ -1,4 +1,4 @@
-package SpecialEvents
+package com.kosti.palesoccerfieldadmin.SpecialEvents
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat
@@ -21,7 +21,8 @@ import java.util.Date
 import java.util.Locale
 
 class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecialDataModel>, private val context: Context) :
-    RecyclerView.Adapter<SpecialEventsCustomAdapter.ViewHolder>(), FragmentEditAddSpecialEvent.OnDismissListener {
+    RecyclerView.Adapter<SpecialEventsCustomAdapter.ViewHolder>(),
+    FragmentEditAddSpecialEvent.OnDismissListener {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tV_nombre: TextView
@@ -45,7 +46,7 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
     }
 
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): SpecialEventsCustomAdapter.ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.special_events_list_item, viewGroup, false)
@@ -89,7 +90,7 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
             bundle.putBoolean("status", dataSet[position].Status)
             bundle.putString("imageUrl",dataSet[position].ImageUrl)
             fragmentSpecialEvent.arguments = bundle
-            fragmentSpecialEvent.show((context as SpecialEvents ).supportFragmentManager, "BSDialogFragment")
+            fragmentSpecialEvent.show((context as SpecialEvents).supportFragmentManager, "BSDialogFragment")
 
         }
 

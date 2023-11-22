@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="SpecialEvents.FragmentEditAddSpecialEvent"
+    tools:context=".SpecialEvents.FragmentEditAddSpecialEvent"
     android:padding="20dp">
 
     <TextView

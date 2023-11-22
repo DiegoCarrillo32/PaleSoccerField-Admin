@@ -180,7 +180,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Reservas"
+                    android:text="Calendario de Reservas"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -219,7 +219,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/check_icon"
+                    android:src="@drawable/registrar_horario_icon"
                     app:tint="@color/black" />
 
                 <Button
@@ -276,7 +276,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Gestion de Reservas"
+                    android:text="Editar / Agregar / Eliminar"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -356,7 +356,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/review_icon"
+                    android:src="@drawable/promotion_icon"
                     app:tint="@color/black" />
 
                 <Button
@@ -364,7 +364,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Gestion de promociones"
+                    android:text="Gestion de Promociones"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -380,7 +380,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/gestion_reservas"
+                    android:src="@drawable/baseline_celebration_24"
                     app:tint="@color/black" />
 
                 <Button
@@ -388,7 +388,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Eventos Especiales"
+                    android:text="Gestion de Eventos Especiales"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>

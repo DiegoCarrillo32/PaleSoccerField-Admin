@@ -18,7 +18,7 @@
             android:name=".reservations.editReservations.EditReservation"
             android:exported="false" />
         <activity
-            android:name="SpecialEvents.SpecialEvents"
+            android:name=".SpecialEvents.SpecialEvents"
             android:exported="false" />
         <activity
             android:name=".promotions.Promotions"
