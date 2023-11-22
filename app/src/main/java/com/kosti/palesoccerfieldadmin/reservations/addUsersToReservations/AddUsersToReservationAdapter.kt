@@ -18,7 +18,7 @@ class AddUsersToReservationAdapter(
 
     // Lista de usuarios seleccionados
     private val selectedUsers: MutableList<JugadoresDataModel> = mutableListOf()
-
+    private var originalData: MutableList<JugadoresDataModel> = data.toMutableList()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameProfile: TextView = itemView.findViewById(R.id.user_list_reservation_user_name)
         val nickNameProfile: TextView = itemView.findViewById(R.id.user_list_reservation_user_nickname)
@@ -69,9 +69,9 @@ class AddUsersToReservationAdapter(
                 filteredList.add(user)
             }
         }
-        data = filteredList
-        notifyDataSetChanged()
+        setData(filteredList)
     }
+
 
     fun toConvertListtoString(list: MutableList<String>): String {
         return list.joinToString(separator = "\n")
@@ -87,4 +87,5 @@ class AddUsersToReservationAdapter(
     fun getSelectedUsers(): List<JugadoresDataModel> {
         return selectedUsers.toList()
     }
+
 }

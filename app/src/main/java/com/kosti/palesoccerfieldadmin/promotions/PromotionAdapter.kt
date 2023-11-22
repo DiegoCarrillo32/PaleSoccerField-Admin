@@ -105,9 +105,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             bundle.putString("imageUrl", dataSet[position].ImageUrl)
             addEditPromotion.arguments = bundle
 
-
             addEditPromotion.show((context as Promotions).supportFragmentManager, "BSDialogFragment")
-
 
         }
 

@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.EventoEspecialDataModel
+import com.kosti.palesoccerfieldadmin.promotions.AddEditPromotion
 import com.kosti.palesoccerfieldadmin.reservations.CustomAdapter
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
-class SpecialEvents : AppCompatActivity() {
+class SpecialEvents : AppCompatActivity(), FragmentEditAddSpecialEvent.OnDismissListener {
 
-    private lateinit var toolbar: Toolbar
-    private lateinit var customAdapter: SpecialEventsCustomAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var listaEventosEspeciales: MutableList<EventoEspecialDataModel>
 
@@ -25,18 +24,19 @@ class SpecialEvents : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_special_events)
 
+        recyclerView = findViewById(R.id.reciclerSpecialEvents)
+        recyclerView.layoutManager = LinearLayoutManager(this)
         listaEventosEspeciales = mutableListOf()
+        consultarDatosEventosEspecialesFirebase()
 
-        toolbar = findViewById(R.id.toolbarSpecialEvents)
+        val toolbar: Toolbar = findViewById(R.id.toolbarSpecialEvents)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         toolbar.setNavigationOnClickListener {
-            //val intent = Intent(this, MainActivity::class.java)
-            //startActivity(intent)
             finish()
         }
-        consultarDatosEventosEspecialesFirebase()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,9 +47,11 @@ class SpecialEvents : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.addSpecialEvent -> {
+                val bottomSheetFragment = FragmentEditAddSpecialEvent()
+                bottomSheetFragment.setOnDismissListener(this)
+                bottomSheetFragment.show(supportFragmentManager, "AEPDialogFragment")
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -57,17 +59,13 @@ class SpecialEvents : AppCompatActivity() {
     fun consultarDatosEventosEspecialesFirebase() {
         FirebaseUtils().readCollection("evento_especial") { result ->
             result.onSuccess {
+                listaEventosEspeciales.clear()
                 for(eventoEspecial in it){
-                    if (eventoEspecial["nombre"] == null ||
-                        eventoEspecial["fecha"] == null ||
-                        eventoEspecial["descripcion"] == null ||
-                        eventoEspecial["estado"] == null
-                    ){
-                        Toast.makeText(this, "Reserva con datos erroneos", Toast.LENGTH_LONG).show()
-                        continue
-                    }
+                    //if (eventoEspecial["estado"] != true ) continue
+
                     listaEventosEspeciales.add(
                         EventoEspecialDataModel(
+                            eventoEspecial["id"].toString(),
                             eventoEspecial["descripcion"].toString(),
                             eventoEspecial["estado"] as Boolean,
                             eventoEspecial["fecha"] as Timestamp,
@@ -76,10 +74,10 @@ class SpecialEvents : AppCompatActivity() {
                         )
                     )
                 }
-                customAdapter = SpecialEventsCustomAdapter(listaEventosEspeciales, this)
-                recyclerView = findViewById(R.id.reciclerSpecialEvents)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                recyclerView.adapter = customAdapter
+
+                val adapter = SpecialEventsCustomAdapter(listaEventosEspeciales, this)
+                recyclerView.adapter = adapter
+                recyclerView.adapter?.notifyDataSetChanged()
             }
 
             result.onFailure {
@@ -91,4 +89,8 @@ class SpecialEvents : AppCompatActivity() {
             }
         }
     }
+    override fun onDismissOnActivity() {
+        consultarDatosEventosEspecialesFirebase()
+    }
+
 }

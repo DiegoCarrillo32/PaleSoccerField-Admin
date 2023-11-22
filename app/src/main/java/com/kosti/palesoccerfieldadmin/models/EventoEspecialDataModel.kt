@@ -14,18 +14,21 @@ import kotlin.properties.Delegates
  */
 class EventoEspecialDataModel() {
 
+    lateinit var id: String
     lateinit var Description: String
     var Status: Boolean by Delegates.notNull()
     lateinit var Date: Timestamp
     lateinit var ImageUrl: String
     lateinit var Name: String
     constructor(
+        Id: String,
         description: String,
         status: Boolean,
         date: Timestamp,
         imageUrl: String,
         name: String
     ) : this() {
+         id = Id
          Description = description
          Status = status
          Date= date

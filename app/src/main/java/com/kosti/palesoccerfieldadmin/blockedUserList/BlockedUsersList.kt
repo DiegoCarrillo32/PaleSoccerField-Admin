@@ -167,7 +167,7 @@ class BlockedUsersList : AppCompatActivity() {
                             document["nombre"].toString(),
                             document["apodo"].toString(),
                             document["uid"].toString(),
-                            document["id"].toString(),
+                            document.id,
                             document["correo"].toString()
                         )
 
