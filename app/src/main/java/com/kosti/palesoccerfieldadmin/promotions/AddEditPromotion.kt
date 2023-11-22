@@ -19,6 +19,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
@@ -186,8 +187,18 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
         if(imageUri == Uri.EMPTY){
             Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // disable the isDraggable bottom sheet to avoid errors
+
+
+        if(dialog is BottomSheetDialog) {
+            (dialog as BottomSheetDialog).behavior.isDraggable = false
 
         }
+        isCancelable = false
+
 
         if(imageUrl != ""){
             FirebaseUtils().deleteImage(imageUrl)
@@ -239,27 +250,45 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
             return
         }
+        // create a coroutine to save the image and get the url
 
-        FirebaseUtils().saveImage(imageUri, sd){
-                result ->
-            result.onSuccess {res ->
-                imageUrl = res
-                FirebaseUtils().createDocument(
-                    "promocion", hashMapOf(
-                        "nombre" to name,
-                        "descripcion" to desc,
-                        "estado" to true,
-                        "fecha_final" to selectedTimeStart,
-                        "fecha_inicio" to selectedTimeEnd,
-                        "imagen_url" to imageUrl
-                    )
-                )
-                dismiss()
-                Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()                }
-            result.onFailure {
-                Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
-            }
+
+
+
+        if(dialog is BottomSheetDialog) {
+            (dialog as BottomSheetDialog).behavior.isDraggable = false
+
         }
+        isCancelable = false
+
+
+
+        try {
+            FirebaseUtils().saveImage(imageUri, sd){
+                    result ->
+                result.onSuccess {res ->
+                    imageUrl = res
+                    FirebaseUtils().createDocument(
+                        "promocion", hashMapOf(
+                            "nombre" to name,
+                            "descripcion" to desc,
+                            "estado" to true,
+                            "fecha_final" to selectedTimeStart,
+                            "fecha_inicio" to selectedTimeEnd,
+                            "imagen_url" to imageUrl
+                        )
+                    )
+                    dismiss()
+                    Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()                }
+                result.onFailure {
+                    Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("AddEditPromotion", e.message.toString())
+            Toast.makeText(context, "Error al crear la promocion, por favor no cierre el formulario", Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 
