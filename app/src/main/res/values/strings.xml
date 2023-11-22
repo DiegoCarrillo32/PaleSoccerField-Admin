@@ -80,6 +80,28 @@
     <string name="fecha">Fecha:</string>
     <string name="crear">Crear</string>
     <string name="agregar">Agregar</string>
+    <string name="hay_usuarios_por_aceptar">Hay usuarios por aceptar</string>
+    <string name="desea_visitar_la_lista_de_usuarios_por_aprobar">¿Desea visitar la lista de usuarios por aprobar?</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="visitar">Visitar</string>
+    <string name="gestion_de_usuarios">Gestion de usuarios</string>
+    <string name="buscar_usuarios">Buscar usuarios</string>
+    <string name="aprobar_usuarios">Aprobar usuarios</string>
+    <string name="registrar_usuarios">Registrar usuarios</string>
+    <string name="gestion_de_reservas">Gestion de Reservas</string>
+    <string name="calendario_de_reservas">Calendario de Reservas</string>
+    <string name="historial_de_reservas">Historial de reservas</string>
+    <string name="registrar_horarios">Registrar Horarios</string>
+    <string name="aprobar_reservas">Aprobar Reservas</string>
+    <string name="editar_agregar_eliminar">Editar / Agregar / Eliminar</string>
+    <string name="otros">Otros</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="aprobar_rese_as">Aprobar reseñas</string>
+    <string name="gestion_de_promociones">Gestion de Promociones</string>
+    <string name="gestion_de_eventos_especiales">Gestion de Eventos Especiales</string>
+    <string name="eliminar_mi_cuenta">Eliminar mi cuenta</string>
+    <string name="log_out">Log out</string>
+    <string name="todo">TODO</string>
 
 
 </resources>
