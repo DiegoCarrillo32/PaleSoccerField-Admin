@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".blockedUserList.BlockedUsersList">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarAddUserToReservation"
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,18 +29,36 @@
             tools:layout_editor_absoluteX="112dp"
             tools:layout_editor_absoluteY="18dp" />
     </androidx.appcompat.widget.Toolbar>
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewAddUserToReservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         app:iconifiedByDefault="false" />
 
     <RadioGroup
         android:id="@+id/radioGroupFilterAddUserToReservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioAllAddUserToReservation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Todos"
+            android:checked="true" />
 
         <RadioButton
             android:id="@+id/radioBadAddUserToReservation"
@@ -46,8 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="malos"
-            android:checked="true"/>
+            android:text="Malos" />
 
         <RadioButton
             android:id="@+id/radioRegularAddUserToReservation"
@@ -55,50 +74,53 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="regulares" />
+            android:text="Regulares" />
+
         <RadioButton
             android:id="@+id/radioGoodAddUserToReservation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="buenos" />
+            android:text="Buenos" />
     </RadioGroup>
-
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:layout_weight="1">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAddUserToReservation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAddUserToReservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
 
-        <Button
-            android:id="@+id/btnAddPlayersToReservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="agregar"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="invitar"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textViewAddUserToReservation"
+    <Button
+        android:id="@+id/btnAddPlayersToReservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/no_hay_personas_bloqueadas"
-        android:visibility="gone"
-        />
+        android:layout_margin="10dp"
+        android:text="@string/agregar" />
 
+    <ProgressBar
+        android:id="@+id/progressBarAddUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/noResultsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="No se encontraron resultados" />
 
 </LinearLayout>

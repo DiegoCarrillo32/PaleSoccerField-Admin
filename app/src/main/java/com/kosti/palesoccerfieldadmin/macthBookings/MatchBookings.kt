@@ -35,9 +35,7 @@ class MatchBookings : AppCompatActivity() {
         val noReservationsMessage = findViewById<TextView>(R.id.noReservationsMessage)
         recyclerView = findViewById(R.id.recycler)
 
-
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-
 
             val reservasFiltradas = filtrarReservas(year, month, dayOfMonth)
 
@@ -56,7 +54,6 @@ class MatchBookings : AppCompatActivity() {
         val btnBack = findViewById<ImageButton>(R.id.backButton)
         btnBack.setOnClickListener { finish() }
     }
-
 
     fun filtrarReservas(year: Int, month: Int, dayOfMonth: Int): MutableList<ReservasDataModel> {
         val fechaFiltrada = listaReservas.filter { reserva ->
@@ -121,5 +118,6 @@ class MatchBookings : AppCompatActivity() {
             }
         }
     }
+
 }
 

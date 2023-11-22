@@ -1,5 +1,6 @@
 package com.kosti.palesoccerfieldadmin
 
+import SpecialEvents.SpecialEvents
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var btnRegistrarUsuario: Button
     lateinit var btnGestionDeReservas: Button
+    lateinit var btnEventosEspeciales: Button
     lateinit var btnLogOut: Button
     lateinit var usuarioNombreTV:TextView
     lateinit var usuarioCorreoTV: TextView
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         val userMail = intent.getStringExtra("userMail").toString()
         btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
         btnGestionDeReservas = findViewById(R.id.btnGestionDeReservas)
+        btnEventosEspeciales = findViewById(R.id.btnSpecialEvents)
 
         usuarioNombreTV = findViewById(R.id.nombreUsuarioTV)
         usuarioNombreTV.text = userName
@@ -116,12 +119,20 @@ class MainActivity : AppCompatActivity() {
             toGestionDeReservas()
         }
 
+        btnEventosEspeciales.setOnClickListener {
+            toSpecialEvents()
+        }
+
         btnLogOut = findViewById(R.id.btnLogOut)
         btnLogOut.setOnClickListener {
             // TODO: Hacer el logout en firebase o lo que sea
             toLogin()
         }
+    }
 
+    private fun toSpecialEvents() {
+        val intent = Intent(this, SpecialEvents::class.java)
+        startActivity(intent)
     }
 
     private fun manageNotifications() {
