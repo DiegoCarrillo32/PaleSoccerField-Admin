@@ -20,8 +20,7 @@ import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "name"
 private const val ARG_PARAM2 = "age"
 private const val ARG_PARAM3 = "phone"
@@ -32,15 +31,11 @@ private const val ARG_PARAM7 = "id"
 private const val COLLECTION_NAME = "jugadores"
 private const val CLASIFICATION_FIELD = "clasificacion"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileScreen.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 
 class ProfileScreen : BottomSheetDialogFragment() {
 
-    // TODO: Rename and change types of parameters
+
     private var name: String? = null
     private var age: Long? = null
     private var phone: String? = null
@@ -53,6 +48,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var onDismissListener: OnDismissListener? = null
     private var didEditClassification: Boolean = false
     private lateinit var  bottomSheetBehaviour: BottomSheetBehavior<View>;
+    private lateinit var  btnMessage: ImageButton
 
 
 
@@ -97,6 +93,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
         val closeButton: ImageButton = view.findViewById(R.id.backButton)
         val bloquedPeopleButton: ImageButton = view.findViewById(R.id.bloquedPeopleButton)
+        btnMessage = view.findViewById(R.id.messageButton)
 
 
         //Sheet behaviour
@@ -145,6 +142,10 @@ class ProfileScreen : BottomSheetDialogFragment() {
                 isEditingClassification = true
 
             }
+        }
+
+        btnMessage.setOnClickListener {
+
         }
 
 
