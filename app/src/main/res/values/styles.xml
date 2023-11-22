@@ -79,5 +79,10 @@
         <item name="android:background">@drawable/edit_text_layout</item>
     </style>
 
+    <style name="CustomEventDateText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/event_background</item>
+        <!-- Add other style attributes as needed -->
+    </style>
 
 </resources>

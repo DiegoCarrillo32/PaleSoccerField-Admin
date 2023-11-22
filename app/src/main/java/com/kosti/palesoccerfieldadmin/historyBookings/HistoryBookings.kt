@@ -3,8 +3,12 @@ package com.kosti.palesoccerfieldadmin.macthBookings
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.CalendarView
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +19,12 @@ import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
 
-class MatchBookings : AppCompatActivity() {
+class HistoryBookings : AppCompatActivity() {
 
-    private lateinit var customAdapter: MatchBookingsCustomAdapter
+    private lateinit var customAdapter: HistoryBookingsCustomAdapter
     private lateinit var listaReservas: MutableList<ReservasDataModel>
     private lateinit var recyclerView: RecyclerView
+    private var selectedOption: Boolean = true
 
     init {
         listaReservas = mutableListOf()
@@ -29,16 +34,35 @@ class MatchBookings : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_match_bookings)
+        setContentView(R.layout.activity_history_bookings)
 
         val calendarView = findViewById<CalendarView>(R.id.calendarView)
         val noReservationsMessage = findViewById<TextView>(R.id.noReservationsMessage)
         recyclerView = findViewById(R.id.recycler)
 
+        val spinner: Spinner = findViewById(R.id.spinner)
+
+        val opciones = listOf("Sí", "No")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.adapter = adapter
+
+        // Manejar la selección
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                selectedOption = opciones[position] == "Sí"
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // Manejar caso en que no se selecciona nada
+            }
+        }
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
 
-            val reservasFiltradas = filtrarReservas(year, month, dayOfMonth)
+            val reservasFiltradas = filtrarReservas(year, month, dayOfMonth, selectedOption)
 
             if (reservasFiltradas.size > 0) {
                 recyclerView.visibility = android.view.View.VISIBLE
@@ -56,7 +80,7 @@ class MatchBookings : AppCompatActivity() {
         btnBack.setOnClickListener { finish() }
     }
 
-    fun filtrarReservas(year: Int, month: Int, dayOfMonth: Int): MutableList<ReservasDataModel> {
+    fun filtrarReservas(year: Int, month: Int, dayOfMonth: Int, estado: Boolean): MutableList<ReservasDataModel> {
         val fechaFiltrada = listaReservas.filter { reserva ->
             val reservaDate = reserva.Date.toDate()
             val reservaCalendar = Calendar.getInstance().apply {
@@ -64,16 +88,21 @@ class MatchBookings : AppCompatActivity() {
             }
 
             // Comparar año, mes y día
-            reservaCalendar.get(Calendar.YEAR) == year &&
+            val fechaCoincide = reservaCalendar.get(Calendar.YEAR) == year &&
                     reservaCalendar.get(Calendar.MONTH) == month &&
                     reservaCalendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth
-        }.toMutableList()
 
+            // Comparar estado
+            val estadoCoincide = reserva.Status == estado
+
+            // Retornar true si ambas condiciones son verdaderas
+            fechaCoincide && estadoCoincide
+        }.toMutableList()
         return fechaFiltrada
     }
 
     fun cargarReservas(reservasFiltradas: MutableList<ReservasDataModel>){
-        customAdapter = MatchBookingsCustomAdapter(reservasFiltradas, this)
+        customAdapter = HistoryBookingsCustomAdapter(reservasFiltradas, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = customAdapter
     }
@@ -99,7 +128,9 @@ class MatchBookings : AppCompatActivity() {
                                     reserva["id"].toString(),
                                     user[0]["nombre"].toString(),
                                     reserva["fecha"] as Timestamp,
-                                    reserva["estado"] as Boolean
+                                    reserva["estado"] as Boolean,
+                                    reserva["equipo"] as Boolean,
+                                    reserva["tipo"].toString()
                                 )
                             )
                         }

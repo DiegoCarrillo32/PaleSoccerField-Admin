@@ -46,6 +46,10 @@ class CreateReservations : AppCompatActivity() {
     private lateinit var startForResult : ActivityResultLauncher<Intent>
     private lateinit var whereAdd: String
     private var originalBossList: List<JugadoresDataModel> = ArrayList()
+    private var reservationsSchedules = mutableListOf<ScheduleDataModel>()
+    private lateinit var spinnerSchedules: Spinner
+    private lateinit var spinnerTypesOfRsrv: Spinner
+    private lateinit var types: List<String>
 
     private lateinit var recyclerViewPlayers: RecyclerView
     private lateinit var recyclerViewChallenging: RecyclerView
@@ -61,10 +65,18 @@ class CreateReservations : AppCompatActivity() {
 
     private lateinit var boss: JugadoresDataModel
     private var tengoEquipoChecked = false
+
+
+
+    private lateinit var reservationIdToEdit: String // Agrega esta variable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_reservations)
-
+        reservationIdToEdit = intent.getStringExtra("reservationIdToEdit") ?: ""
+        types = resources.getStringArray(R.array.typesOfReservation).toList()
+        spinnerTypesOfRsrv = findViewById(R.id.spinnerTipoReserva)
+        spinnerSchedules = findViewById(R.id.spinnerHorario)
+        btnCrearReserva = findViewById(R.id.btnCrearReserva)
         recyclerViewPlayers = findViewById(R.id.recyclerJugadoresEquipo)
         recyclerViewPlayers.layoutManager = LinearLayoutManager(this)
         adapterRemoveUsersPlayersTeamAdapter = RemoveUsersPlayersTeamAdapter(ArrayList(), this::userPlayersTeam)
@@ -73,6 +85,18 @@ class CreateReservations : AppCompatActivity() {
         recyclerViewChallenging.layoutManager = LinearLayoutManager(this)
         adapterRemoveUsersChallengingTeamAdapter = RemoveUsersChallengingTeamAdapter(ArrayList(), this::userChallengingTeam)
         recyclerViewChallenging.adapter = adapterRemoveUsersChallengingTeamAdapter
+
+
+        if (reservationIdToEdit.isNotEmpty()) {
+            // Si reservationIdToEdit no está vacío, estás en modo edición
+            supportActionBar?.title = "Editar Reserva" // Cambia el título de la barra de acciones
+            cargarJugadoresDesdeFirebase()
+            cargarDatosReservaParaEdicion(reservationIdToEdit)
+            btnCrearReserva.text = "Editar" // Cambia el texto del botón
+        } else {
+            // Estás en modo creación
+            supportActionBar?.title = "Crear Reserva" // Cambia el título de la barra de acciones
+        }
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -109,10 +133,9 @@ class CreateReservations : AppCompatActivity() {
             intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
             startForResult.launch(intent)
         }
-        btnCrearReserva = findViewById(R.id.btnCrearReserva)
+
         btnCrearReserva.setOnClickListener{
-            Log.d("seguimientoBoss", "dasd ")
-            createReservation()
+            createOrUpdateReservation()
         }
 
         btnSelectBoss = findViewById(R.id.btnSeleccionarEncargado)
@@ -205,8 +228,8 @@ class CreateReservations : AppCompatActivity() {
     }
 
     private fun spinnerTypeReservation() {
-        val types = resources.getStringArray(R.array.typesOfReservation).toList()
-        val spinnerTypesOfRsrv: Spinner = findViewById(R.id.spinnerTipoReserva)
+
+
 
         val adapter = CustomSpinnerAdapter(this,R.layout.custom_spinner, types)
 
@@ -240,9 +263,9 @@ class CreateReservations : AppCompatActivity() {
 
     private fun spinnerSchedules() {
 
-        val reservationsSchedules = mutableListOf<ScheduleDataModel>()
 
-        val spinnerSchedules: Spinner = findViewById(R.id.spinnerHorario)
+
+
 
         // Configurar Firestore
         FirebaseFirestore.getInstance()
@@ -502,5 +525,193 @@ class CreateReservations : AppCompatActivity() {
         }
         usersForChallengingTeam.remove(userData)
         adapterRemoveUsersChallengingTeamAdapter.setData(usersForChallengingTeam)
+    }
+
+
+    /*
+    * Activity Editar
+    * */
+
+    private fun cargarDatosReservaParaEdicion(reservationId: String) {
+
+        // Lógica para cargar los datos de la reserva desde Firebase y llenar los campos de la interfaz
+        val db = Firebase.firestore
+        val reservasCollectionRef = db.collection("reservas")
+
+        // Realizar la consulta a Firebase para obtener los datos de la reserva
+        reservasCollectionRef.document(reservationId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                // Verificar si el documento existe
+                if (documentSnapshot.exists()) {
+                    // Obtener los datos del documento
+                    val encargado = documentSnapshot.getString("encargado")
+                    if(encargado != null){
+                        originalBossList.forEach { bossesito ->
+                            if (bossesito.UID == encargado){
+                                boss = bossesito
+                                tvBoss = findViewById(R.id.tvBoss)
+                                tvBoss.text = boss.Name
+                            }else{
+                                Log.d("ERROR EDIT","El encargado no existe")
+                            }
+                        }
+                    }
+                    spinnerSchedules()
+                    val horario = documentSnapshot.getString("horario")
+
+                    if(horario != null){
+                        reservationsSchedules.forEach{schedulito->
+                            if(schedulito.id == horario){
+                                scheduleSelected = schedulito
+                                val scheduleIds = reservationsSchedules.map { it.id }
+
+                                // Encontrar el índice de scheduleSelected en la lista de identificadores
+                                val indexOfSelected = scheduleIds.indexOf(scheduleSelected.id)
+
+                                // Verificar si el índice es válido y establecerlo como el elemento seleccionado en el Spinner
+                                if (indexOfSelected != -1) {
+                                    spinnerSchedules.setSelection(indexOfSelected)
+
+                                    // Configurar el listener del Spinner para manejar selecciones
+                                    spinnerSchedules.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                            scheduleSelected = reservationsSchedules[position]
+                                            // Puedes realizar acciones adicionales al seleccionar un elemento en el spinner
+                                        }
+
+                                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                                            // Acciones adicionales cuando no se selecciona nada en el spinner
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    spinnerTypeReservation()
+
+                    val equipo = documentSnapshot.getBoolean("equipo")
+                    val listaJugadores = documentSnapshot.get("jugadores") as MutableList<*>
+                    val listaRetadores = documentSnapshot.get("retadores") as MutableList<*>
+
+                    challengersIds = listaRetadores as ArrayList<String>
+                    playersIds = listaJugadores as ArrayList<String>
+                    loadTeamsFromFirebase(playersIds, isProposalTeam = true)
+                    loadTeamsFromFirebase(challengersIds, isProposalTeam = false)
+                    Toast.makeText(this,"Mae$equipo y ${checkTengoEquipo.isChecked}", Toast.LENGTH_SHORT).show()
+                    checkTengoEquipo.isChecked = equipo?: false
+
+                    val TipoDeReserva = documentSnapshot.getString("tipo")
+
+                    if (TipoDeReserva != null) {
+                        // Obtener el índice del elemento en la lista
+                        val index = types.indexOf(TipoDeReserva)
+
+                        // Establecer la selección en el Spinner
+                        if (index != -1) {
+                            spinnerTypesOfRsrv.setSelection(index)
+                        }
+
+                        spinnerTypesOfRsrv.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                val itemSeleccionado = types[position]
+                                actualizarVisibilidadBoton(
+                                    btnAgregarJugadores,
+                                    btnAgregarRetadores,
+                                    checkTengoEquipo,
+                                    itemSeleccionado.toString()
+                                )
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                            }
+                        }
+
+                    }
+                } else {
+                    // El documento no existe
+                    // Puedes manejar este caso según tus necesidades
+                }
+            }
+            .addOnFailureListener { e ->
+                // Manejar el error en la consulta a Firebase
+                // Puedes mostrar un mensaje de error o realizar otras acciones
+            }
+    }
+
+    private fun cargarJugadoresDesdeFirebase() {
+        val db = Firebase.firestore
+        val jugadoresCollectionRef = db.collection("jugadores")
+
+        // Limpiar la lista antes de agregar los nuevos usuarios
+        originalBossList = ArrayList()
+
+        jugadoresCollectionRef
+            .get()
+            .addOnSuccessListener { result ->
+                val userList: MutableList<JugadoresDataModel> = ArrayList()
+
+                for (document in result) {
+                    val user = JugadoresDataModel(
+                        document.getString("nombre").orEmpty(),
+                        document.getString("apodo").orEmpty(),
+                        document.getString("clasificacion").orEmpty(),
+                        document.get("posiciones") as? MutableList<String> ?: mutableListOf(),
+                        document.id,
+                        document.getString("UID").orEmpty()
+                    )
+                    userList.add(user)
+                }
+
+                // Almacena la lista completa
+                originalBossList = userList
+
+                // Ahora tienes la lista completa de jugadores en originalBossList
+                // Puedes realizar consultas a esta lista según tus necesidades
+            }
+            .addOnFailureListener { e ->
+                // Manejar el error en la consulta a Firebase
+                // Puedes mostrar un mensaje de error o realizar otras acciones
+            }
+    }
+
+
+    private fun createOrUpdateReservation() {
+        if (reservationIdToEdit.isNotEmpty()) {
+            // Estás en modo edición, implementa la lógica de actualización
+            updateReservation(reservationIdToEdit)
+        } else {
+            // Estás en modo creación, implementa la lógica de creación
+            createReservation()
+        }
+    }
+
+    private fun updateReservation(reservationId: String) {
+        val reservacion: HashMap<String, Any> = HashMap<String, Any>()
+        if(::boss.isInitialized && ::scheduleSelected.isInitialized){//Validamos que haya un encargado y un horario seleccionado
+            reservacion["encargado"] = boss.UID
+
+            reservacion["horario"] = scheduleSelected.id
+            reservacion["fecha"] = scheduleSelected.fecha as Timestamp
+            reservacion["jugadores"] = playersIds
+            reservacion["retadores"] = challengersIds
+            reservacion["estado"] = true
+            if(checkTengoEquipo.isEnabled){//Validamos que esté disponible el check para decir que tengo equipo
+                reservacion["tipo"] = "Publica"
+                reservacion["equipo"] = checkTengoEquipo.isChecked
+            }else{
+                reservacion["tipo"] = "Privada"
+                reservacion["equipo"] = false
+            }
+            FirebaseUtils().updateDocument("reservas",reservationId,reservacion)
+            Toast.makeText(this,"Se Actualizó la reserva exitosamente",Toast.LENGTH_LONG).show()
+            finish()
+        }else{
+            Toast.makeText(this,"Recuerda seleccionar un horario y un encargado.",Toast.LENGTH_LONG).show()
+        }
     }
 }
