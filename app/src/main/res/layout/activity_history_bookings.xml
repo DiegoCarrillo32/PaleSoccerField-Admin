@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="67dp"
             android:gravity="center"
-            android:text="@string/bookings_activity_tittle"
+            android:text="Historial de Reservas"
             android:textSize="18sp" />
 
     </LinearLayout>

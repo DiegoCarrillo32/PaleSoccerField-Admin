@@ -172,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/check_icon"
+                    android:src="@drawable/baseline_calendar_month_24"
                     app:tint="@color/black" />
 
                 <Button
@@ -195,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/check_icon"
+                    android:src="@drawable/baseline_history_24"
                     app:tint="@color/black" />
 
                 <Button

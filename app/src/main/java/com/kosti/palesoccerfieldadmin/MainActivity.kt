@@ -14,6 +14,7 @@ import com.kosti.palesoccerfieldadmin.aproveUsers.AproveUsers
 import com.kosti.palesoccerfieldadmin.deletePassword.DeleteAccount
 import com.kosti.palesoccerfieldadmin.login.Login
 import com.kosti.palesoccerfieldadmin.macthBookings.HistoryBookings
+import com.kosti.palesoccerfieldadmin.macthBookings.MatchBookings
 import com.kosti.palesoccerfieldadmin.promotions.Promotions
 import com.kosti.palesoccerfieldadmin.registro.Register
 import com.kosti.palesoccerfieldadmin.reservations.Reservations
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnBooking = findViewById<Button>(R.id.btnReservas)
         btnBooking.setOnClickListener {
-            val intent = Intent(this, HistoryBookings::class.java)
+            val intent = Intent(this, MatchBookings::class.java)
             startActivity(intent)
         }
 
