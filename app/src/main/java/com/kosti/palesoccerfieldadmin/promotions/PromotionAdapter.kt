@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
@@ -14,6 +15,7 @@ import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.PromotionDataModel
 import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import com.squareup.picasso.Picasso
 import java.util.Date
 import java.util.Locale
 
@@ -29,6 +31,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         val fechaFinalTV : TextView
         val deleteBtn : ImageButton
         val editBtn : ImageButton
+        val image : ImageView
         init {
             nameTV = view.findViewById(R.id.nameTV)
             descriptionTV = view.findViewById(R.id.descriptionTV)
@@ -36,6 +39,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             fechaFinalTV = view.findViewById(R.id.fechaFin)
             deleteBtn = view.findViewById(R.id.deleteBtn)
             editBtn = view.findViewById(R.id.editBtn)
+            image = view.findViewById(R.id.imageView)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PromotionAdapter.ViewHolder {
@@ -66,6 +70,8 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         holder.fechaFinalTV.text = "Fecha de finalizacion: $formattedDateFinal"
         holder.nameTV.text = dataSet[position].Name
         holder.descriptionTV.text = dataSet[position].Description
+        // set the image to the imageview using an url
+        if(dataSet[position].ImageUrl != "") Picasso.get().load(dataSet[position].ImageUrl).into(holder.image)
 
         holder.deleteBtn.setOnClickListener {
             val builder = android.app.AlertDialog.Builder(context)

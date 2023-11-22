@@ -1,21 +1,34 @@
 package com.kosti.palesoccerfieldadmin.promotions
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.PromotionDataModel
 import com.kosti.palesoccerfieldadmin.schedules.AddScheduleFragment
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -29,8 +42,6 @@ private const val ARG_PARAM5 = "endDate"
 private const val ARG_PARAM6 = "imageUrl"
 private const val ARG_PARAM7 = "status"
 
-
-
 class AddEditPromotion : BottomSheetDialogFragment() {
     // TODO: Rename and change types of parameters
     private var id: String? = null
@@ -38,18 +49,21 @@ class AddEditPromotion : BottomSheetDialogFragment() {
     private var desc: String? = null
     private var startDate: Date? = null
     private var endDate: Date? = null
-    private var imageUrl: String? = null
+    private var imageUrl: String = ""
     private var status: String? = null
+
+    private var imageUri : Uri = Uri.EMPTY
+    private var sd = ""
 
     private val calendar = Calendar.getInstance()
     private lateinit var btnDatePicker : TextView
     private lateinit var btnDatePicker2  : TextView
+    private var btnAddImage: ImageButton? = null
 
     private var selectedTimeStart: Timestamp = Timestamp(Date())
     private var selectedTimeEnd: Timestamp = Timestamp(Date())
 
     private var onDismissListener: OnDismissListener? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,10 +73,13 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             desc = it.getString(ARG_PARAM3)
             startDate = it.getSerializable(ARG_PARAM4) as Date
             endDate = it.getSerializable(ARG_PARAM5) as Date
-            imageUrl = it.getString(ARG_PARAM6)
+            imageUrl = it.getString(ARG_PARAM6) ?: ""
             status = it.getString(ARG_PARAM7)
 
         }
+
+
+
     }
 
     override fun onCreateView(
@@ -71,10 +88,31 @@ class AddEditPromotion : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_edit_promotion, container, false)
+
+
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == 1){
+            imageUri = data?.data ?: Uri.EMPTY
+            sd = getFileName(context, imageUri)
+            Toast.makeText(context, "Imagen seleccionada", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+
+        btnAddImage = view.findViewById<ImageButton>(R.id.selectImage)
+        btnAddImage?.setOnClickListener {
+            val galleryIntent = Intent(Intent.ACTION_PICK)
+            galleryIntent.type = "image/*"
+            // start the activiy in the FRAGMENT and get the result in the fragment
+            // get the result of the activity
+            startActivityForResult(galleryIntent, 1)
+        }
 
         btnDatePicker = view.findViewById<TextView>(R.id.selectDateStart)
         btnDatePicker.setOnClickListener {
@@ -113,6 +151,25 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
     }
 
+    @SuppressLint("Range")
+    private fun getFileName(context: Context?, imageUri: Uri): String {
+        if(imageUri.scheme == "content"){
+            val cursor = context?.contentResolver?.query(imageUri, null, null, null, null)
+            try {
+                if(cursor != null && cursor.moveToFirst()){
+                    if(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME) != -1)
+                        return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+        return imageUri.path?.lastIndexOf("/").let {
+            it?.let { it1 -> imageUri.path?.substring(it1) } ?: ""
+        }
+    }
+
     private fun EditToDb(btnName: EditText?, btnDescription: EditText?) {
         val name = btnName?.text.toString()
         val desc = btnDescription?.text.toString()
@@ -127,18 +184,39 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             return
         }
 
-        FirebaseUtils().updateDocument(
-            "promocion", id!!, hashMapOf(
-                "nombre" to name,
-                "descripcion" to desc,
-                "estado" to true,
-                "fecha_final" to selectedTimeStart,
-                "fecha_inicio" to selectedTimeEnd,
-                "imagen_url" to ""
-            )
-        )
-        dismiss()
-        Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
+        if(imageUri == Uri.EMPTY){
+            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
+
+        }
+
+        if(imageUrl != ""){
+            FirebaseUtils().deleteImage(imageUrl)
+        }
+
+
+        FirebaseUtils().saveImage(imageUri, sd){
+                result ->
+            result.onSuccess {res ->
+                imageUrl = res
+                FirebaseUtils().updateDocument(
+                    "promocion", id!!, hashMapOf(
+                        "nombre" to name,
+                        "descripcion" to desc,
+                        "estado" to true,
+                        "fecha_final" to selectedTimeStart,
+                        "fecha_inicio" to selectedTimeEnd,
+                        "imagen_url" to imageUrl
+                    )
+                )
+                dismiss()
+                Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
+            }
+            result.onFailure {
+                Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
     }
 
     private fun AddToDb(btnName: EditText, btnDescription: EditText) {
@@ -153,19 +231,36 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             Toast.makeText(context, "La fecha de inicio no puede ser mayor a la fecha de fin", Toast.LENGTH_SHORT).show()
             return
         }
+        if(imageUri == Uri.EMPTY || sd == ""){
+            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if(imageUri == Uri.EMPTY){
+            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        FirebaseUtils().createDocument(
-            "promocion", hashMapOf(
-                "nombre" to name,
-                "descripcion" to desc,
-                "estado" to true,
-                "fecha_final" to selectedTimeStart,
-                "fecha_inicio" to selectedTimeEnd,
-                "imagen_url" to ""
-            )
-        )
-        dismiss()
-        Toast.makeText(context, "Promocion agregada", Toast.LENGTH_SHORT).show()
+        FirebaseUtils().saveImage(imageUri, sd){
+                result ->
+            result.onSuccess {res ->
+                imageUrl = res
+                FirebaseUtils().createDocument(
+                    "promocion", hashMapOf(
+                        "nombre" to name,
+                        "descripcion" to desc,
+                        "estado" to true,
+                        "fecha_final" to selectedTimeStart,
+                        "fecha_inicio" to selectedTimeEnd,
+                        "imagen_url" to imageUrl
+                    )
+                )
+                dismiss()
+                Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()                }
+            result.onFailure {
+                Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
     private fun showDatePicker(text: TextView, flag: Boolean) {

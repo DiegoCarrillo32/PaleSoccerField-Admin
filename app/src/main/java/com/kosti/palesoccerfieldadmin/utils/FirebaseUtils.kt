@@ -1,12 +1,14 @@
 package com.kosti.palesoccerfieldadmin.utils
 
 import android.content.ContentValues.TAG
+import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -14,6 +16,19 @@ import java.util.Date
 
 class FirebaseUtils {
     private val db = Firebase.firestore
+    private val storage = Firebase.storage.reference
+
+    fun saveImage(imageUri:Uri,sd: String, callback: (Result<String>) -> Unit) {
+        val ref = storage.child("file/$sd").putFile(imageUri)
+
+        ref.addOnSuccessListener {
+            storage.child("file/$sd").downloadUrl.addOnSuccessListener {
+                callback(Result.success(it.toString()))
+            }
+        }.addOnFailureListener {
+            callback(Result.failure(it))
+        }
+    }
 
     fun readCollection(
         collectionName: String,
@@ -258,6 +273,11 @@ class FirebaseUtils {
         val date = Date(it)
         val formatter = SimpleDateFormat("dd/MM/yyyy")
         return formatter.format(date).toString()
+    }
+
+    fun deleteImage(imageUrl: String) {
+        val imageRef = storage.storage.getReferenceFromUrl(imageUrl)
+        imageRef.delete()
     }
 
 }

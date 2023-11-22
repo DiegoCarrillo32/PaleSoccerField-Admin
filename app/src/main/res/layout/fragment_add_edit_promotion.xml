@@ -81,6 +81,14 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/rectangle_fecha_nacimiento"/>
 
+    <ImageButton
+        android:id="@+id/selectImage"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/add_user_icon"
+        />
+
 
     <Button
         android:id="@+id/btn_addPromotion"
