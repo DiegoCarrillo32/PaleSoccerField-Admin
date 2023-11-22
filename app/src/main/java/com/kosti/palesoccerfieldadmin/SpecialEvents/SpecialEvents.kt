@@ -1,4 +1,4 @@
-package SpecialEvents
+package com.kosti.palesoccerfieldadmin.SpecialEvents
 
 import android.os.Bundle
 import android.view.Menu

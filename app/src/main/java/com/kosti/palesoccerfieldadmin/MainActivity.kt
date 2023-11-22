@@ -1,6 +1,6 @@
 package com.kosti.palesoccerfieldadmin
 
-import SpecialEvents.SpecialEvents
+import com.kosti.palesoccerfieldadmin.SpecialEvents.SpecialEvents
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
