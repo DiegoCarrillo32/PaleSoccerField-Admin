@@ -106,7 +106,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                         continue
                     }
 
-                    if(user["estado"] == false || user["rol"] == ADMIN_ROLE) {
+                    if(user["estado"] == false) {
                         continue
                     }
 
