@@ -24,7 +24,7 @@
             android:name=".reservations.addUsersToReservations.AddUsersToReservation"
             android:exported="false" />
         <activity
-            android:name=".macthBookings.MatchBookings"
+            android:name=".macthBookings.HistoryBookings"
             android:exported="false" />
         <activity
             android:name=".reservations.createReservations.CreateReservations"
