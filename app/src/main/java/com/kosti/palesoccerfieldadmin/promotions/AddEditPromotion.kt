@@ -78,8 +78,6 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
         }
 
-
-
     }
 
     override fun onCreateView(
@@ -88,8 +86,6 @@ class AddEditPromotion : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_edit_promotion, container, false)
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
