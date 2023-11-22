@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
     android:orientation="vertical"
-    >
+    tools:context="SpecialEvents.FragmentEditAddSpecialEvent"
+    android:padding="20dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -17,10 +17,10 @@
         android:layout_marginBottom="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/selectName"
+            android:id="@+id/selectNameES"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre de la promocion"
+            android:hint="Nombre del evento"
             android:inputType="text"
             android:maxLength="64"
             />
@@ -37,7 +37,7 @@
         android:layout_marginBottom="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/selectDesc"
+            android:id="@+id/selectDescES"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripcion"
@@ -49,12 +49,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Fecha de inicio"/>
+        android:text="Fecha"/>
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/selectDateStart"
+        android:id="@+id/selectDateES"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:hint="Fecha de inicio"
+        android:hint="Fecha"
         android:textSize="16sp"
         android:clickable="true"
         android:focusable="true"
@@ -67,36 +67,57 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Fecha de final"/>
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/selectDateEnd"
+        android:text="Estado"/>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:hint="Fecha de finalizacion"
-        android:textSize="16sp"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingTop="15dp"
-        android:paddingEnd="18dp"
-        android:paddingStart="10dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/rectangle_fecha_nacimiento"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/rectangle_fecha_nacimiento"
+        android:layout_marginBottom="20dp">
+
+        <RadioGroup
+            android:id="@+id/rg_evento_especial_estado"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/radio_button_1"
+           >
+
+            <RadioButton
+                android:id="@+id/radio_btn_activo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Activo" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_inactivo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Inactivo" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Imagen"/>
 
     <ImageButton
-        android:id="@+id/selectImage"
+        android:id="@+id/selectImageES"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/add_user_icon"
+        android:src="@drawable/upload_image_icon"
         />
 
-
     <Button
-        android:id="@+id/btn_addPromotion"
+        android:id="@+id/btn_addSpecialEvent"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="125dp"
         android:layout_height="50dp"
-
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_selector"
@@ -104,6 +125,4 @@
         android:textColor="@color/principal"
         android:textSize="21sp"
         android:textStyle="bold" />
-
-
 </LinearLayout>
