@@ -42,7 +42,8 @@
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF" />
+            android:background="@drawable/rounded_corners_booking_card"
+            android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
@@ -56,7 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="No hay reservas para este día"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:layout_marginTop="10dp" />
 
 
     </LinearLayout>
