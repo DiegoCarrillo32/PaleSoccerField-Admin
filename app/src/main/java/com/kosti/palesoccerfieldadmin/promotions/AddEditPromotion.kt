@@ -185,16 +185,12 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
             return
         }
-
-        // disable the isDraggable bottom sheet to avoid errors
-
-
+        
         if(dialog is BottomSheetDialog) {
             (dialog as BottomSheetDialog).behavior.isDraggable = false
 
         }
         isCancelable = false
-
 
         if(imageUrl != ""){
             FirebaseUtils().deleteImage(imageUrl)
