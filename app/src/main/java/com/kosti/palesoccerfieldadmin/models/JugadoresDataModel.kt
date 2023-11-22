@@ -74,7 +74,7 @@ public class JugadoresDataModel() {
         nick: String,
         phone: String,
         date: String,
-        id: String
+        id: String,
     ) : this() {
 
         Nickname = nick

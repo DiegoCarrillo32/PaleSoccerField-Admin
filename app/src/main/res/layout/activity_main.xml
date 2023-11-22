@@ -12,7 +12,7 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:orientation="horizontal">
         <ImageView
             android:src="@drawable/pales_logo"
@@ -45,70 +45,35 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:background="@color/grey"
-        />
+        android:layout_height="2dp"
+        android:layout_weight="0"
+        android:background="@color/grey" />
 
     <ScrollView
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="4">
+        android:layout_weight="2">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <!--    GESTION DE USUARIOS -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/check_icon"
-                    app:tint="@color/black" />
-
-                <Button
-                    android:id="@+id/btnReservas"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/white"
-                    android:text="Reservas"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/person_icon"
-                    app:tint="@color/black" />
-
-                <Button
-                    android:id="@+id/btnCuenta"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/white"
-                    android:text="Cuenta"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
+                android:layout_weight="0.1"
+                android:text="Gestion de usuarios"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@color/principal"
+                android:padding="2dp"
+                android:layout_marginHorizontal="10dp"/>
+            <!--    BUSCAR USUARIO  -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,7 +97,7 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
-
+            <!--    APROBAR USUARIO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -156,7 +121,7 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
-
+            <!--    REGISTRAR USUARIO-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -181,6 +146,46 @@
 
             </LinearLayout>
 
+
+            <!--    GESTION DE RESERVAS -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="Gestion de Reservas"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@color/principal"
+                android:padding="2dp"
+                android:layout_marginHorizontal="10dp">
+            </TextView>
+            <!--    CALENDARIO DE RESERVAS    -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/check_icon"
+                    app:tint="@color/black" />
+
+                <Button
+                    android:id="@+id/btnReservas"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Reservas"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+            <!--    REGISTRAR HORARIO-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -205,6 +210,7 @@
 
             </LinearLayout>
 
+            <!--    APROBAR RESERVA-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -228,6 +234,7 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
+            <!--    AGREGAR, EDITAR, ELIMINAR RESERVAS-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -251,25 +258,139 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
+            <!--    OTROS -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="Otros"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@color/principal"
+                android:padding="2dp"
+                android:layout_marginHorizontal="10dp">
+            </TextView>
+
+            <!--    CUENTA USUARIO   -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/person_icon"
+                    app:tint="@color/black" />
+
+                <Button
+                    android:id="@+id/btnCuenta"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Cuenta"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!--    GESTION DE RESEÑAS-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/review_icon"
+                    app:tint="@color/black" />
+
+                <Button
+                    android:id="@+id/btnApproveReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Aprobar reseñas"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!--    GESTION DE PROMOCIONES-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/review_icon"
+                    app:tint="@color/black" />
+
+                <Button
+                    android:id="@+id/btnPromotionManagement"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Gestion de promociones"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!--    GESTION DE PROMOCIONES-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/gestion_reservas"
+                    app:tint="@color/black" />
+
+                <Button
+                    android:id="@+id/btnSpecialEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Eventos Especiales"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_weight="0"
+        android:background="@color/grey" />
     <Button
         android:id="@+id/btnSend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:backgroundTint="@color/white"
         android:text="Eliminar mi cuenta"
         android:textColor="#FF0000"
         android:textSize="20sp" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:background="@color/grey"
-        />
+        android:layout_height="2dp"
+        android:layout_weight="0"
+        android:background="@color/grey" />
     <Button
         android:id="@+id/btnLogOut"
         android:backgroundTint="@color/white"

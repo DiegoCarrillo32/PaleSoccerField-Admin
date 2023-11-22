@@ -33,13 +33,14 @@ class Reservations : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbarGestionDeReservas)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        consultarDatosReservasFirebase()
+
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            //val intent = Intent(this, MainActivity::class.java)
+            //startActivity(intent)
             finish()
         }
+        consultarDatosReservasFirebase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

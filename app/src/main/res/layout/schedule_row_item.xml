@@ -3,43 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <TextView
+
         android:id="@+id/dateTV"
         android:layout_weight="2"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:text="Fecha de la tanda"/>
 
     <TextView
         android:id="@+id/startTimeTV"
-        android:layout_weight="1"
-        android:layout_width="wrap_content"
+        android:layout_weight="2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Hora de inicio"/>
 
     <TextView
         android:id="@+id/endTimeTV"
-        android:layout_weight="1"
-        android:layout_width="wrap_content"
+        android:layout_weight="2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Hora de fin"/>
 
-    <Button
-
+    <ImageButton
         android:id="@+id/editBtn"
+        android:src="@drawable/edit_new_icon"
+        android:layout_weight="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Editar"
-        />
+        android:contentDescription="Edit" />
 
-    <Button
+    <ImageButton
 
         android:id="@+id/deleteBtn"
+        android:src="@drawable/delete_icon"
+        android:layout_weight="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eliminar"
+        android:contentDescription="Delete"
         />
 
 </LinearLayout>

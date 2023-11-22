@@ -34,15 +34,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="#D6D6D6"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:background="#FFFFFF" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/noReservationsMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="No hay reservas para este día"
+            android:visibility="gone"/>
 
 
     </LinearLayout>
+
 </LinearLayout>

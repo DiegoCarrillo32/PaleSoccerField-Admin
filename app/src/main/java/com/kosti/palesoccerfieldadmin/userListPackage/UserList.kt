@@ -21,6 +21,8 @@ import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 
 
+private const val ADMIN_ROLE = "Administrador"
+
 class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
     private lateinit var userListView:ListView
     private lateinit var userList: MutableList<JugadoresDataModel>
@@ -104,6 +106,10 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                         continue
                     }
 
+                    if(user["estado"] == false || user["rol"] == ADMIN_ROLE) {
+                        continue
+                    }
+
                     userList.add(
                         JugadoresDataModel(
                             user["nombre"].toString(),
@@ -112,7 +118,8 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                         user["apodo"].toString(),
                         user["telefono"].toString(),
                         user["fecha_nacimiento"].toString(),
-                        user["id"].toString()
+                        user["id"].toString(),
+
                     )
                     )
                 }
