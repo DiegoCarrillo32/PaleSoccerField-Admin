@@ -9,8 +9,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarPromotions"
-        android:background="@color/white"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:theme="?attr/actionBarTheme"
+        android:background="?attr/colorPrimary"
+
         app:navigationIcon="@drawable/arrow_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

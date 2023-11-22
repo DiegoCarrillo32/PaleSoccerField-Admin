@@ -20,6 +20,7 @@
             android:id="@+id/toolbarTV"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
             app:logo="@color/white"
             app:titleTextColor="@color/white"
             android:elevation="10dp"/>
