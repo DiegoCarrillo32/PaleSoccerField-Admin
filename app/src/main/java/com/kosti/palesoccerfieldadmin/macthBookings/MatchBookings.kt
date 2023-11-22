@@ -127,6 +127,7 @@ class MatchBookings : AppCompatActivity() {
 
 
     fun getReservasFromFirebase(){
+
         FirebaseUtils().readCollectionByDate("reservas", year, month, dayOfMonth) { result ->
             result.onSuccess {
                 for (reserva in it) {

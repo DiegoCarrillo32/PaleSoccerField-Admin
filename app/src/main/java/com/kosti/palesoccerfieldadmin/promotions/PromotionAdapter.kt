@@ -78,7 +78,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             builder.setTitle("Eliminar promocion")
             builder.setMessage("¿Estas seguro que deseas eliminar esta promocion?")
             builder.setPositiveButton("Si") { dialog, which ->
-
+                FirebaseUtils().deleteImage(dataSet[position].ImageUrl);
                 FirebaseUtils().deleteDocument("promocion", dataSet[position].Id)
                 dataSet.removeAt(position)
                 notifyItemRemoved(position)

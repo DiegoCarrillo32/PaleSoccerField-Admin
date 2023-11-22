@@ -30,6 +30,11 @@ class FirebaseUtils {
         }
     }
 
+    fun deleteImage(imageUrl: String) {
+        val imageRef = storage.storage.getReferenceFromUrl(imageUrl)
+        imageRef.delete()
+    }
+
     fun readCollection(
         collectionName: String,
         callback: (Result<MutableList<HashMap<String, Any>>>) -> Unit
@@ -275,9 +280,6 @@ class FirebaseUtils {
         return formatter.format(date).toString()
     }
 
-    fun deleteImage(imageUrl: String) {
-        val imageRef = storage.storage.getReferenceFromUrl(imageUrl)
-        imageRef.delete()
-    }
+
 
 }
