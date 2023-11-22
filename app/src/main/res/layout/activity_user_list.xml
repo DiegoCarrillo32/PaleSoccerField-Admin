@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:textSize="15sp"
         android:text="@string/nombre_o_apodo"/>
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewUserList"
@@ -47,12 +48,36 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Role"/>
+            <CheckBox
+                android:text="Administrador"
+                android:id="@+id/adminCheckBox"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="@string/clasf"/>
             <Spinner
+                android:layout_marginTop="10dp"
                 android:id="@+id/rateSpinner"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -66,19 +91,21 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="@string/pos"/>
             <Spinner
+                android:layout_marginTop="10dp"
                 android:id="@+id/positionSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
 
+
+
         </LinearLayout>
-
-
 
     </LinearLayout>
 
