@@ -48,7 +48,7 @@ class MatchBookings : AppCompatActivity() {
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
 
-            consultarDatosReservasFirebase(year, month, dayOfMonth)
+
             // Aquí debes cargar las reservas para la fecha seleccionada
             // Puedes utilizar una función o una llamada a una API, dependiendo de tu implementación
 
@@ -72,9 +72,9 @@ class MatchBookings : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = customAdapter
     }
-    fun consultarDatosReservasFirebase(year: Int, month: Int, dayOfMonth: Int) {
-        listaReservas.clear()
-        FirebaseUtils().readCollectionByDate("reservas", year, month, dayOfMonth) { result ->
+
+    private fun getReservasFromFirebase(){
+        FirebaseUtils().readCollection("reservas") { result ->
             result.onSuccess {
                 for (reserva in it) {
                     if (reserva["encargado"] == null ||
@@ -97,69 +97,6 @@ class MatchBookings : AppCompatActivity() {
                                     reserva["estado"] as Boolean
                                 )
                             )
-
-
-                            recyclerView.visibility = android.view.View.VISIBLE
-
-                            customAdapter = MatchBookingsCustomAdapter(listaReservas, this)
-                            recyclerView.layoutManager = LinearLayoutManager(this)
-                            recyclerView.adapter = customAdapter
-                           
-
-                        }
-                        result.onFailure {
-                            Toast.makeText(
-                                this,
-                                "Error al cargar los datos del encargado",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-
-                }
-            }
-            result.onFailure {
-                Toast.makeText(this, "Error al cargar los datos", Toast.LENGTH_LONG).show()
-
-            }
-        }
-    }
-
-
-    fun getReservasFromFirebase(){
-
-        FirebaseUtils().readCollectionByDate("reservas", year, month, dayOfMonth) { result ->
-            result.onSuccess {
-                for (reserva in it) {
-                    if (reserva["encargado"] == null ||
-                        reserva["fecha"] == null
-                    ) {
-                        Toast.makeText(this, "Reserva con datos erroneos", Toast.LENGTH_LONG).show()
-                        continue
-                    }
-                    FirebaseUtils().getCollectionByProperty(
-                        "jugadores",
-                        "UID",
-                        reserva["encargado"].toString()
-                    ) { result ->
-                        result.onSuccess { user ->
-                            listaReservas.add(
-                                ReservasDataModel(
-                                    reserva["id"].toString(),
-                                    user[0]["nombre"].toString(),
-                                    reserva["fecha"] as Timestamp,
-                                    reserva["estado"] as Boolean
-                                )
-                            )
-
-
-                            recyclerView.visibility = android.view.View.VISIBLE
-
-                            customAdapter = MatchBookingsCustomAdapter(listaReservas, this)
-                            recyclerView.layoutManager = LinearLayoutManager(this)
-                            recyclerView.adapter = customAdapter
-
-
                         }
                         result.onFailure {
                             Toast.makeText(
