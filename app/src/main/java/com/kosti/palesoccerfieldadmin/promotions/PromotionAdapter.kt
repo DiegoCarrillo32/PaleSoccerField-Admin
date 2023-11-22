@@ -117,7 +117,6 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             result.onSuccess {
                 dataSet.clear()
                 for (promotion in it){
-                    if(promotion["estado"] != true) continue
 
                     val promotionData = PromotionDataModel(
                         promotion["id"].toString(),

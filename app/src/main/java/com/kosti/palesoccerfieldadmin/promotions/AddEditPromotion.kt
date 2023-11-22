@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -51,7 +52,7 @@ class AddEditPromotion : BottomSheetDialogFragment() {
     private var startDate: Date? = null
     private var endDate: Date? = null
     private var imageUrl: String = ""
-    private var status: String? = null
+    private var status: Boolean = false
 
     private var imageUri : Uri = Uri.EMPTY
     private var sd = ""
@@ -59,6 +60,7 @@ class AddEditPromotion : BottomSheetDialogFragment() {
     private val calendar = Calendar.getInstance()
     private lateinit var btnDatePicker : TextView
     private lateinit var btnDatePicker2  : TextView
+    private lateinit var radioGroupStatus : RadioGroup
     private var btnAddImage: ImageButton? = null
 
     private var selectedTimeStart: Timestamp = Timestamp(Date())
@@ -75,7 +77,7 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             startDate = it.getSerializable(ARG_PARAM4) as Date
             endDate = it.getSerializable(ARG_PARAM5) as Date
             imageUrl = it.getString(ARG_PARAM6) ?: ""
-            status = it.getString(ARG_PARAM7)
+            status = it.getBoolean(ARG_PARAM7)
 
         }
 
@@ -101,7 +103,20 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        radioGroupStatus = view.findViewById<RadioGroup>(R.id.radioGroupStatus)
+        radioGroupStatus.setOnCheckedChangeListener {
+                group, checkedId ->
 
+            when(checkedId){
+                R.id.radioBtnAvailable -> {
+                    status = true
+                }
+                R.id.radioBtnNotAvailable -> {
+                    status = false
+                }
+            }
+
+        }
         btnAddImage = view.findViewById<ImageButton>(R.id.selectImage)
         btnAddImage?.setOnClickListener {
             val galleryIntent = Intent(Intent.ACTION_PICK)
@@ -132,6 +147,13 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             val formattedDate2 = endDate?.let { dateFormat.format(it) }
             btnDatePicker2.text = "Fecha seleccionada: $formattedDate2"
             selectedTimeEnd = Timestamp(endDate!!)
+
+            if(status == true){
+                radioGroupStatus.check(R.id.radioBtnAvailable)
+            } else {
+                radioGroupStatus.check(R.id.radioBtnNotAvailable)
+            }
+
         }
 
         val btnAdd = view.findViewById<TextView>(R.id.btn_addPromotion)
@@ -181,10 +203,6 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             return
         }
 
-        if(imageUri == Uri.EMPTY){
-            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
-            return
-        }
         
         if(dialog is BottomSheetDialog) {
             (dialog as BottomSheetDialog).behavior.isDraggable = false
@@ -192,32 +210,48 @@ class AddEditPromotion : BottomSheetDialogFragment() {
         }
         isCancelable = false
 
-        if(imageUrl != ""){
-            FirebaseUtils().deleteImage(imageUrl)
-        }
 
 
-        FirebaseUtils().saveImage(imageUri, sd){
-                result ->
-            result.onSuccess {res ->
-                imageUrl = res
-                FirebaseUtils().updateDocument(
-                    "promocion", id!!, hashMapOf(
-                        "nombre" to name,
-                        "descripcion" to desc,
-                        "estado" to true,
-                        "fecha_final" to selectedTimeStart,
-                        "fecha_inicio" to selectedTimeEnd,
-                        "imagen_url" to imageUrl
+        if(imageUri != Uri.EMPTY && sd != ""){
+            if(imageUrl != ""){
+                FirebaseUtils().deleteImage(imageUrl)
+            }
+            FirebaseUtils().saveImage(imageUri, sd){
+                    result ->
+                result.onSuccess {res ->
+                    imageUrl = res
+                    FirebaseUtils().updateDocument(
+                        "promocion", id!!, hashMapOf(
+                            "nombre" to name,
+                            "descripcion" to desc,
+                            "estado" to status,
+                            "fecha_final" to selectedTimeStart,
+                            "fecha_inicio" to selectedTimeEnd,
+                            "imagen_url" to imageUrl
+                        )
                     )
+                    dismiss()
+                    Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
+                }
+                result.onFailure {
+                    Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            FirebaseUtils().updateDocument(
+                "promocion", id!!, hashMapOf(
+                    "nombre" to name,
+                    "descripcion" to desc,
+                    "estado" to status,
+                    "fecha_final" to selectedTimeStart,
+                    "fecha_inicio" to selectedTimeEnd,
+                    "imagen_url" to imageUrl
                 )
-                dismiss()
-                Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
-            }
-            result.onFailure {
-                Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
-            }
+            )
+            dismiss()
+            Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
         }
+
 
 
     }
@@ -234,18 +268,8 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             Toast.makeText(context, "La fecha de inicio no puede ser mayor a la fecha de fin", Toast.LENGTH_SHORT).show()
             return
         }
-        if(imageUri == Uri.EMPTY || sd == ""){
-            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if(imageUri == Uri.EMPTY){
-            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
-            return
-        }
+
         // create a coroutine to save the image and get the url
-
-
-
 
         if(dialog is BottomSheetDialog) {
             (dialog as BottomSheetDialog).behavior.isDraggable = false
@@ -253,33 +277,48 @@ class AddEditPromotion : BottomSheetDialogFragment() {
         }
         isCancelable = false
 
-
-
-        try {
-            FirebaseUtils().saveImage(imageUri, sd){
-                    result ->
-                result.onSuccess {res ->
-                    imageUrl = res
-                    FirebaseUtils().createDocument(
-                        "promocion", hashMapOf(
-                            "nombre" to name,
-                            "descripcion" to desc,
-                            "estado" to true,
-                            "fecha_final" to selectedTimeStart,
-                            "fecha_inicio" to selectedTimeEnd,
-                            "imagen_url" to imageUrl
+        if(imageUri != Uri.EMPTY && sd != ""){
+            try {
+                FirebaseUtils().saveImage(imageUri, sd){
+                        result ->
+                    result.onSuccess {res ->
+                        imageUrl = res
+                        FirebaseUtils().createDocument(
+                            "promocion", hashMapOf(
+                                "nombre" to name,
+                                "descripcion" to desc,
+                                "estado" to status,
+                                "fecha_final" to selectedTimeStart,
+                                "fecha_inicio" to selectedTimeEnd,
+                                "imagen_url" to imageUrl
+                            )
                         )
-                    )
-                    dismiss()
-                    Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()                }
-                result.onFailure {
-                    Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+                        dismiss()
+                        Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()                }
+                    result.onFailure {
+                        Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("AddEditPromotion", e.message.toString())
+                Toast.makeText(context, "Error al crear la promocion, por favor no cierre el formulario", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: Exception) {
-            Log.e("AddEditPromotion", e.message.toString())
-            Toast.makeText(context, "Error al crear la promocion, por favor no cierre el formulario", Toast.LENGTH_SHORT).show()
+        } else {
+            FirebaseUtils().createDocument(
+                "promocion", hashMapOf(
+                    "nombre" to name,
+                    "descripcion" to desc,
+                    "estado" to status,
+                    "fecha_final" to selectedTimeStart,
+                    "fecha_inicio" to selectedTimeEnd,
+                    "imagen_url" to imageUrl
+                )
+            )
+            dismiss()
+            Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()
         }
+
+
 
 
     }

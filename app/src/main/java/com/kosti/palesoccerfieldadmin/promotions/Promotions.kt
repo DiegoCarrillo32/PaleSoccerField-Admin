@@ -101,6 +101,23 @@ class Promotions : AppCompatActivity(), AddEditPromotion.OnDismissListener {
             mostrarDialogo()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.schedule_toolbar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.action_add -> {
+                val bottomSheetFragment = AddEditPromotion()
+                bottomSheetFragment.setOnDismissListener(this)
+                bottomSheetFragment.show(supportFragmentManager, "AEPDialogFragment")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
     private fun fadeInWithTransition(view: View) {
         val transition = Fade()
         transition.duration = 500
@@ -149,7 +166,6 @@ class Promotions : AppCompatActivity(), AddEditPromotion.OnDismissListener {
             result.onSuccess {
                 promotionList.clear()
                 for (promotion in it) {
-                    if (promotion["estado"] != true) continue
                     val promotionData = PromotionDataModel(
                         promotion["id"].toString(),
                         promotion["descripcion"].toString(),
