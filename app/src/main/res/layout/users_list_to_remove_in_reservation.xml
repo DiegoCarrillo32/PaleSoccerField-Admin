@@ -108,14 +108,14 @@
 
     <ImageButton
         android:layout_weight="0"
-        android:layout_margin="5dp"
         android:id="@+id/bnt_user_list_reservation_Remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/baseline_remove_24"
+        android:src="@drawable/deny_icon"
+        android:background="#00000000"
         android:backgroundTint="#fffbfe"
         android:text="@string/bloquear" />
 </LinearLayout>

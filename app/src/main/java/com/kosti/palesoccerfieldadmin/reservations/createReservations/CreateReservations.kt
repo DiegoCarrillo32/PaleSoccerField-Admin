@@ -45,6 +45,7 @@ class CreateReservations : AppCompatActivity() {
     private var usersForChallengingTeam: MutableList<JugadoresDataModel> = ArrayList()
     private lateinit var startForResult : ActivityResultLauncher<Intent>
     private lateinit var whereAdd: String
+    private var originalBossList: List<JugadoresDataModel> = ArrayList()
 
     private lateinit var recyclerViewPlayers: RecyclerView
     private lateinit var recyclerViewChallenging: RecyclerView
@@ -110,6 +111,7 @@ class CreateReservations : AppCompatActivity() {
         }
         btnCrearReserva = findViewById(R.id.btnCrearReserva)
         btnCrearReserva.setOnClickListener{
+            Log.d("seguimientoBoss", "dasd ")
             createReservation()
         }
 
@@ -179,8 +181,9 @@ class CreateReservations : AppCompatActivity() {
             * */
         val reservacion: HashMap<String, Any> = HashMap<String, Any>()
 
-        if(boss!=null && scheduleSelected!=null){//Validamos que haya un encargado y un horario seleccionado
+        if(::boss.isInitialized && ::scheduleSelected.isInitialized){//Validamos que haya un encargado y un horario seleccionado
             reservacion["encargado"] = boss.UID
+
             reservacion["horario"] = scheduleSelected.id
             reservacion["fecha"] = scheduleSelected.fecha as Timestamp
             reservacion["jugadores"] = playersIds
@@ -197,7 +200,7 @@ class CreateReservations : AppCompatActivity() {
             Toast.makeText(this,"Se creó la reserva exitosamente",Toast.LENGTH_LONG).show()
             finish()
         }else{
-            Toast.makeText(this,"Por favor llenar todos los campos",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Recuerda seleccionar un horario y un encargado.",Toast.LENGTH_LONG).show()
         }
     }
 
@@ -396,6 +399,7 @@ class CreateReservations : AppCompatActivity() {
         val recyclerViewD = dialog.findViewById<RecyclerView>(R.id.recyclerSelectBoss)
         val searchView = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.searchViewSelectBoss)
         recyclerViewD.layoutManager = LinearLayoutManager(this)
+
         // Configurar el RecyclerView y cargar los jugadores desde Firebase
         val adapter = AddBossToReservationAdapter(ArrayList()) { jugadorSeleccionado ->
             boss = jugadorSeleccionado
@@ -415,11 +419,15 @@ class CreateReservations : AppCompatActivity() {
     private fun cargarJugadoresDesdeFirebase(adapter: AddBossToReservationAdapter, searchView: androidx.appcompat.widget.SearchView) {
         val db = Firebase.firestore
         val usersCollectionRef = db.collection("jugadores")
-        val userList: ArrayList<JugadoresDataModel> = ArrayList()
+
+        // Limpiar la lista antes de agregar los nuevos usuarios
+        originalBossList = ArrayList()
 
         usersCollectionRef
             .get()
             .addOnSuccessListener { result ->
+                val userList: ArrayList<JugadoresDataModel> = ArrayList()
+
                 for (document in result) {
                     val user = JugadoresDataModel(
                         document["nombre"].toString(),
@@ -430,8 +438,10 @@ class CreateReservations : AppCompatActivity() {
                         document["UID"].toString()
                     )
                     userList.add(user)
-
                 }
+
+                // Guarda los datos originales al principio
+                originalBossList = userList.toList()
 
                 // Actualizar el adaptador con la lista de usuarios obtenida de Firebase
                 adapter.setData(userList)
@@ -449,7 +459,13 @@ class CreateReservations : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 // Lógica de búsqueda mientras se escribe
-                adapter.filter(newText ?: "")
+                if (newText.isNullOrBlank()) {
+                    // Si el texto está vacío, utiliza los datos originales
+                    adapter.setData(originalBossList)
+                } else {
+                    // Si hay texto de búsqueda, filtra la lista
+                    adapter.filter(newText ?: "")
+                }
                 return true
             }
         })

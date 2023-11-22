@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -23,11 +26,12 @@ class AddUsersToReservation : AppCompatActivity() {
     private lateinit var adapterAddUsers: AddUsersToReservationAdapter
     private val playersNameCollection = "jugadores"
     private lateinit var idUser: String
-
+    private var originalUserList: List<JugadoresDataModel> = ArrayList()
     private var playersIds: ArrayList<String> = ArrayList()
     private var challengersIds: ArrayList<String> = ArrayList()
     private lateinit var searchView: androidx.appcompat.widget.SearchView
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    private var selectedFilterOption: String = "all"
 
     //This have users
     private var userList: MutableList<JugadoresDataModel> = ArrayList()
@@ -36,9 +40,20 @@ class AddUsersToReservation : AppCompatActivity() {
     private var usersForChallengingTeam: ArrayList<JugadoresDataModel> = ArrayList()
     private lateinit var whereAdd: String
 
+    private lateinit var radioGroup: RadioGroup
+    private lateinit var radioAll: RadioButton
+    private lateinit var radioBad: RadioButton
+    private lateinit var radioRegular: RadioButton
+    private lateinit var radioGood: RadioButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_users_to_reservation)
+        radioGroup = findViewById<RadioGroup>(R.id.radioGroupFilterAddUserToReservation)
+        radioAll = findViewById<RadioButton>(R.id.radioAllAddUserToReservation)
+        radioBad = findViewById<RadioButton>(R.id.radioBadAddUserToReservation)
+        radioRegular = findViewById<RadioButton>(R.id.radioRegularAddUserToReservation)
+        radioGood = findViewById<RadioButton>(R.id.radioGoodAddUserToReservation)
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewAddUserToReservation)
         searchView = findViewById<androidx.appcompat.widget.SearchView>(R.id.searchViewAddUserToReservation)
         toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarAddUserToReservation)
@@ -50,6 +65,8 @@ class AddUsersToReservation : AppCompatActivity() {
         adapterAddUsers = AddUsersToReservationAdapter(ArrayList(), this::addUserToReservation)
         recyclerView.adapter = adapterAddUsers
 
+
+
         btnAddPlayers.setOnClickListener{
             onAceptarButtonClick()
         }
@@ -60,23 +77,50 @@ class AddUsersToReservation : AppCompatActivity() {
         // Obtener el ID del usuario actual
         idUser = intent.getStringExtra("textParameter").toString()
 
+
         // Llamar a la función para obtener la lista de usuarios desde Firebase
         getAllUsersFromCollection(playersNameCollection)
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText.orEmpty())
+                return true
+            }
+        })
+
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            // Obtener la opción seleccionada
+            selectedFilterOption = when (checkedId) {
+                R.id.radioAllAddUserToReservation -> "all"
+                R.id.radioBadAddUserToReservation -> "bad"
+                R.id.radioRegularAddUserToReservation -> "regular"
+                R.id.radioGoodAddUserToReservation -> "good"
+                else -> "all" // Opción predeterminada
+            }
+
+            // Filtrar la lista según la opción seleccionada y la cadena de búsqueda actual
+            filterList(searchView.query.toString())
+        }
     }
+
 
     private fun getAllUsersFromCollection(collectionName: String) {
         val db = Firebase.firestore
         val usersCollectionRef = db.collection(collectionName)
 
-        // Limpiar la lista antes de agregar los nuevos usuarios
-        if (userList.isNotEmpty()) {
-            userList.clear()
-        }
+        // Limpia la lista antes de agregar los nuevos usuarios
+        userList.clear()
 
         usersCollectionRef
             .get()
             .addOnSuccessListener { result ->
                 if (result != null) {
+                    // Limpia la lista antes de agregar nuevos usuarios
+                    userList.clear()
+
                     for (document in result) {
                         val user = JugadoresDataModel(
                             document["nombre"].toString(),
@@ -86,34 +130,20 @@ class AddUsersToReservation : AppCompatActivity() {
                             document.id,
                             document["id"].toString()
                         )
+
                         findUserIdByNameAndNickname(user.Name, user.Nickname) { userId ->
                             if (userId != null) {
-                                if(whereAdd=="proposalTeam") {
-                                    if(playersIds.isNotEmpty()){
-                                        if (userId in playersIds) {
-                                            //
-                                        } else {
-                                            Log.d("encuentraID", "#$userId")
-                                            userList.add(user)
-                                        }
-                                    }else{
-                                        userList.add(user)
-                                    }
+                                val isAlreadyAdded = userId in playersIds || userId in challengersIds
 
-                                }else if(whereAdd=="challengingTeam"){
-                                    if(challengersIds.isNotEmpty()){
-                                        if (userId in challengersIds) {
-                                            //
-                                        } else {
-                                            Log.d("encuentraID", "#$userId")
-                                            userList.add(user)
-                                        }
-                                    }else{
-                                        userList.add(user)
-                                    }
+                                if (!isAlreadyAdded) {
+                                    Log.d("encuentraID", "#$userId")
+                                    userList.add(user)
                                 }
                             }
+                            // Actualiza el adaptador con la nueva lista de usuarios
                             updateAdapterData(userList)
+                            // Guarda los datos originales al principio
+                            originalUserList = userList.toList()
                         }
                     }
                 } else {
@@ -124,10 +154,46 @@ class AddUsersToReservation : AppCompatActivity() {
                 Log.w("Usercito", "Error al obtener documentos: ", exception)
             }
     }
+
+
     private fun updateAdapterData(userList: List<JugadoresDataModel>) {
         // Actualizar los datos en el adaptador y notificar cambios
         adapterAddUsers.setData(userList)
     }
+    private fun restoreOriginalData() {
+        userList.clear()
+        userList.addAll(originalUserList)
+        updateAdapterData(userList)
+    }
+
+    private fun filterList(query: String) {
+        val filteredList = when (selectedFilterOption) {
+            "all" -> originalUserList.filter { user ->
+                user.Name.contains(query, ignoreCase = true) ||
+                        user.Nickname.contains(query, ignoreCase = true) ||
+                        user.Clasification.contains(query, ignoreCase = true)
+            }
+            "bad" -> originalUserList.filter { user ->
+                user.Clasification.equals("Malo", ignoreCase = true) &&
+                        (user.Name.contains(query, ignoreCase = true) || user.Nickname.contains(query, ignoreCase = true))
+            }
+            "regular" -> originalUserList.filter { user ->
+                user.Clasification.equals("Regular", ignoreCase = true) &&
+                        (user.Name.contains(query, ignoreCase = true) || user.Nickname.contains(query, ignoreCase = true))
+            }
+            "good" -> originalUserList.filter { user ->
+                user.Clasification.equals("Bueno", ignoreCase = true) &&
+                        (user.Name.contains(query, ignoreCase = true) || user.Nickname.contains(query, ignoreCase = true))
+            }
+            else -> originalUserList // Opción desconocida, muestra todos
+        }
+
+        userList.clear()
+        userList.addAll(filteredList)
+        updateAdapterData(userList)
+    }
+
+
     private fun onAceptarButtonClick() {
         val selectedUsers = adapterAddUsers.getSelectedUsers()
         val userIds = mutableListOf<String>()
@@ -135,41 +201,57 @@ class AddUsersToReservation : AppCompatActivity() {
         // Variable para contar el número de respuestas obtenidas
         var responsesReceived = 0
 
-        selectedUsers.forEach { user ->
-            // Aquí deberías buscar el ID del usuario por nombre y apodo
-            findUserIdByNameAndNickname(user.Name, user.Nickname) { userId ->
-                // Agregar el ID a la lista si se encuentra
-                if (userId != null) {
-                    userIds.add(userId)
-                }
 
-                // Incrementar el contador de respuestas
-                responsesReceived++
-
-                // Verificar si se han recibido respuestas para todos los usuarios seleccionados
-                if (responsesReceived == selectedUsers.size) {
-                    // Todas las respuestas han sido recibidas, puedes continuar con el código
-                    val intent = Intent(this, CreateReservations::class.java)
-                    when (whereAdd) {
-                        "proposalTeam" -> {
-                            intent.putExtra("textParameter", "proposalTeam")
-                            playersIds = playersIds.plus(userIds) as ArrayList<String>
-                            intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
-                            intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
-
-                        }
-                        "challengingTeam" -> {
-                            intent.putExtra("textParameter", "challengingTeam")
-                            challengersIds = challengersIds.plus(userIds) as ArrayList<String>
-                            intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
-                            intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
-                        }
+        if (selectedUsers.size<=6){
+            selectedUsers.forEach { user ->
+                // Aquí deberías buscar el ID del usuario por nombre y apodo
+                findUserIdByNameAndNickname(user.Name, user.Nickname) { userId ->
+                    // Agregar el ID a la lista si se encuentra
+                    if (userId != null) {
+                        userIds.add(userId)
                     }
-                    Log.d("seguimiento","challengersIds $challengersIds \nplayersIds $playersIds")
-                    setResult(Activity.RESULT_OK, intent)
-                    finish()
+
+                    // Incrementar el contador de respuestas
+                    responsesReceived++
+
+                    // Verificar si se han recibido respuestas para todos los usuarios seleccionados
+                    if (responsesReceived == selectedUsers.size) {
+                        // Todas las respuestas han sido recibidas, puedes continuar con el código
+                        val intent = Intent(this, CreateReservations::class.java)
+                        when (whereAdd) {
+                            "proposalTeam" -> {
+                                val comparacion: Int = selectedUsers.size + playersIds.size
+                                if ((comparacion)<=6){
+                                    intent.putExtra("textParameter", "proposalTeam")
+                                    playersIds = playersIds.plus(userIds) as ArrayList<String>
+                                    intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
+                                    intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
+                                }else{
+                                    Toast.makeText(this,"No se pueden agregar más de 6 jugadores",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            "challengingTeam" -> {
+                                val comparacion: Int = selectedUsers.size + challengersIds.size
+                                if ((comparacion)<=6){
+                                    intent.putExtra("textParameter", "challengingTeam")
+                                    challengersIds = challengersIds.plus(userIds) as ArrayList<String>
+                                    intent.putStringArrayListExtra("challengersIds", ArrayList(challengersIds))
+                                    intent.putStringArrayListExtra("playersIds", ArrayList(playersIds))
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
+                                }else{
+                                    Toast.makeText(this,"No se pueden agregar más de 6 jugadores",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
+        }else{
+            Toast.makeText(this,"No se pueden agregar más de 6 jugadores",Toast.LENGTH_SHORT).show()
         }
     }
     private fun findUserIdByNameAndNickname(name: String, nickname: String, callback: (String?) -> Unit) {
