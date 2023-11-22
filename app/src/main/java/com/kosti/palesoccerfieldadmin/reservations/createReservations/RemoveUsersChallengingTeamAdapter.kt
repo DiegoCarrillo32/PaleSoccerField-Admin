@@ -41,7 +41,7 @@ class RemoveUsersChallengingTeamAdapter(
 
         // Configurar el clic en el elemento para llamar a la función de clic externa
         holder.btnRemove.setOnClickListener {
-            Log.d("RemoveUsers","Aqui llegamos a tocar el btn")
+            Log.d("RemoveUsers", "Aqui llegamos a tocar el btn")
             removeClickListener(userData)
         }
     }

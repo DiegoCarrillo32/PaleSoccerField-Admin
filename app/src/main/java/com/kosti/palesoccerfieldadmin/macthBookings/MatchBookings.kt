@@ -19,12 +19,17 @@ import com.kosti.palesoccerfieldadmin.reservations.CustomAdapter
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
 
+
 class MatchBookings : AppCompatActivity() {
 
     private lateinit var customAdapter: MatchBookingsCustomAdapter
     private lateinit var listaReservas: MutableList<ReservasDataModel>
     private lateinit var reservasDelDia: MutableList<ReservasDataModel>
     private lateinit var recyclerView: RecyclerView
+
+    init {
+        getReservasFromFirebase()
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,7 +127,55 @@ class MatchBookings : AppCompatActivity() {
 
 
     fun getReservasFromFirebase(){
+        FirebaseUtils().readCollectionByDate("reservas", year, month, dayOfMonth) { result ->
+            result.onSuccess {
+                for (reserva in it) {
+                    if (reserva["encargado"] == null ||
+                        reserva["fecha"] == null
+                    ) {
+                        Toast.makeText(this, "Reserva con datos erroneos", Toast.LENGTH_LONG).show()
+                        continue
+                    }
+                    FirebaseUtils().getCollectionByProperty(
+                        "jugadores",
+                        "UID",
+                        reserva["encargado"].toString()
+                    ) { result ->
+                        result.onSuccess { user ->
+                            listaReservas.add(
+                                ReservasDataModel(
+                                    reserva["id"].toString(),
+                                    user[0]["nombre"].toString(),
+                                    reserva["fecha"] as Timestamp,
+                                    reserva["estado"] as Boolean
+                                )
+                            )
 
+
+                            recyclerView.visibility = android.view.View.VISIBLE
+
+                            customAdapter = MatchBookingsCustomAdapter(listaReservas, this)
+                            recyclerView.layoutManager = LinearLayoutManager(this)
+                            recyclerView.adapter = customAdapter
+
+
+                        }
+                        result.onFailure {
+                            Toast.makeText(
+                                this,
+                                "Error al cargar los datos del encargado",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                }
+            }
+            result.onFailure {
+                Toast.makeText(this, "Error al cargar los datos", Toast.LENGTH_LONG).show()
+
+            }
+        }
     }
 
 }

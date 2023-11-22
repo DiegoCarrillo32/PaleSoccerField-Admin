@@ -227,6 +227,26 @@ class FirebaseUtils {
             }
     }
 
+    fun checkStatusAttr(COLLECTION_NAME: String, callback: (Boolean) -> Unit){
+        val query = db.collection(COLLECTION_NAME)
+        // I only want to know if there is at least 1 document with the "estado" attr set to false
+        query.whereEqualTo("estado", false)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
+                    callback(false)
+                } else {
+                    callback(true)
+                }
+            }
+            .addOnFailureListener {
+                callback(false)
+            }
+
+
+    }
+
     fun transformEpochToAge(it: Long): Int {
         val date = Date(it)
         val currentDate = Date()

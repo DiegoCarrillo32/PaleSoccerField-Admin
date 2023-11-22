@@ -15,6 +15,9 @@
         android:theme="@style/Base.Theme.PaleSoccerFieldAdmin"
         tools:targetApi="s">
         <activity
+            android:name=".promotions.Promotions"
+            android:exported="false" />
+        <activity
             android:name=".reservations.addUsersToReservations.AddUsersToReservation"
             android:exported="false" />
         <activity
@@ -58,6 +61,9 @@
             android:exported="true" />
         <activity
             android:name=".userAdminProfile.EditUserData"
+            android:exported="true" />
+        <activity
+            android:name=".approveReview.AprobarResenia"
             android:exported="true" />
         <activity
             android:name=".login.Login"

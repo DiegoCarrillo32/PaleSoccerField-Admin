@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.time.Duration.Companion.hours
 
-val COLLECTION_NAME = "horario"
+private val COLLECTION_NAME = "horario"
 class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, private val context: Context) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(), AddScheduleFragment.OnDismissListener {
     //TODO: Validar los campos, revisar por que las horas se ven raro, verificar bien las fechas
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -98,7 +98,6 @@ class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, priva
         builder.setView(dialogView)
         val dialog = builder.create()
 
-
         val btnCancelar: Button = dialogView.findViewById(R.id.btn_dialog_cancelar)
         val btnEliminar: Button = dialogView.findViewById(R.id.btn_dialog_eliminar)
         val tvFechaHorario: TextView = dialogView.findViewById(R.id.dialog_tVFecha)
@@ -110,7 +109,6 @@ class ScheduleAdapter(private val dataSet: MutableList<ScheduleDataModel>, priva
         tvHoraI.text = horaInicio
 
         btnEliminar.setOnClickListener {
-            //TODO: si el horario reservacion es true, entonces cancele los cambios
 
             if(dataSet[position].reservado){
                 Toast.makeText(context, "No se puede eliminar el horario porque una reserva depende de el", Toast.LENGTH_SHORT).show()
