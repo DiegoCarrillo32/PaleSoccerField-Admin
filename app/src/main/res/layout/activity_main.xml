@@ -98,6 +98,11 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    APROBAR USUARIO -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -122,6 +127,11 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    REGISTRAR USUARIO-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -186,6 +196,11 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -209,6 +224,11 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator4"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    REGISTRAR HORARIO-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -234,6 +254,11 @@
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/separator5"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    APROBAR RESERVA-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -257,7 +282,11 @@
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
-
+            <View
+                android:id="@+id/separator6"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    AGREGAR, EDITAR, ELIMINAR RESERVAS-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -322,6 +351,11 @@
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/separator7"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    GESTION DE RESEÑAS-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -345,6 +379,12 @@
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/separator8"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
 
             <!--    GESTION DE PROMOCIONES-->
             <LinearLayout
@@ -370,6 +410,12 @@
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/separator9"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
 
             <!--    GESTION DE PROMOCIONES-->
             <LinearLayout

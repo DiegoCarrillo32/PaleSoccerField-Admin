@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
+import com.kosti.palesoccerfieldadmin.reservations.CustomSpinnerAdapter
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
@@ -198,12 +199,16 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
 
     private fun spinnerPositions(view: View) {
-        val elementos = positions
+        var elementos = positions
+
+        if(elementos.isEmpty()){
+            elementos = mutableListOf("Sin posición")
+        }
 
         val spinner: Spinner = view.findViewById(R.id.spinnerPositions)
         val adapter =
             this.context?.let {
-                ArrayAdapter(
+                CustomSpinnerAdapter(
                     it,
                     R.layout.spinner_item_profile,
                     elementos
