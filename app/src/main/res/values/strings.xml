@@ -80,6 +80,7 @@
     <string name="fecha">Fecha:</string>
     <string name="crear">Crear</string>
     <string name="agregar">Agregar</string>
+    <string name="icon_to_send_messages_to_user">Icon to send messages to user</string>
     <string name="hay_usuarios_por_aceptar">Hay usuarios por aceptar</string>
     <string name="desea_visitar_la_lista_de_usuarios_por_aprobar">¿Desea visitar la lista de usuarios por aprobar?</string>
     <string name="cancelar">Cancelar</string>

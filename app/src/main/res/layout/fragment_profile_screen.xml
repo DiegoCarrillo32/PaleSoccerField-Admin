@@ -28,6 +28,7 @@
             android:layout_height="48dp"
             android:layout_weight="1" />
 
+
         <ImageButton
             android:id="@+id/bloquedPeopleButton"
             android:layout_width="67dp"
@@ -76,6 +77,15 @@
                 android:background="@drawable/custom_stroke_profile"
                 android:dropDownSelector="@color/white"
                 android:popupBackground="@color/white" />
+
+            <ImageButton
+                android:id="@+id/messageButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:layout_gravity="right"
+                android:contentDescription="@string/icon_to_send_messages_to_user"
+                android:src="@drawable/message_icon" />
 
             <LinearLayout
                 android:layout_width="match_parent"

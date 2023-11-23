@@ -79,6 +79,17 @@
                 android:dropDownSelector="@color/white"
                 android:popupBackground="@color/white" />
 
+            <ImageButton
+                android:id="@+id/messageButton"
+                android:paddingTop="15dp"
+                android:paddingRight="10dp"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:background="@null"
+                android:layout_gravity="right"
+                android:contentDescription="@string/icon_to_send_messages_to_user"
+                android:src="@drawable/message_icon" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

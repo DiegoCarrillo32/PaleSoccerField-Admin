@@ -18,6 +18,12 @@
             android:name=".reservations.editReservations.EditReservation"
             android:exported="false" />
         <activity
+            android:name=".otherUsersProfile.SendMessage"
+            android:exported="false" />
+        <activity
+            android:name="SpecialEvents.SpecialEvents"
+            android:exported="false" />
+        <activity
             android:name=".SpecialEvents.SpecialEvents"
             android:exported="false" />
         <activity
