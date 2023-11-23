@@ -43,8 +43,6 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_list)
-
-        //  variables
         userListView = findViewById(R.id.users_list)
         userListProgressBar = findViewById(R.id.userListProgressBar)
         toolbar = findViewById(R.id.toolbarUserList)

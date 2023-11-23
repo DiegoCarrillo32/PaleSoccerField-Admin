@@ -20,9 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Promociones"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:gravity="center"
 
             />

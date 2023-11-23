@@ -16,6 +16,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:title="Gestion de Reservas"
+        app:titleTextColor="@color/white"
         app:navigationIcon="@drawable/arrow_back_white"/>
 
     <androidx.recyclerview.widget.RecyclerView
