@@ -48,6 +48,24 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tVEtiquetaEquipo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="Equipo:"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tVEtiquetaTipo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="Tipo:"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -73,6 +91,20 @@
 
             <TextView
                 android:id="@+id/tVEstadoTR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tVEquipoTR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tVTipoTR"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp" />

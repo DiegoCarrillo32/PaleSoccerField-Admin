@@ -65,21 +65,18 @@ class AddUsersToReservation : AppCompatActivity() {
         adapterAddUsers = AddUsersToReservationAdapter(ArrayList(), this::addUserToReservation)
         recyclerView.adapter = adapterAddUsers
 
-
-
         btnAddPlayers.setOnClickListener{
             onAceptarButtonClick()
         }
-
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
         // Obtener el ID del usuario actual
         idUser = intent.getStringExtra("textParameter").toString()
 
-
         // Llamar a la función para obtener la lista de usuarios desde Firebase
         getAllUsersFromCollection(playersNameCollection)
+
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false

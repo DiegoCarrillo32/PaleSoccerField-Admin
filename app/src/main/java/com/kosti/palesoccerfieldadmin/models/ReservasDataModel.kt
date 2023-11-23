@@ -71,4 +71,21 @@ class ReservasDataModel() {
         Date = date
         Status = status
     }
+
+
+    constructor(
+        id:String,
+        manager: String,
+        date: Timestamp,
+        status: Boolean,
+        team: Boolean,
+        type: String
+    ) : this() {
+        this.id = id
+        Manager= manager
+        Date = date
+        Status = status
+        Team = team
+        Type = type
+    }
 }

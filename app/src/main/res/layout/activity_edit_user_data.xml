@@ -50,7 +50,7 @@
             android:layout_gravity="center"
 
 
-            android:src="@drawable/profile"
+            android:src="@drawable/pales_logo"
             app:shapeAppearanceOverlay="@style/circular"
             app:strokeColor="#FFF"
             app:strokeWidth="3dp" />

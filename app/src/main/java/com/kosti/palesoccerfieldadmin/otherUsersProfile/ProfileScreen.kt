@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
+import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
@@ -145,6 +146,11 @@ class ProfileScreen : BottomSheetDialogFragment() {
         }
 
         btnMessage.setOnClickListener {
+
+            val intent = Intent(requireContext(), SendMessage::class.java)
+            intent.putExtra("userName", name )
+            intent.putExtra("userPhone", phone)
+            startActivity(intent)
 
         }
 

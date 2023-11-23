@@ -1,4 +1,4 @@
-package com.kosti.palesoccerfieldadmin.promotions
+package com.kosti.palesoccerfieldadmin.SpecialEvents
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,71 +16,65 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.models.PromotionDataModel
-import com.kosti.palesoccerfieldadmin.schedules.AddScheduleFragment
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.properties.Delegates
 
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "id"
 private const val ARG_PARAM2 = "name"
 private const val ARG_PARAM3 = "description"
-private const val ARG_PARAM4 = "startDate"
-private const val ARG_PARAM5 = "endDate"
+private const val ARG_PARAM4 = "date"
+private const val ARG_PARAM5 = "status"
 private const val ARG_PARAM6 = "imageUrl"
-private const val ARG_PARAM7 = "status"
 
-class AddEditPromotion : BottomSheetDialogFragment() {
+
+class FragmentEditAddSpecialEvent : BottomSheetDialogFragment() {
     // TODO: Rename and change types of parameters
     private var id: String? = null
     private var name: String? = null
-    private var desc: String? = null
-    private var startDate: Date? = null
-    private var endDate: Date? = null
+    private var description: String? = null
+    private var date: Date? = null
+    private var status: Boolean by Delegates.notNull()
     private var imageUrl: String = ""
-    private var status: Boolean = false
 
     private var imageUri : Uri = Uri.EMPTY
     private var sd = ""
 
     private val calendar = Calendar.getInstance()
     private lateinit var btnDatePicker : TextView
-    private lateinit var btnDatePicker2  : TextView
-    private lateinit var radioGroupStatus : RadioGroup
     private var btnAddImage: ImageButton? = null
-
-    private var selectedTimeStart: Timestamp = Timestamp(Date())
-    private var selectedTimeEnd: Timestamp = Timestamp(Date())
+    private var selectedTime: Timestamp = Timestamp(Date())
 
     private var onDismissListener: OnDismissListener? = null
+
+    private lateinit var radioGroup: RadioGroup
+    private lateinit var radioButton: RadioButton
+    private var estado by Delegates.notNull<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             id = it.getString(ARG_PARAM1)
             name = it.getString(ARG_PARAM2)
-            desc = it.getString(ARG_PARAM3)
-            startDate = it.getSerializable(ARG_PARAM4) as Date
-            endDate = it.getSerializable(ARG_PARAM5) as Date
+            description= it.getString(ARG_PARAM3)
+            date = it.getSerializable(ARG_PARAM4) as Date
+            status = it.getBoolean(ARG_PARAM5)
             imageUrl = it.getString(ARG_PARAM6) ?: ""
-            status = it.getBoolean(ARG_PARAM7)
-
         }
-
     }
 
     override fun onCreateView(
@@ -88,9 +82,8 @@ class AddEditPromotion : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_edit_promotion, container, false)
+        return inflater.inflate(R.layout.fragment_edit_add_special_event, container, false)
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode == 1){
@@ -100,74 +93,65 @@ class AddEditPromotion : BottomSheetDialogFragment() {
         }
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        radioGroupStatus = view.findViewById<RadioGroup>(R.id.radioGroupStatus)
-        radioGroupStatus.setOnCheckedChangeListener {
-                group, checkedId ->
-
-            when(checkedId){
-                R.id.radioBtnAvailable -> {
-                    status = true
-                }
-                R.id.radioBtnNotAvailable -> {
-                    status = false
-                }
-            }
-
-        }
-        btnAddImage = view.findViewById<ImageButton>(R.id.selectImage)
+        // IMAGEN
+        btnAddImage = view.findViewById(R.id.selectImageES)
         btnAddImage?.setOnClickListener {
             val galleryIntent = Intent(Intent.ACTION_PICK)
             galleryIntent.type = "image/*"
-            // start the activiy in the FRAGMENT and get the result in the fragment
-            // get the result of the activity
-            startActivityForResult(galleryIntent, 1)
+            startActivityForResult(galleryIntent,1)
         }
 
-        btnDatePicker = view.findViewById<TextView>(R.id.selectDateStart)
-        btnDatePicker.setOnClickListener {
-            showDatePicker(btnDatePicker, true)
+        // FECHA
+        btnDatePicker = view.findViewById(R.id.selectDateES)
+        btnDatePicker.setOnClickListener{
+            showDatePicker(btnDatePicker)
         }
-        btnDatePicker2 = view.findViewById<TextView>(R.id.selectDateEnd)
-        btnDatePicker2.setOnClickListener {
-            showDatePicker(btnDatePicker2, false)
-        }
-        val btnName = view.findViewById<EditText>(R.id.selectName)
-        val btnDescription = view.findViewById<EditText>(R.id.selectDesc)
 
-        if(id != null){
-            btnName.setText(name)
-            btnDescription.setText(desc)
+        val btnNombre = view.findViewById<EditText>(R.id.selectNameES)
+        val btnDescription = view.findViewById<EditText>(R.id.selectDescES)
+
+        radioGroup = view.findViewById(R.id.rg_evento_especial_estado)
+        radioGroup.setOnCheckedChangeListener {
+                group, checkedId ->
+
+            radioButton = view.findViewById(checkedId)
+            if (radioButton.text == "Activo") {
+                estado =true
+            }else {
+                estado =false
+            }
+            
+        }
+
+        if(id != null) {
+            btnNombre.setText(name)
+            btnDescription.setText(description)
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val formattedDate = startDate?.let { dateFormat.format(it) }
-            btnDatePicker.text = "Fecha seleccionada: $formattedDate"
-            selectedTimeStart = Timestamp(startDate!!)
-            val formattedDate2 = endDate?.let { dateFormat.format(it) }
-            btnDatePicker2.text = "Fecha seleccionada: $formattedDate2"
-            selectedTimeEnd = Timestamp(endDate!!)
+            val formattedDate = date?.let { dateFormat.format(it) }
+            btnDatePicker.text= "Fecha seleccionada: $formattedDate"
+            selectedTime = Timestamp(date!!)
 
-            if(status == true){
-                radioGroupStatus.check(R.id.radioBtnAvailable)
-            } else {
-                radioGroupStatus.check(R.id.radioBtnNotAvailable)
+            val radioBtnActivo = view.findViewById<RadioButton>(R.id.radio_btn_activo)
+            val radioBtnInactiva = view.findViewById<RadioButton>(R.id.radio_btn_inactivo)
+
+            if(status){
+                radioBtnActivo.isChecked = true
+            }else {
+                radioBtnInactiva.isChecked = true
             }
 
         }
 
-        val btnAdd = view.findViewById<TextView>(R.id.btn_addPromotion)
-        btnAdd.setOnClickListener {
+        val btnAddES = view.findViewById<TextView>(R.id.btn_addSpecialEvent)
+        btnAddES.setOnClickListener {
             if(id != null) {
-                EditToDb(btnName, btnDescription)
+                EditToDb(btnNombre, btnDescription)
             } else {
-                AddToDb(btnName, btnDescription)
+                AddToDb(btnNombre, btnDescription)
             }
-
-
         }
-
-
     }
 
     @SuppressLint("Range")
@@ -178,7 +162,6 @@ class AddEditPromotion : BottomSheetDialogFragment() {
                 if(cursor != null && cursor.moveToFirst()){
                     if(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME) != -1)
                         return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-
                 }
             } finally {
                 cursor?.close()
@@ -189,8 +172,9 @@ class AddEditPromotion : BottomSheetDialogFragment() {
         }
     }
 
-    private fun EditToDb(btnName: EditText?, btnDescription: EditText?) {
-        val name = btnName?.text.toString()
+    private fun EditToDb(btnNombre: EditText?, btnDescription: EditText?) {
+
+        val name = btnNombre?.text.toString()
         val desc = btnDescription?.text.toString()
 
         if(name.isEmpty() || desc.isEmpty()){
@@ -198,78 +182,77 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             return
         }
 
-        if(selectedTimeStart.seconds > selectedTimeEnd.seconds){
-            Toast.makeText(context, "La fecha de inicio no puede ser mayor a la fecha de fin", Toast.LENGTH_SHORT).show()
-            return
-        }
 
-        
+        // disable the isDraggable bottom sheet to avoid errors
+
         if(dialog is BottomSheetDialog) {
             (dialog as BottomSheetDialog).behavior.isDraggable = false
 
         }
+
         isCancelable = false
 
+        if(imageUrl != ""){
+            FirebaseUtils().deleteImage(imageUrl)
+        }
 
-
-        if(imageUri != Uri.EMPTY && sd != ""){
-            if(imageUrl != ""){
-                FirebaseUtils().deleteImage(imageUrl)
-            }
-            FirebaseUtils().saveImage(imageUri, sd){
+        radioGroup.checkedRadioButtonId
+        if(imageUri != Uri.EMPTY && sd != "") {
+            FirebaseUtils().saveImage(imageUri, sd) {
                     result ->
                 result.onSuccess {res ->
                     imageUrl = res
                     FirebaseUtils().updateDocument(
-                        "promocion", id!!, hashMapOf(
+                        "evento_especial", id!!, hashMapOf(
                             "nombre" to name,
                             "descripcion" to desc,
-                            "estado" to status,
-                            "fecha_final" to selectedTimeStart,
-                            "fecha_inicio" to selectedTimeEnd,
+                            "estado" to estado,
+                            "fecha" to selectedTime,
                             "imagen_url" to imageUrl
                         )
                     )
                     dismiss()
-                    Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Evento editado", Toast.LENGTH_SHORT).show()
                 }
                 result.onFailure {
                     Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
                 }
             }
-        } else {
+        } else{
             FirebaseUtils().updateDocument(
-                "promocion", id!!, hashMapOf(
+                "evento_especial", id!!, hashMapOf(
                     "nombre" to name,
                     "descripcion" to desc,
-                    "estado" to status,
-                    "fecha_final" to selectedTimeStart,
-                    "fecha_inicio" to selectedTimeEnd,
+                    "estado" to estado,
+                    "fecha" to selectedTime,
                     "imagen_url" to imageUrl
                 )
             )
             dismiss()
-            Toast.makeText(context, "Promocion editada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Evento editado", Toast.LENGTH_SHORT).show()
         }
 
 
 
     }
 
-    private fun AddToDb(btnName: EditText, btnDescription: EditText) {
-        val name = btnName.text.toString()
+    private fun AddToDb(btnNombre: EditText, btnDescription: EditText) {
+        val name = btnNombre.text.toString()
         val desc = btnDescription.text.toString()
+
         if(name.isEmpty() || desc.isEmpty()){
             Toast.makeText(context, "Por favor llene todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if(selectedTimeStart.seconds > selectedTimeEnd.seconds){
-            Toast.makeText(context, "La fecha de inicio no puede ser mayor a la fecha de fin", Toast.LENGTH_SHORT).show()
+        if(imageUri == Uri.EMPTY || sd == ""){
+            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
             return
         }
-
-        // create a coroutine to save the image and get the url
+        if(imageUri == Uri.EMPTY){
+            Toast.makeText(context, "Por favor seleccione una imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         if(dialog is BottomSheetDialog) {
             (dialog as BottomSheetDialog).behavior.isDraggable = false
@@ -277,53 +260,35 @@ class AddEditPromotion : BottomSheetDialogFragment() {
         }
         isCancelable = false
 
-        if(imageUri != Uri.EMPTY && sd != ""){
-            try {
-                FirebaseUtils().saveImage(imageUri, sd){
-                        result ->
-                    result.onSuccess {res ->
-                        imageUrl = res
-                        FirebaseUtils().createDocument(
-                            "promocion", hashMapOf(
-                                "nombre" to name,
-                                "descripcion" to desc,
-                                "estado" to status,
-                                "fecha_final" to selectedTimeStart,
-                                "fecha_inicio" to selectedTimeEnd,
-                                "imagen_url" to imageUrl
-                            )
+        try {
+            FirebaseUtils().saveImage(imageUri, sd){
+                    result ->
+                result.onSuccess {res ->
+                    imageUrl = res
+                    FirebaseUtils().createDocument(
+                        "evento_especial", hashMapOf(
+                            "nombre" to name,
+                            "descripcion" to desc,
+                            "estado" to true,
+                            "fecha" to selectedTime,
+                            "imagen_url" to imageUrl
                         )
-                        dismiss()
-                        Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()                }
-                    result.onFailure {
-                        Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
-                    }
+                    )
+                    dismiss()
+                    Toast.makeText(context, "Evento especial creado $imageUrl", Toast.LENGTH_SHORT).show()                }
+                result.onFailure {
+                    Toast.makeText(context, "Error al agregar imagen", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-                Log.e("AddEditPromotion", e.message.toString())
-                Toast.makeText(context, "Error al crear la promocion, por favor no cierre el formulario", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            FirebaseUtils().createDocument(
-                "promocion", hashMapOf(
-                    "nombre" to name,
-                    "descripcion" to desc,
-                    "estado" to status,
-                    "fecha_final" to selectedTimeStart,
-                    "fecha_inicio" to selectedTimeEnd,
-                    "imagen_url" to imageUrl
-                )
-            )
-            dismiss()
-            Toast.makeText(context, "Promocion agregada $imageUrl", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.e("Fragment Evento Especial", e.message.toString())
+            Toast.makeText(context, "Error al crear el evento, por favor no cierre el formulario", Toast.LENGTH_SHORT).show()
         }
-
-
-
-
     }
 
-    private fun showDatePicker(text: TextView, flag: Boolean) {
+
+
+    private fun showDatePicker(text: TextView) {
         // Create a DatePickerDialog
 
         val datePickerDialog = context?.let {
@@ -342,12 +307,8 @@ class AddEditPromotion : BottomSheetDialogFragment() {
                     val formattedDate = dateFormat.format(selectedDate.time)
                     // Update the TextView to display the selected date with the "Selected Date: " prefix
                     text.text = "Fecha seleccionada: $formattedDate"
-                    if(flag){
-                        selectedTimeStart = Timestamp(selectedDate.time)
-                    }
-                    else{
-                        selectedTimeEnd = Timestamp(selectedDate.time)
-                    }
+
+                    selectedTime = Timestamp(selectedDate.time)
 
                 },
                 calendar.get(Calendar.YEAR),
@@ -371,7 +332,5 @@ class AddEditPromotion : BottomSheetDialogFragment() {
 
     interface OnDismissListener {
         fun onDismissOnActivity()
-
     }
-
 }

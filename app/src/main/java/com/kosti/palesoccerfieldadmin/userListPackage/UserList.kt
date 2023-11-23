@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Spinner
@@ -31,6 +32,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
     private lateinit var userListProgressBar: ProgressBar
     private lateinit var toolbar: Toolbar
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var isAdminCheckBox: CheckBox
     private var ratesList = listOf<String>("Todos", "Malo", "Bueno", "Regular")
     private var positionList = listOf<String>("Todos","Defensa", "Arquero", "Medio campista", "Delantero")
     private var selectedRate = "Todos"
@@ -47,18 +49,20 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
         userListProgressBar = findViewById(R.id.userListProgressBar)
         toolbar = findViewById(R.id.toolbarUserList)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayoutUserList)
+        isAdminCheckBox = findViewById(R.id.adminCheckBox)
         filteredList = mutableListOf()
         userList = mutableListOf()
-
+        adapter = UserListAdapter(this, userList)
 
         fetchDataFromFirebase()
         initSearchWidget()
         setupSpinners()
-
+        filteredList = userList
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
         swipeRefreshLayout.setOnRefreshListener {
             fetchDataFromFirebase()
+            filteredList = userList
             swipeRefreshLayout.isRefreshing = false
         }
 
@@ -68,21 +72,17 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
 
                 fragmentProfileScreen.setOnDismissListener(this@UserList)
                 var data = Bundle()
-                data.putString("name", userList[p2].Name)
-                data.putString("classification", userList[p2].Clasification)
-                data.putString("nickname", userList[p2].Nickname)
-                // Calculate age from Timestamp
+                data.putString("name", filteredList[p2].Name)
+                data.putString("classification", filteredList[p2].Clasification)
+                data.putString("nickname", filteredList[p2].Nickname)
 
-                data.putLong("age", (userList[p2].Age.toLong()))
-
-                data.putString("phone", userList[p2].Phone)
-                data.putStringArrayList("positions", userList[p2].Positions as ArrayList<String>)
-                data.putString("id", userList[p2].Id)
+                data.putLong("age", (filteredList[p2].Age.toLong()))
+                data.putString("phone", filteredList[p2].Phone)
+                data.putStringArrayList("positions", filteredList[p2].Positions as ArrayList<String>)
+                data.putString("id", filteredList[p2].Id)
                 fragmentProfileScreen.arguments = data
 
                 fragmentProfileScreen.show(supportFragmentManager, "ProfileScreen")
-
-
             }
         }
     }
@@ -106,21 +106,21 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                         continue
                     }
 
-                    if(user["estado"] == false || user["rol"] == ADMIN_ROLE) {
+                    if(user["estado"] == false) {
                         continue
                     }
-
-                    userList.add(
-                        JugadoresDataModel(
-                            user["nombre"].toString(),
+                    var player = JugadoresDataModel(
+                        user["nombre"].toString(),
                         user["clasificacion"].toString(),
                         user["posiciones"] as MutableList<String> ,
                         user["apodo"].toString(),
                         user["telefono"].toString(),
                         user["fecha_nacimiento"].toString(),
                         user["id"].toString(),
-
-                    )
+                        )
+                    player.Role = user["rol"].toString()
+                    userList.add(
+                        player
                     )
                 }
                 adapter = UserListAdapter(this, userList)
@@ -149,6 +149,8 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedRate = ratesList[p2]
                 filterList()
+                adapter.notifyDataSetChanged()
+
 
             }
 
@@ -161,6 +163,8 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedPosition = positionList[p2]
                 filterList()
+                adapter.notifyDataSetChanged()
+
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -169,30 +173,48 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
 
         }
 
+        isAdminCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                filteredList = userList.filter { it.Role == ADMIN_ROLE } as MutableList<JugadoresDataModel>
+                userListView.adapter = UserListAdapter(applicationContext, filteredList);
+                adapter.notifyDataSetChanged()
+            }else{
+                filterList()
+            }
+        }
+
         rateSpinner.adapter = rateAdapter;
         positionSpinner.adapter = positionAdapter;
     }
     fun filterList(){
-        if(selectedRate == "Todos" && selectedPosition == "Todos"){
+        if(selectedRate == "Todos" && selectedPosition == "Todos" ){
             userListView.adapter = UserListAdapter(applicationContext, userList);
+            adapter.notifyDataSetChanged()
             return
         }
+
         if(selectedRate == "Todos"){
             filteredList = userList
                 .filter { it.Positions.contains(selectedPosition)  } as MutableList<JugadoresDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
+            adapter.notifyDataSetChanged()
+
             return
         }
         if(selectedPosition == "Todos"){
             filteredList = userList
                 .filter { it.Clasification.toLowerCase() == selectedRate.toLowerCase() } as MutableList<JugadoresDataModel>
             userListView.adapter = UserListAdapter(applicationContext, filteredList);
+            adapter.notifyDataSetChanged()
+
             return
         }
         filteredList = userList
             .filter { it.Clasification.toLowerCase() == selectedRate.toLowerCase() }
             .filter { it.Positions.contains(selectedPosition)  } as MutableList<JugadoresDataModel>
         userListView.adapter = UserListAdapter(applicationContext, filteredList);
+        adapter.notifyDataSetChanged()
+
     }
 
     private fun initSearchWidget(){
@@ -226,6 +248,8 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                 }
 
                 userListView.adapter = UserListAdapter(applicationContext, filteredUsers);
+                adapter.notifyDataSetChanged()
+
                 return false;
             }
         } )

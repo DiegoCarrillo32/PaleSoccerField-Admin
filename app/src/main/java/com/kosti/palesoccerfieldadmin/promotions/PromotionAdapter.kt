@@ -105,9 +105,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             bundle.putString("imageUrl", dataSet[position].ImageUrl)
             addEditPromotion.arguments = bundle
 
-
             addEditPromotion.show((context as Promotions).supportFragmentManager, "BSDialogFragment")
-
 
         }
 
@@ -119,7 +117,6 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             result.onSuccess {
                 dataSet.clear()
                 for (promotion in it){
-                    if(promotion["estado"] != true) continue
 
                     val promotionData = PromotionDataModel(
                         promotion["id"].toString(),
