@@ -13,7 +13,6 @@ import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
-import com.kosti.palesoccerfieldadmin.otherUsersProfile.ProfileScreen
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -35,7 +34,7 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
 
 
 
-    private var selectedDateTimestamp: Timestamp = Timestamp(Date())
+    private var selectedDateTimestamp: Timestamp? = null
     private var selectedTimeStart: Timestamp? = null
     private var selectedTimeEnd: Timestamp? = null
 
@@ -137,47 +136,46 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
 
     }
 
-    private fun showTimePicker(select_flag: Boolean){
+    private fun showTimePicker(selectFlag: Boolean){
 
         val timePickerDialog = TimePickerDialog(
             context, {timePicker, hourOfDay, minute ->
 
                 // Create a new Calendar instance to hold the selected time
                 val selectedTime = Calendar.getInstance()
+                if(selectedDateTimestamp == null) {
+                    Toast.makeText(context, "Por favor seleccione una fecha para el horario", Toast.LENGTH_SHORT).show()
+                    return@TimePickerDialog
+                }
                 // Set the selected time using the values received from the TimePicker dialog
-                if(!select_flag && selectedTimeStart != null && selectedTimeStart!!.toDate().hours > hourOfDay){
+                if(!selectFlag && selectedTimeStart != null && selectedTimeStart!!.toDate().hours > hourOfDay){
                     Toast.makeText(context, "La hora final no puede ser menor a la hora inicial", Toast.LENGTH_SHORT).show()
                     return@TimePickerDialog
 
                 }
 
-                if(!select_flag && selectedTimeStart == null) {
+                if(!selectFlag && selectedTimeStart == null) {
                     Toast.makeText(context, "Por favor seleccione la hora inicial", Toast.LENGTH_SHORT).show()
                     return@TimePickerDialog
                 }
 
-
-
-                // if the selected time is 1 hour or less than the selected start time, show an error message
-                if(!select_flag && hourOfDay < selectedTimeStart!!.toDate().hours+1){
+                if(!selectFlag && hourOfDay < selectedTimeStart!!.toDate().hours+1){
                     Toast.makeText(context, "La cantidad minima de reserva es 1 hora", Toast.LENGTH_SHORT).show()
                     return@TimePickerDialog
-
                 }
+
+                selectedTime.set(Calendar.DAY_OF_MONTH, selectedDateTimestamp!!.toDate().date)
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 selectedTime.set(Calendar.MINUTE, minute)
 
-                // Create a SimpleDateFormat to format the time as "HH:mm"
                 val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                // Format the selected time into a string
                 val formattedTime = timeFormat.format(selectedTime.time)
 
-                // Update the TextView to display the selected time with the "Selected Time: " prefix
-                if(select_flag){
+                if(selectFlag) {
                     btnSelectTimeStart.text = "Hora seleccionada: $formattedTime"
                     selectedTimeStart = Timestamp(selectedTime.time)
                 }
-                else{
+                else {
                     btnSelectTimeEnd.text = "Hora seleccionada: $formattedTime"
                     selectedTimeEnd = Timestamp(selectedTime.time)
                 }
@@ -189,7 +187,7 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
         )
 
 
-        if(selectedTimeStart != null && !select_flag)
+        if(selectedTimeStart != null && !selectFlag)
             selectedTimeStart?.toDate()
                 ?.let {
                     timePickerDialog.updateTime(it.hours+1, selectedTimeStart!!.toDate().minutes)
@@ -231,8 +229,12 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
         datePickerDialog?.show()
     }
     private fun editSchedule(){
+        if(selectedDateTimestamp == null || selectedTimeStart == null || selectedTimeEnd == null) {
+            Toast.makeText(context, "Por favor seleccione una fecha y hora", Toast.LENGTH_SHORT).show()
+            return
+        }
         FirebaseUtils().updateDocument(COLLECTION_NAME, id!!, hashMapOf(
-            "fecha" to selectedDateTimestamp,
+            "fecha" to selectedDateTimestamp!!,
             "tanda" to mutableListOf(
                 selectedTimeStart,
                 selectedTimeEnd
@@ -240,8 +242,12 @@ class AddScheduleFragment: BottomSheetDialogFragment() {
         ))
     }
     private fun saveToDb(){
+        if(selectedDateTimestamp == null || selectedTimeStart == null || selectedTimeEnd == null) {
+            Toast.makeText(context, "Por favor seleccione una fecha y hora", Toast.LENGTH_SHORT).show()
+            return
+        }
         FirebaseUtils().createDocument(COLLECTION_NAME, hashMapOf(
-            "fecha" to selectedDateTimestamp,
+            "fecha" to selectedDateTimestamp!!,
             "tanda" to mutableListOf(
                 selectedTimeStart,
                 selectedTimeEnd

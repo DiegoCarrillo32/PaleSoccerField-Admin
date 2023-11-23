@@ -94,6 +94,7 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
         tvFecha.text = fecha
 
         btnEliminar.setOnClickListener {
+            FirebaseUtils().updateDocument("horario", dataSet[position].ScheduleID, hashMapOf("reservado" to false))
             FirebaseUtils().deleteDocument("reservas", dataSet[position].id.toString())
             dataSet.removeAt(position)
             notifyItemRemoved(position)
