@@ -32,6 +32,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         val deleteBtn : ImageButton
         val editBtn : ImageButton
         val image : ImageView
+        val statusTextView : TextView
         init {
             nameTV = view.findViewById(R.id.nameTV)
             descriptionTV = view.findViewById(R.id.descriptionTV)
@@ -40,6 +41,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             deleteBtn = view.findViewById(R.id.deleteBtn)
             editBtn = view.findViewById(R.id.editBtn)
             image = view.findViewById(R.id.imageView)
+            statusTextView = view.findViewById(R.id.status)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PromotionAdapter.ViewHolder {
@@ -57,6 +59,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         holder.descriptionTV.text = dataSet[position].Description
         holder.fechaInicioTV.text = dataSet[position].StartDate.toDate().toString()
         holder.fechaFinalTV.text = dataSet[position].EndDate.toDate().toString()
+        holder.statusTextView.text = if (dataSet[position].Status) "Activa" else "Inactiva"
 
         val dateInit = Date((dataSet[position].StartDate?.seconds ?: 0) * 1000)
         val dateFormatInit = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

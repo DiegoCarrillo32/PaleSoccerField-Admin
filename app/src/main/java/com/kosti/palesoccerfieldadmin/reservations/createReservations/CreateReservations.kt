@@ -1,7 +1,6 @@
 package com.kosti.palesoccerfieldadmin.reservations.createReservations
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -25,7 +22,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.type.DateTime
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.models.ScheduleDataModel
@@ -62,6 +58,7 @@ class CreateReservations : AppCompatActivity() {
     private lateinit var spinnerTipoReserva: Spinner
     private lateinit var checkTengoEquipo: CheckBox
     private lateinit var scheduleSelected:ScheduleDataModel
+    private lateinit var auxScheduleSelected: String
     private lateinit var tvBoss: TextView
 
     private lateinit var boss: JugadoresDataModel
@@ -88,9 +85,11 @@ class CreateReservations : AppCompatActivity() {
         recyclerViewChallenging.adapter = adapterRemoveUsersChallengingTeamAdapter
 
 
-        if (reservationIdToEdit.isNotEmpty()) {
+        if (reservationIdToEdit != "") {
+            val title = findViewById<TextView>(R.id.tvToolbarTitle)
+            title.text = "Editar Reserva"
             // Si reservationIdToEdit no está vacío, estás en modo edición
-            supportActionBar?.title = "Editar Reserva" // Cambia el título de la barra de acciones
+            Toast.makeText(this, "Estás en modo edición", Toast.LENGTH_SHORT).show()
             cargarJugadoresDesdeFirebase()
             cargarDatosReservaParaEdicion(reservationIdToEdit)
             btnCrearReserva.text = "Editar" // Cambia el texto del botón
@@ -193,23 +192,14 @@ class CreateReservations : AppCompatActivity() {
     }
 
     private fun createReservation(){
-        /*Todo
-            * encargado: id
-            * equipo: boolean
-            * estado:boolean
-            * fecha:timestamp
-            * horarioID: id
-            * jugadores: ?
-            * retadores: ?
-            * tipo: "Publica" o "Privada"
-            * */
+
         val reservacion: HashMap<String, Any> = HashMap<String, Any>()
 
         if(::boss.isInitialized && ::scheduleSelected.isInitialized){//Validamos que haya un encargado y un horario seleccionado
             reservacion["encargado"] = boss.UID
 
             reservacion["horario"] = scheduleSelected.id
-            reservacion["fecha"] = scheduleSelected.fecha as Timestamp
+            reservacion["fecha"] = scheduleSelected.tanda?.get(0) as Timestamp
             reservacion["jugadores"] = playersIds
             reservacion["retadores"] = challengersIds
             reservacion["estado"] = true
@@ -222,6 +212,7 @@ class CreateReservations : AppCompatActivity() {
             }
             FirebaseUtils().createDocument("reservas", reservacion)
             Toast.makeText(this,"Se creó la reserva exitosamente",Toast.LENGTH_LONG).show()
+            FirebaseUtils().updateDocument("horario",scheduleSelected.id, hashMapOf("reservado" to true))
             finish()
         }else{
             Toast.makeText(this,"Recuerda seleccionar un horario y un encargado.",Toast.LENGTH_LONG).show()
@@ -262,64 +253,76 @@ class CreateReservations : AppCompatActivity() {
         }
     }
 
-    private fun spinnerSchedules() {
+    private fun spinnerSchedules(idHorario: String = "" ) {
 
-
-
-
-
-        // Configurar Firestore
         FirebaseFirestore.getInstance()
+        FirebaseUtils().readCollection("horario") {
+            result ->
+                result.onSuccess {
+                    reservationsSchedules.clear()
+                    for (schedule in it) {
+                        if (schedule["reservado"] == null ||
+                            schedule["tanda"] == null) {
+                            Toast.makeText(this, "Horario con datos erroneos", Toast.LENGTH_LONG).show()
+                            continue
+                        }
+                        // si el horario está reservado y es el horario que se está editando agrega el horario a la lista
+                        if((idHorario != "") && (schedule["id"].toString() == idHorario)){
+                            Toast.makeText(this, "Horario reservado $idHorario", Toast.LENGTH_LONG).show()
+                            var horario = ScheduleDataModel(
+                                schedule["id"].toString(),
+                                schedule["fecha"] as Timestamp,
+                                schedule["tanda"] as MutableList<Timestamp>,
+                                schedule["reservado"] as Boolean,
+                                convertTime(schedule["tanda"] as MutableList<Timestamp> )
+                            )
 
+                            reservationsSchedules.add(horario)
+                            continue
+                        }
+                        // si el horario está reservado y no es el horario que se está editando no agrega el horario a la lista
+                        if(schedule["reservado"] == true ){
+                            continue
+                        }
 
-        FirebaseUtils().readCollectionStateFalse("horario", "reservado") { result ->
-            result.onSuccess { it ->
+                        var horario = ScheduleDataModel(
+                            schedule["id"].toString(),
+                            schedule["fecha"] as Timestamp,
+                            schedule["tanda"] as MutableList<Timestamp>,
+                            schedule["reservado"] as Boolean,
+                            convertTime(schedule["tanda"] as MutableList<Timestamp> )
+                        )
 
-                for (schedule in it) {
-                    if (schedule["reservado"] == null ||
-                        schedule["tanda"] == null
-                    ) {
-                        Toast.makeText(this, "Horario con datos erroneos", Toast.LENGTH_LONG).show()
-                        continue
+                        reservationsSchedules.add(horario)
+                    }
+                    val scheduleText = reservationsSchedules.map { horario ->
+                        horario.getTextoHorario()
                     }
 
-                    var horario = ScheduleDataModel(
-                        schedule["id"].toString(),
-                        schedule["fecha"] as Timestamp,
-                        schedule["tanda"] as MutableList<Timestamp>,
-                        schedule["reservado"] as Boolean,
-                        convertTime(schedule["tanda"] as MutableList<Timestamp> )
-                    )
-
-                    Log.d("REVISANDO", horario.getTextoHorario())
-                    reservationsSchedules.add(horario)
-                }
-
-                val scheduleText = reservationsSchedules.map { horario ->
-                    horario.getTextoHorario()
-                }
-
-                // Crear un ArrayAdapter y establecerlo en el Spinner
-                val adapter = CustomSpinnerAdapter(this,R.layout.custom_spinner, scheduleText)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerSchedules.adapter = adapter
+                    // Crear un ArrayAdapter y establecerlo en el Spinner
+                    val adapter = CustomSpinnerAdapter(this,R.layout.custom_spinner, scheduleText)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinnerSchedules.adapter = adapter
 
 
-                spinnerSchedules.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                       scheduleSelected = reservationsSchedules[position]
+                    spinnerSchedules.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            scheduleSelected = reservationsSchedules[position]
 
-                    }
+                        }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
 
+                        }
                     }
                 }
-            }
             result.onFailure {
                 Toast.makeText(this, "Error al cargar horarios", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
     }
 
     private fun convertTime(list:MutableList<Timestamp>): String {
@@ -515,7 +518,6 @@ class CreateReservations : AppCompatActivity() {
 
     private fun cargarDatosReservaParaEdicion(reservationId: String) {
 
-        // Lógica para cargar los datos de la reserva desde Firebase y llenar los campos de la interfaz
         val db = Firebase.firestore
         val reservasCollectionRef = db.collection("reservas")
 
@@ -537,12 +539,14 @@ class CreateReservations : AppCompatActivity() {
                             }
                         }
                     }
-                    spinnerSchedules()
-                    val horario = documentSnapshot.getString("horario")
+                    val idHorario = documentSnapshot.getString("horario")
 
-                    if(horario != null){
-                        reservationsSchedules.forEach{schedulito->
-                            if(schedulito.id == horario){
+
+                    if(idHorario != null){
+                        auxScheduleSelected = idHorario
+                        spinnerSchedules(idHorario) // settea la lista, tomando en cuenta solo el horario actual
+                        reservationsSchedules.forEach{ schedulito->
+                            if(schedulito.id == idHorario){
                                 scheduleSelected = schedulito
                                 val scheduleIds = reservationsSchedules.map { it.id }
 
@@ -646,10 +650,8 @@ class CreateReservations : AppCompatActivity() {
                     )
                     userList.add(user)
                 }
-
                 // Almacena la lista completa
                 originalBossList = userList
-
                 // Ahora tienes la lista completa de jugadores en originalBossList
                 // Puedes realizar consultas a esta lista según tus necesidades
             }
@@ -658,7 +660,6 @@ class CreateReservations : AppCompatActivity() {
                 // Puedes mostrar un mensaje de error o realizar otras acciones
             }
     }
-
 
     private fun createOrUpdateReservation() {
         if (reservationIdToEdit.isNotEmpty()) {
@@ -676,7 +677,8 @@ class CreateReservations : AppCompatActivity() {
             reservacion["encargado"] = boss.UID
 
             reservacion["horario"] = scheduleSelected.id
-            reservacion["fecha"] = scheduleSelected.fecha as Timestamp
+            reservacion["fecha"] = scheduleSelected.tanda?.get(0) as Timestamp
+
             reservacion["jugadores"] = playersIds
             reservacion["retadores"] = challengersIds
             reservacion["estado"] = true
@@ -686,6 +688,10 @@ class CreateReservations : AppCompatActivity() {
             }else{
                 reservacion["tipo"] = "Privada"
                 reservacion["equipo"] = false
+            }
+            if(scheduleSelected.id != auxScheduleSelected){
+                FirebaseUtils().updateDocument("horario",auxScheduleSelected, hashMapOf("reservado" to false))
+                FirebaseUtils().updateDocument("horario",scheduleSelected.id, hashMapOf("reservado" to true))
             }
             FirebaseUtils().updateDocument("reservas",reservationId,reservacion)
             Toast.makeText(this,"Se Actualizó la reserva exitosamente",Toast.LENGTH_LONG).show()
