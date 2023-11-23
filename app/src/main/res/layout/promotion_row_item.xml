@@ -14,43 +14,119 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
-            <TextView
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Nombre: "/>
+                />
+                <TextView
+                    android:id="@+id/nameTV"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Nombre de la promoción"/>
+                />
+            </LinearLayout>
 
-                android:id="@+id/nameTV"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Nombre de la promoción"/>
-            />
-            <TextView
-                android:paddingTop="5dp"
+            <LinearLayout
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/descriptionTV"
-                android:text="Descripción"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Descripcion: "/>
+                />
+                <TextView
+                    android:paddingTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/descriptionTV"
+                    android:text="Descripción"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Fecha Inicio: "/>
+                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fechaInicio"
+                    android:text="Fecha1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Fecha Inicio: "/>
+                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fechaFin"
+                    android:text="Fecha2"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:id="@+id/fechaInicio"
-            android:text="Fecha1"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:id="@+id/fechaFin"
-            android:text="Fecha2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="center"
+        android:background="@color/grey"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_weight="0"
+            android:layout_width="240dp"
+            android:background="@color/white"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:src="@drawable/pales_logo">
+
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/editBtn"
             android:src="@drawable/edit_new_icon"
-            android:layout_weight="0"
+            android:layout_weight="2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Edit" />
@@ -59,20 +135,20 @@
 
             android:id="@+id/deleteBtn"
             android:src="@drawable/delete_icon"
-            android:layout_weight="0"
+            android:layout_weight="2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Delete"
             />
-
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_margin="10dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <View
+        android:layout_marginVertical="10dp"
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_weight="0"
+        android:background="#000000" />
 
 
 

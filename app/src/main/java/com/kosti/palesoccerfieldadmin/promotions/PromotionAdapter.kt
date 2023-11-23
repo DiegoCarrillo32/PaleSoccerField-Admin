@@ -66,10 +66,9 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         val dateFormatFinal = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val formattedDateFinal = dateFormatFinal.format(dateFinal)
 
-        holder.fechaInicioTV.text = "Fecha de inicio: $formattedDateInit"
-        holder.fechaFinalTV.text = "Fecha de finalizacion: $formattedDateFinal"
-        holder.nameTV.text = dataSet[position].Name
-        holder.descriptionTV.text = dataSet[position].Description
+        holder.fechaInicioTV.text = formattedDateInit
+        holder.fechaFinalTV.text = formattedDateFinal
+
         // set the image to the imageview using an url
         if(dataSet[position].ImageUrl != "") Picasso.get().load(dataSet[position].ImageUrl).into(holder.image)
 

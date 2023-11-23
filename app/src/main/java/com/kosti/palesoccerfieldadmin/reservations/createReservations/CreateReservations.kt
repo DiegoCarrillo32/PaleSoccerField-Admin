@@ -1,6 +1,7 @@
 package com.kosti.palesoccerfieldadmin.reservations.createReservations
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -356,22 +357,6 @@ class CreateReservations : AppCompatActivity() {
         limpiarListaYRecycler()
     }
 
-    //TODO: METER LOGICA PARA QUE DEPENDIENDO DE LAS OPCIONES QUE SE SELECCIONEN SE DESACTIVEN UNAS U OTRAS EN EL UI lista
-
-    //TODO: CONFIGURAR SPINNER HORARIOS CON LOS QUE ESTAN DISPONIBLES AHORITA SEGUN LA BASE DE DATOS
-
-    //TODO: METER LOGICA PARA ABRIR ACITVITY PARA SELECCIONAR EL ENCARGADO
-
-    //TODO: CONFIGURAR EL OTRO SPINNER CON VALORES QUEMADOS PERO USANDO LISTAS EN VALUES PARA RESERVA Privada o Publica lista
-
-    //TODO: AGREGAR FUNCIONALIDAD PARA SELECCIONAR JUGADORES Y DEPENDE DEL BOTON SE AÑADAN A UN EQUIPO O A OTRO
-
-    //TODO: CONFIGURAR UI PARA LOS ADAPTER CUSTOM DE LOS EQUIPOS --Andrik-- create_reservation_player_list_item lista
-
-    //TODO: CREAR 2 CUSTOM ADAPTERS PARA LOS DOS RECYCLER VIEW
-
-    //TODO: IMPORTANTEEEEEE FUNCIONALIDAD PARA EL BOTON DE CREAR RESERVA METER LAS 100000 VALIDACIONES
-
     private fun loadTeamsFromFirebase(list: ArrayList<String>, isProposalTeam: Boolean) {
         // Verificar si la carga desde Firebase ya se realizó
         val usersList = if (isProposalTeam) usersForProposalTeam else usersForChallengingTeam
@@ -462,11 +447,7 @@ class CreateReservations : AppCompatActivity() {
                     )
                     userList.add(user)
                 }
-
-                // Guarda los datos originales al principio
                 originalBossList = userList.toList()
-
-                // Actualizar el adaptador con la lista de usuarios obtenida de Firebase
                 adapter.setData(userList)
             }
             .addOnFailureListener { exception ->
@@ -597,7 +578,6 @@ class CreateReservations : AppCompatActivity() {
                     playersIds = listaJugadores as ArrayList<String>
                     loadTeamsFromFirebase(playersIds, isProposalTeam = true)
                     loadTeamsFromFirebase(challengersIds, isProposalTeam = false)
-                    Toast.makeText(this,"Mae$equipo y ${checkTengoEquipo.isChecked}", Toast.LENGTH_SHORT).show()
                     checkTengoEquipo.isChecked = equipo?: false
 
                     val TipoDeReserva = documentSnapshot.getString("tipo")
@@ -714,4 +694,6 @@ class CreateReservations : AppCompatActivity() {
             Toast.makeText(this,"Recuerda seleccionar un horario y un encargado.",Toast.LENGTH_LONG).show()
         }
     }
+
+
 }

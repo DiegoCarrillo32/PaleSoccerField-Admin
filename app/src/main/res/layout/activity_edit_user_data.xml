@@ -10,6 +10,7 @@
 
 
     <LinearLayout
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -55,15 +56,6 @@
             app:strokeColor="#FFF"
             app:strokeWidth="3dp" />
 
-        <Button
-            android:id="@+id/button2"
-            style="@style/ButtonAsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/editImage"
-            android:textSize="12sp" />
 
         <LinearLayout
             android:id="@+id/layoutPositions"

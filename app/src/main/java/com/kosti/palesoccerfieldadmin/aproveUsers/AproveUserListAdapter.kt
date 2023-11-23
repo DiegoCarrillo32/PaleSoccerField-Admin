@@ -35,7 +35,7 @@ class AproveUserListAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: AproveUserListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
         holder.userName.text = item.Name
         holder.userNickname.text = buildString {
@@ -44,9 +44,7 @@ class AproveUserListAdapter(
             append(" )")
         }
 
-        val context = holder.itemView.context  // Get the context from the ViewHolder's itemView
-
-        // Approve Button Click
+        val context = holder.itemView.context
         holder.btnAprove.setOnClickListener {
             val db = FirebaseFirestore.getInstance()
             val builder = AlertDialog.Builder(context)
@@ -109,13 +107,13 @@ class AproveUserListAdapter(
                 var bloquedMail : HashMap<String, Any>
                         = HashMap()
                 bloquedMail["correo"] = item.Email
-                val reservationEliminated = FirebaseUtils().getDocumentReferenceById("reservas", item.Id)
+                val userEliminated = FirebaseUtils().getDocumentReferenceById("jugadores", item.Id)
                 val currentPosition = holder.adapterPosition
                 db.runBatch() { batch ->
-                    batch.delete(reservationEliminated)
+                    batch.delete(userEliminated)
                 }.addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(context, "Reserva eliminada", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Jugador eliminado", Toast.LENGTH_SHORT).show()
                         data.removeAt(currentPosition)
                         notifyItemRemoved(currentPosition)
                     } else {
@@ -134,7 +132,6 @@ class AproveUserListAdapter(
                             .show()
                     }
                 }
-                data.removeAt(currentPosition)
                 notifyItemRemoved(currentPosition)
             }
             builder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, i: Int ->
