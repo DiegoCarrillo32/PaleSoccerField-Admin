@@ -259,14 +259,14 @@
                 android:id="@+id/switchMedioCampista"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Medio Campista" />
+                android:text="Mediocampista" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_marginHorizontal="20dp"
                 android:id="@+id/switchArquero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Arquero" />
+                android:text="Portero" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_marginHorizontal="20dp"

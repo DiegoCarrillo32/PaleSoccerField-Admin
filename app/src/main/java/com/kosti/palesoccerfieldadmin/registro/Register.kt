@@ -53,8 +53,8 @@ class Register : AppCompatActivity() {
     lateinit var switchlateralDerecho: SwitchCompat
 
     private val DELANTERO = "Delantero"
-    private val MEDIO_CAMPISTA = "Medio Campista"
-    private val ARQUERO = "Arquero"
+    private val MEDIO_CAMPISTA = "Mediocampista"
+    private val ARQUERO = "Portero"
     private val DEFENSA = "Defensa"
     private val LATERAL_IZQ = "Lateral Izquierdo"
     private val LATERAL_DER = "Lateral Derecho"

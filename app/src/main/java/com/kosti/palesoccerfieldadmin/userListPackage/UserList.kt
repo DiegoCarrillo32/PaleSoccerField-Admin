@@ -34,7 +34,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
     private lateinit var toolbar: Toolbar
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var ratesList = listOf(ALL_FILTER, "Malo", "Bueno", "Regular")
-    private var positionList = listOf(ALL_FILTER,"Defensa", "Arquero", "Medio campista", "Delantero")
+    private var positionList = listOf(ALL_FILTER,"Delantero", "Mediocampista", "Portero","Defensa", "Lateral Izquierdo", "Lateral Derecho")
     private val rolesList = listOf(ALL_FILTER, PLAYER_ROLE, ADMIN_ROLE)
     private var selectedRate = ALL_FILTER
     private var selectedPosition = ALL_FILTER
@@ -66,19 +66,16 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
         userListView.onItemClickListener = object: AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val fragmentProfileScreen = ProfileScreen()
-
                 fragmentProfileScreen.setOnDismissListener(this@UserList)
                 var data = Bundle()
                 data.putString("name", filteredList[p2].Name)
                 data.putString("classification", filteredList[p2].Clasification)
                 data.putString("nickname", filteredList[p2].Nickname)
-
                 data.putLong("age", (filteredList[p2].Age.toLong()))
                 data.putString("phone", filteredList[p2].Phone)
                 data.putStringArrayList("positions", filteredList[p2].Positions as ArrayList<String>)
                 data.putString("id", filteredList[p2].Id)
                 fragmentProfileScreen.arguments = data
-
                 fragmentProfileScreen.show(supportFragmentManager, "ProfileScreen")
             }
         }
