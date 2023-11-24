@@ -52,11 +52,17 @@ class Reservations : AppCompatActivity() {
         return when (item.itemId) {
             R.id.addReservation -> {
                 val intent = Intent(this, CreateReservations::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, 1)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        listaReservas.clear()
+        consultarDatosReservasFirebase()
     }
     fun consultarDatosReservasFirebase() {
         FirebaseUtils().readCollection("reservas") { result ->
@@ -74,12 +80,14 @@ class Reservations : AppCompatActivity() {
                         reserva["encargado"].toString()
                     ) { result ->
                         result.onSuccess { user ->
+                            val res =ReservasDataModel(
+                                reserva["id"].toString(),
+                                user[0]["nombre"].toString(),
+                                reserva["fecha"] as Timestamp
+                            )
+                            res.ScheduleID = reserva["horario"].toString()
                             listaReservas.add(
-                                ReservasDataModel(
-                                    reserva["id"].toString(),
-                                    user[0]["nombre"].toString(),
-                                    reserva["fecha"] as Timestamp
-                                )
+                                res
                             )
                             customAdapter = CustomAdapter(listaReservas, this)
                             recyclerView = findViewById(R.id.recicler)

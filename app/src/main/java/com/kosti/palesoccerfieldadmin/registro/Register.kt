@@ -1,7 +1,6 @@
 package com.kosti.palesoccerfieldadmin.registro
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
@@ -14,10 +13,10 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.kosti.palesoccerfieldadmin.MainActivity
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Calendar
@@ -40,17 +39,35 @@ class Register : AppCompatActivity() {
 
     lateinit var radioGroupUserType: RadioGroup
     lateinit var radioButtonUserType: RadioButton
-    lateinit var rol:String
+    lateinit var rol: String
 
     lateinit var radioGroupClasificacion: RadioGroup
     lateinit var radioButtonClasificacion: RadioButton
-    lateinit var clasificacion:String
+    lateinit var clasificacion: String
 
+    lateinit var switchDelantero: SwitchCompat
+    lateinit var switchMedioCampista: SwitchCompat
+    lateinit var switchArquero: SwitchCompat
+    lateinit var switchDefensa: SwitchCompat
+    lateinit var switchlateralIzquierdo: SwitchCompat
+    lateinit var switchlateralDerecho: SwitchCompat
+
+    private val DELANTERO = "Delantero"
+    private val MEDIO_CAMPISTA = "Mediocampista"
+    private val ARQUERO = "Portero"
+    private val DEFENSA = "Defensa"
+    private val LATERAL_IZQ = "Lateral Izquierdo"
+    private val LATERAL_DER = "Lateral Derecho"
     private lateinit var auth: FirebaseAuth
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro)
+
+        var listaPosition: MutableList<String>
+        listaPosition = mutableListOf()
 
         editTextNombre = findViewById(R.id.nombreRegister)
         editTextEmail = findViewById(R.id.emailRegister)
@@ -63,6 +80,14 @@ class Register : AppCompatActivity() {
         textViewFechanacimiento = findViewById(R.id.fechaNacimientoRegister)
         radioGroupUserType = findViewById(R.id.rg_tipoDeUsuario)
         radioGroupClasificacion = findViewById(R.id.rg_clasificacion)
+
+        switchDelantero = findViewById(R.id.switchDelantero)
+        switchMedioCampista = findViewById(R.id.switchMedioCampista)
+        switchArquero = findViewById(R.id.switchArquero)
+        switchDefensa = findViewById(R.id.switchDefensa)
+        switchlateralIzquierdo = findViewById(R.id.switchlateralIzquierdo)
+        switchlateralDerecho = findViewById(R.id.switchlateralDerecho)
+
         rol = ""
         clasificacion = ""
 
@@ -72,16 +97,14 @@ class Register : AppCompatActivity() {
             toMain()
         }
 
-        radioGroupUserType.setOnCheckedChangeListener{
-            group, checkedId ->
+        radioGroupUserType.setOnCheckedChangeListener { group, checkedId ->
 
             radioButtonUserType = findViewById(checkedId)
             rol = radioButtonUserType.text.toString()
 
         }
 
-        radioGroupClasificacion.setOnCheckedChangeListener{
-                group, checkedId ->
+        radioGroupClasificacion.setOnCheckedChangeListener { group, checkedId ->
 
             radioButtonClasificacion = findViewById(checkedId)
             clasificacion = radioButtonClasificacion.text.toString()
@@ -107,7 +130,10 @@ class Register : AppCompatActivity() {
                     // Crea una instancia de Calendar y configura la fecha seleccionada
                     val calendario = Calendar.getInstance()
                     calendario.set(Calendar.YEAR, year)
-                    calendario.set(Calendar.MONTH, month) // Ten en cuenta que los meses comienzan desde 0 en Calendar
+                    calendario.set(
+                        Calendar.MONTH,
+                        month
+                    ) // Ten en cuenta que los meses comienzan desde 0 en Calendar
                     calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
                     // Obtiene el Timestamp de la fecha seleccionada
@@ -133,11 +159,11 @@ class Register : AppCompatActivity() {
             val fechaNac: String = textViewFechanacimiento.text.toString()
 
 
-            if(TextUtils.isEmpty(nombre) || TextUtils.isEmpty(email) ||
+            if (TextUtils.isEmpty(nombre) || TextUtils.isEmpty(email) ||
                 TextUtils.isEmpty(password) || TextUtils.isEmpty(telefono)
                 || TextUtils.isEmpty(fechaNac) || TextUtils.isEmpty(clasificacion)
                 || TextUtils.isEmpty(rol)
-            ){
+            ) {
 
                 if (TextUtils.isEmpty(nombre)) {
                     editTextNombre.error = "Ingrese su nombre"
@@ -158,7 +184,7 @@ class Register : AppCompatActivity() {
                 if (TextUtils.isEmpty(clasificacion)) {
                     Toast.makeText(
                         this@Register,
-                       "Por favor, seleccione la clasificacion.",
+                        "Por favor, seleccione la clasificacion.",
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
@@ -174,6 +200,25 @@ class Register : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (switchDelantero.isChecked) {
+                listaPosition.add(DELANTERO)
+            }
+            if (switchMedioCampista.isChecked) {
+                listaPosition.add(MEDIO_CAMPISTA)
+            }
+            if (switchArquero.isChecked) {
+                listaPosition.add(ARQUERO)
+            }
+            if (switchDefensa.isChecked) {
+                listaPosition.add(DEFENSA)
+            }
+            if (switchlateralIzquierdo.isChecked) {
+                listaPosition.add(LATERAL_IZQ)
+            }
+            if (switchlateralDerecho.isChecked) {
+                listaPosition.add(LATERAL_DER)
+            }
+
             if (TextUtils.isEmpty(apodo)) {
                 apodo = " "
                 apodo = editTextNombre.text.toString()
@@ -184,6 +229,17 @@ class Register : AppCompatActivity() {
             if (!isValidEmail(email.trim())) {
                 editTextEmail.error = "Correo invalido"
                 progressBar.visibility = View.GONE
+                return@setOnClickListener
+            }
+
+            if (telefono.length != 8) {
+                editTextTelefono.error = "Formato de numero invalido"
+                progressBar.visibility = View.GONE
+                Toast.makeText(
+                    this@Register,
+                    "Número invalido.",
+                    Toast.LENGTH_SHORT,
+                ).show()
                 return@setOnClickListener
             }
 
@@ -207,7 +263,16 @@ class Register : AppCompatActivity() {
                             "Authentication successful.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        createUser(nombre, email,apodo, telefono, fechaCovertida, clasificacion, rol)
+                        createUser(
+                            nombre,
+                            email,
+                            apodo,
+                            telefono,
+                            fechaCovertida,
+                            clasificacion,
+                            rol,
+                            listaPosition
+                        )
                         toMain()
                     } else {
                         // If sign in fails, display a message to the user.
@@ -223,27 +288,32 @@ class Register : AppCompatActivity() {
         }
     }
 
-    private fun createUser(nombre: String,
-                           email: String,
-                           apodo: String,
-                           telefono: String,
-                           fechaNac: String,
-                           clasf: String,
-                           rol: String
+    private fun createUser(
+        nombre: String,
+        email: String,
+        apodo: String,
+        telefono: String,
+        fechaNac: String,
+        clasf: String,
+        rol: String,
+        listaPosition: MutableList<String>
     ) {
         val jugadorPorDefecto: HashMap<String, Any> = HashMap<String, Any>()
         val bloqueosList = mutableListOf<String>()
-        val posicionesList = mutableListOf<String>()
 
-        jugadorPorDefecto["apodo"] = apodo.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["apodo"] = apodo.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["bloqueos"] = bloqueosList
-        jugadorPorDefecto["clasificacion"] = clasf.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["clasificacion"] = clasf.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["correo"] = email
         jugadorPorDefecto["estado"] = true
         jugadorPorDefecto["fecha_nacimiento"] = fechaNac
-        jugadorPorDefecto["nombre"] = nombre.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-        jugadorPorDefecto["posiciones"] = posicionesList
-        jugadorPorDefecto["rol"] = rol.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["nombre"] = nombre.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        jugadorPorDefecto["posiciones"] = listaPosition
+        jugadorPorDefecto["rol"] = rol.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         jugadorPorDefecto["telefono"] = telefono
         jugadorPorDefecto["UID"] = Firebase.auth.currentUser?.uid.toString()
 

@@ -1,7 +1,8 @@
-package SpecialEvents
+package com.kosti.palesoccerfieldadmin.SpecialEvents
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.EventoEspecialDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
@@ -18,7 +21,8 @@ import java.util.Date
 import java.util.Locale
 
 class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecialDataModel>, private val context: Context) :
-    RecyclerView.Adapter<SpecialEventsCustomAdapter.ViewHolder>() {
+    RecyclerView.Adapter<SpecialEventsCustomAdapter.ViewHolder>(),
+    FragmentEditAddSpecialEvent.OnDismissListener {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tV_nombre: TextView
@@ -56,10 +60,13 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.tV_nombre.text = dataSet[position].Name
+        viewHolder.tV_descripcion.text = dataSet[position].Description
+        viewHolder.tV_fecha.text = dataSet[position].Date.toDate().toString()
 
         val date = Date(dataSet[position].Date.seconds * 1000)
         val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
         val formattedDate = dateFormat.format(date)
+
         viewHolder.tV_fecha.text = formattedDate
 
         if (dataSet[position].Status){
@@ -67,17 +74,23 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
         }else{
             viewHolder.tV_estado.text = "Inactiva"
         }
-        viewHolder.tV_descripcion.text = dataSet[position].Description
 
         if(dataSet[position].ImageUrl != "")Picasso.get().load(dataSet[position].ImageUrl).into(viewHolder.imagen)
 
         viewHolder.btnEditar.setOnClickListener {
 
-            Toast.makeText(
-                viewHolder.itemView.context,
-                "Editar",
-                Toast.LENGTH_SHORT,
-            ).show()
+            val bundle = Bundle()
+            val fragmentSpecialEvent = FragmentEditAddSpecialEvent()
+            fragmentSpecialEvent.setOnDismissListener(this)
+
+            bundle.putString("id", dataSet[position].id)
+            bundle.putString("name", dataSet[position].Name)
+            bundle.putString("description", dataSet[position].Description)
+            bundle.putSerializable("date", dataSet[position].Date.toDate())
+            bundle.putBoolean("status", dataSet[position].Status)
+            bundle.putString("imageUrl",dataSet[position].ImageUrl)
+            fragmentSpecialEvent.arguments = bundle
+            fragmentSpecialEvent.show((context as SpecialEvents).supportFragmentManager, "BSDialogFragment")
 
         }
 
@@ -102,6 +115,32 @@ class SpecialEventsCustomAdapter(private var dataSet: MutableList<EventoEspecial
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
+    override fun onDismissOnActivity() {
+        consultarDatosEventosEspecialesFirebase()
+    }
 
+    fun consultarDatosEventosEspecialesFirebase() {
+        FirebaseUtils().readCollection("evento_especial") { result ->
+            result.onSuccess {
+                dataSet.clear()
+                for(eventoEspecial in it){
+                    //if (eventoEspecial["estado"] != true)continue
+                    dataSet.add(
+                        EventoEspecialDataModel(
+                            eventoEspecial["id"].toString(),
+                            eventoEspecial["descripcion"].toString(),
+                            eventoEspecial["estado"] as Boolean,
+                            eventoEspecial["fecha"] as Timestamp,
+                            eventoEspecial["imagen_url"].toString(),
+                            eventoEspecial["nombre"].toString()
+                        )
+                    )
 
+                }
+                notifyDataSetChanged()
+            }
+            result.onFailure {
+            }
+        }
+    }
 }

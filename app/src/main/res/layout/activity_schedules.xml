@@ -10,8 +10,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarSchedule"
-        android:background="@color/white"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:background="?attr/colorPrimary"
+        android:theme="?attr/actionBarTheme"
+
         app:navigationIcon="@drawable/arrow_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -20,9 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Horarios"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:gravity="center"
 
             />

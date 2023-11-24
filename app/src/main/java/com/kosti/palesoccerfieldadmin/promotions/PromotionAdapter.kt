@@ -32,6 +32,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         val deleteBtn : ImageButton
         val editBtn : ImageButton
         val image : ImageView
+        val statusTextView : TextView
         init {
             nameTV = view.findViewById(R.id.nameTV)
             descriptionTV = view.findViewById(R.id.descriptionTV)
@@ -40,6 +41,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             deleteBtn = view.findViewById(R.id.deleteBtn)
             editBtn = view.findViewById(R.id.editBtn)
             image = view.findViewById(R.id.imageView)
+            statusTextView = view.findViewById(R.id.status)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PromotionAdapter.ViewHolder {
@@ -57,6 +59,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         holder.descriptionTV.text = dataSet[position].Description
         holder.fechaInicioTV.text = dataSet[position].StartDate.toDate().toString()
         holder.fechaFinalTV.text = dataSet[position].EndDate.toDate().toString()
+        holder.statusTextView.text = if (dataSet[position].Status) "Activa" else "Inactiva"
 
         val dateInit = Date((dataSet[position].StartDate?.seconds ?: 0) * 1000)
         val dateFormatInit = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -66,10 +69,9 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
         val dateFormatFinal = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val formattedDateFinal = dateFormatFinal.format(dateFinal)
 
-        holder.fechaInicioTV.text = "Fecha de inicio: $formattedDateInit"
-        holder.fechaFinalTV.text = "Fecha de finalizacion: $formattedDateFinal"
-        holder.nameTV.text = dataSet[position].Name
-        holder.descriptionTV.text = dataSet[position].Description
+        holder.fechaInicioTV.text = formattedDateInit
+        holder.fechaFinalTV.text = formattedDateFinal
+
         // set the image to the imageview using an url
         if(dataSet[position].ImageUrl != "") Picasso.get().load(dataSet[position].ImageUrl).into(holder.image)
 
@@ -105,9 +107,7 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             bundle.putString("imageUrl", dataSet[position].ImageUrl)
             addEditPromotion.arguments = bundle
 
-
             addEditPromotion.show((context as Promotions).supportFragmentManager, "BSDialogFragment")
-
 
         }
 
@@ -119,7 +119,6 @@ class PromotionAdapter(private val dataSet: MutableList<PromotionDataModel>,
             result.onSuccess {
                 dataSet.clear()
                 for (promotion in it){
-                    if(promotion["estado"] != true) continue
 
                     val promotionData = PromotionDataModel(
                         promotion["id"].toString(),

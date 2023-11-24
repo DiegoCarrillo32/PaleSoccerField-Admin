@@ -17,7 +17,8 @@
         <ImageView
             android:src="@drawable/pales_logo"
             android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:layout_height="100dp"
+            android:contentDescription="@string/todo" />
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -65,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:text="Gestion de usuarios"
+                android:text="@string/gestion_de_usuarios"
                 android:textSize="20dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -92,11 +93,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Buscar usuarios"
+                    android:text="@string/buscar_usuarios"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    APROBAR USUARIO -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,11 +122,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Aprobar usuarios"
+                    android:text="@string/aprobar_usuarios"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    REGISTRAR USUARIO-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,7 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Registrar usuarios"
+                    android:text="@string/registrar_usuarios"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -152,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:text="Gestion de Reservas"
+                android:text="@string/gestion_de_reservas"
                 android:textSize="20dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -180,11 +191,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Reservas"
+                    android:text="@string/calendario_de_reservas"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -203,11 +219,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Historial de reservas"
+                    android:text="@string/historial_de_reservas"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
+            <View
+                android:id="@+id/separator4"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    REGISTRAR HORARIO-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -219,7 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/check_icon"
+                    android:src="@drawable/registrar_horario_icon"
                     app:tint="@color/black" />
 
                 <Button
@@ -227,12 +248,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Registrar Horarios"
+                    android:text="@string/registrar_horarios"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/separator5"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    APROBAR RESERVA-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -252,11 +278,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Aprobar Reservas"
+                    android:text="@string/aprobar_reservas"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
-
+            <View
+                android:id="@+id/separator6"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    AGREGAR, EDITAR, ELIMINAR RESERVAS-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -276,7 +306,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Gestion de Reservas"
+                    android:text="@string/editar_agregar_eliminar"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -286,7 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:text="Otros"
+                android:text="@string/otros"
                 android:textSize="20dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -315,12 +345,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Cuenta"
+                    android:text="@string/cuenta"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/separator7"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
             <!--    GESTION DE RESEÑAS-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -340,10 +375,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Aprobar reseñas"
+                    android:text="@string/aprobar_rese_as"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/separator8"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
 
             <!--    GESTION DE PROMOCIONES-->
             <LinearLayout
@@ -356,18 +397,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/review_icon"
-                    app:tint="@color/black" />
+                    android:src="@drawable/promotion_icon"
+                    app:tint="@color/black"
+                    android:contentDescription="TODO" />
 
                 <Button
                     android:id="@+id/btnPromotionManagement"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Gestion de promociones"
+                    android:text="@string/gestion_de_promociones"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/separator9"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#858585" />
 
             <!--    GESTION DE PROMOCIONES-->
             <LinearLayout
@@ -380,7 +428,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/gestion_reservas"
+                    android:src="@drawable/baseline_celebration_24"
                     app:tint="@color/black" />
 
                 <Button
@@ -388,7 +436,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
-                    android:text="Eventos Especiales"
+                    android:text="@string/gestion_de_eventos_especiales"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -406,7 +454,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:backgroundTint="@color/white"
-        android:text="Eliminar mi cuenta"
+        android:text="@string/eliminar_mi_cuenta"
         android:textColor="#FF0000"
         android:textSize="20sp" />
     <View
@@ -422,7 +470,7 @@
         android:layout_weight="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Log out"/>
+        android:text="@string/log_out"/>
 
 
 </LinearLayout>

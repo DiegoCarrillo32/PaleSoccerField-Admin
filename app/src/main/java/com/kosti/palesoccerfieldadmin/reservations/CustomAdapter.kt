@@ -1,6 +1,7 @@
 package com.kosti.palesoccerfieldadmin.reservations
 
 import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.models.ReservasDataModel
+import com.kosti.palesoccerfieldadmin.reservations.createReservations.CreateReservations
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import java.util.Date
 import java.util.Locale
@@ -57,13 +59,12 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
         viewHolder.tV_fecha.text = formattedDate
 
         viewHolder.btnEditar.setOnClickListener {
+            val reservationId = dataSet[position].id.toString()
 
-            Toast.makeText(
-                viewHolder.itemView.context,
-                "Editar",
-                Toast.LENGTH_SHORT,
-            ).show()
-
+            // Abre la actividad CreateReservations en modo de edición
+            val intent = Intent(context, CreateReservations::class.java)
+            intent.putExtra("reservationIdToEdit", reservationId)
+            context.startActivity(intent)
         }
 
         viewHolder.btnEliminar.setOnClickListener {
@@ -93,6 +94,7 @@ class CustomAdapter(private var dataSet: MutableList<ReservasDataModel>, private
         tvFecha.text = fecha
 
         btnEliminar.setOnClickListener {
+            FirebaseUtils().updateDocument("horario", dataSet[position].ScheduleID, hashMapOf("reservado" to false))
             FirebaseUtils().deleteDocument("reservas", dataSet[position].id.toString())
             dataSet.removeAt(position)
             notifyItemRemoved(position)

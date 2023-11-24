@@ -126,7 +126,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/telefono"
                     android:inputType="phone"
-                    android:maxLength="20"/>
+                    android:maxLength="8"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -184,7 +185,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@drawable/rectangle_fecha_nacimiento">
+                android:background="@drawable/rectangle_fecha_nacimiento"
+                android:layout_marginBottom="20dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/clasificacion"
@@ -225,6 +227,69 @@
                         android:text="@string/malo" />
                 </RadioGroup>
             </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/rectangle_fecha_nacimiento">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="10dp"
+                android:paddingTop="15dp"
+                android:paddingEnd="18dp"
+                android:text="@string/posiciones"
+                android:textSize="16sp">
+
+            </com.google.android.material.textview.MaterialTextView>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/switchDelantero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delantero" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/switchMedioCampista"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mediocampista" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/switchArquero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Portero" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/switchDefensa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Defensa" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/switchlateralIzquierdo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lateral Izquierdo" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/switchlateralDerecho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lateral Derecho" />
+
+        </LinearLayout>
 
             <TextView
                 android:id="@+id/textViewToLogin"

@@ -25,7 +25,6 @@ public class JugadoresDataModel() {
     lateinit var Nickname: String
     lateinit var BannedList: MutableList<String>
     lateinit var Clasification: String
-    lateinit var Password: String
     lateinit var Email: String
     var Status: Boolean by Delegates.notNull()
     lateinit var Age: String
@@ -40,7 +39,6 @@ public class JugadoresDataModel() {
         nick: String,
         bannedList: MutableList<String>,
         clasf: String,
-        password: String,
         email: String,
         status: Boolean,
         name: String,
@@ -55,7 +53,6 @@ public class JugadoresDataModel() {
         Nickname = nick
         BannedList = bannedList
         Clasification = clasf
-        Password = password
         Email = email
         Status = status
         Age = date

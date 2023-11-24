@@ -11,7 +11,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarUserList"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:theme="?attr/actionBarTheme"
+        android:background="?attr/colorPrimary"
+
         app:navigationIcon="@drawable/arrow_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -19,6 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:textColor="@color/white"
+
             android:text="@string/lista_de_jugadores"
             android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
@@ -26,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:textSize="15sp"
         android:text="@string/nombre_o_apodo"/>
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewUserList"
@@ -47,12 +52,37 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Role"/>
+            <Spinner
+                android:layout_marginTop="10dp"
+                android:id="@+id/roleSpinner"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="@string/clasf"/>
             <Spinner
+                android:layout_marginTop="10dp"
                 android:id="@+id/rateSpinner"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -66,21 +96,29 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="@string/pos"/>
             <Spinner
+                android:layout_marginTop="10dp"
                 android:id="@+id/positionSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
 
+
+
         </LinearLayout>
 
-
-
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_weight="0"
+        android:background="@color/grey" />
 
     <ProgressBar
         android:id="@+id/userListProgressBar"

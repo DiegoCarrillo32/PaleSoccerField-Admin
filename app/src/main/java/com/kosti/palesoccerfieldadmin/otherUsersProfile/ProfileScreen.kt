@@ -17,11 +17,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
+import com.kosti.palesoccerfieldadmin.reservations.CustomSpinnerAdapter
+import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "name"
 private const val ARG_PARAM2 = "age"
 private const val ARG_PARAM3 = "phone"
@@ -32,15 +33,11 @@ private const val ARG_PARAM7 = "id"
 private const val COLLECTION_NAME = "jugadores"
 private const val CLASIFICATION_FIELD = "clasificacion"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileScreen.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 
 class ProfileScreen : BottomSheetDialogFragment() {
 
-    // TODO: Rename and change types of parameters
+
     private var name: String? = null
     private var age: Long? = null
     private var phone: String? = null
@@ -53,6 +50,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var onDismissListener: OnDismissListener? = null
     private var didEditClassification: Boolean = false
     private lateinit var  bottomSheetBehaviour: BottomSheetBehavior<View>;
+    private lateinit var  btnMessage: ImageButton
 
 
 
@@ -97,6 +95,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
         val closeButton: ImageButton = view.findViewById(R.id.backButton)
         val bloquedPeopleButton: ImageButton = view.findViewById(R.id.bloquedPeopleButton)
+        btnMessage = view.findViewById(R.id.messageButton)
 
 
         //Sheet behaviour
@@ -147,6 +146,15 @@ class ProfileScreen : BottomSheetDialogFragment() {
             }
         }
 
+        btnMessage.setOnClickListener {
+
+            val intent = Intent(requireContext(), SendMessage::class.java)
+            intent.putExtra("userName", name )
+            intent.putExtra("userPhone", phone)
+            startActivity(intent)
+
+        }
+
 
 
 
@@ -191,12 +199,16 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
 
     private fun spinnerPositions(view: View) {
-        val elementos = positions
+        var elementos = positions
+
+        if(elementos.isEmpty()){
+            elementos = mutableListOf("Sin posición")
+        }
 
         val spinner: Spinner = view.findViewById(R.id.spinnerPositions)
         val adapter =
             this.context?.let {
-                ArrayAdapter(
+                CustomSpinnerAdapter(
                     it,
                     R.layout.spinner_item_profile,
                     elementos

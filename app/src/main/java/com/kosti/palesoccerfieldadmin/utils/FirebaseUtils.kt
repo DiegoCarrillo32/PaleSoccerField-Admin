@@ -95,7 +95,6 @@ class FirebaseUtils {
 
     fun getDocumentReferenceById(collectionName: String, idCollection: String): DocumentReference {
         return db.collection(collectionName).document(idCollection)
-
     }
 
     // Función para realizar la consulta con filtros en Firestore
@@ -117,6 +116,7 @@ class FirebaseUtils {
         val documents = mutableListOf<HashMap<String, Any>>()
         db.collection(collectionName)
             .whereEqualTo(state, false)
+
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
