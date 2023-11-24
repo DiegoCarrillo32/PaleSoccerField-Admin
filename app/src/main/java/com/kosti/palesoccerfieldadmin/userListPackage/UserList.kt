@@ -111,7 +111,7 @@ class UserList : AppCompatActivity(), ProfileScreen.OnDismissListener {
                         user["apodo"].toString(),
                         user["telefono"].toString(),
                         user["fecha_nacimiento"].toString(),
-                        user["id"].toString(),
+                        user["id"].toString()
                         )
                     player.Role = user["rol"].toString()
                     userList.add(

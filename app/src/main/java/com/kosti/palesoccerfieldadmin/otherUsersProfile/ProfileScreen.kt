@@ -17,7 +17,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
 import com.kosti.palesoccerfieldadmin.blockedUserList.BlockedUsersList
+import com.kosti.palesoccerfieldadmin.changePassword.ChangePassword
 import com.kosti.palesoccerfieldadmin.reservations.CustomSpinnerAdapter
+import com.kosti.palesoccerfieldadmin.userAdminProfile.EditPositionsUser
 import com.kosti.palesoccerfieldadmin.userAdminProfile.EditUserData
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 
@@ -95,6 +97,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
         val closeButton: ImageButton = view.findViewById(R.id.backButton)
         val bloquedPeopleButton: ImageButton = view.findViewById(R.id.bloquedPeopleButton)
+        val btnEditPositions:ImageButton = view.findViewById(R.id.edit_position_button)
         btnMessage = view.findViewById(R.id.messageButton)
 
 
@@ -154,6 +157,8 @@ class ProfileScreen : BottomSheetDialogFragment() {
             startActivity(intent)
 
         }
+
+        btnEditPositions.setOnClickListener { editPositions() }
 
 
 
@@ -256,6 +261,21 @@ class ProfileScreen : BottomSheetDialogFragment() {
             onDismissListener?.onDismissOnActivity()
             didEditClassification = false
         }
+    }
+
+    private fun activityEditPositions(type: String){
+        val intent = Intent(requireContext(), EditPositionsUser::class.java)
+
+        // Agregar datos al Intent
+        intent.putStringArrayListExtra("positions", ArrayList(positions))
+        intent.putExtra("type", type)
+        intent.putExtra("userId", id)
+        startActivityForResult(intent, EditUserData.REQUEST_CODE_EDIT_FIELD)
+    }
+
+
+    private fun editPositions() {
+        activityEditPositions("Posiciones");
     }
 
     interface OnDismissListener {

@@ -69,15 +69,44 @@
                 android:textAppearance="@style/profileName"
                 android:textSize="60sp" />
 
-            <Spinner
-                android:id="@+id/spinnerPositions"
-                style="@style/SpinnerStyleExtraLarge"
-                android:layout_width="448dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:background="@drawable/custom_stroke_profile"
-                android:dropDownSelector="@color/white"
-                android:popupBackground="@color/white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1.3" />
+
+                <Spinner
+                    android:id="@+id/spinnerPositions"
+                    style="@style/SpinnerStyle"
+                    android:layout_width="224dp"
+                    android:layout_height="92dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_stroke_profile"
+                    android:dropDownSelector="@color/white"
+                    android:popupBackground="@color/white" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/edit_position_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:background="@null"
+                    android:contentDescription="@string/icon_to_send_messages_to_user"
+                    android:src="@drawable/edit_icon_white" />
+
+
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/messageButton"

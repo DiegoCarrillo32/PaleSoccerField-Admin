@@ -3,6 +3,7 @@ package com.kosti.palesoccerfieldadmin.userAdminProfile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -30,7 +31,7 @@ class EditPositionsUser : AppCompatActivity() {
 
         tvTittle.setText(type)
 
-        val allPositions = listOf("Delantero", "Medio Campista", "Arquero", "Defensa", "Lateral Izquierdo", "Lateral Derecho")
+        val allPositions = listOf("Delantero", "Mediocampista", "Portero", "Defensa", "Lateral Izquierdo", "Lateral Derecho")
 
         val linearLayout = findViewById<LinearLayout>(R.id.checkBoxContainer)
 
