@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var btnGestionDeReservas: Button
     lateinit var btnEventosEspeciales: Button
     lateinit var btnLogOut: Button
+    lateinit var btnBannerUsers: Button
     lateinit var usuarioNombreTV:TextView
     lateinit var usuarioCorreoTV: TextView
 
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         btnRegistrarUsuario = findViewById(R.id.registrarUsuarios)
         btnGestionDeReservas = findViewById(R.id.btnGestionDeReservas)
         btnEventosEspeciales = findViewById(R.id.btnSpecialEvents)
+        btnBannerUsers = findViewById(R.id.btnBannerUsers)
 
         usuarioNombreTV = findViewById(R.id.nombreUsuarioTV)
         usuarioNombreTV.text = userName
@@ -120,6 +122,10 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        btnBannerUsers.setOnClickListener{
+            toBanearUsuarios()
+        }
+
         btnRegistrarUsuario.setOnClickListener{
             toRegister()
         }
@@ -188,5 +194,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
         finish()
+    }
+
+    fun toBanearUsuarios() {
+        val intent = Intent(this,BanearPersona::class.java)
+        startActivity(intent)
     }
 }

@@ -114,4 +114,13 @@ public class JugadoresDataModel() {
         UID=uid
     }
 
+    constructor(
+        documentID : String,
+        nombre : String,
+        estado : Boolean
+    ) : this(){
+        UID = documentID
+        Name = nombre
+        Status = estado
+    }
 }

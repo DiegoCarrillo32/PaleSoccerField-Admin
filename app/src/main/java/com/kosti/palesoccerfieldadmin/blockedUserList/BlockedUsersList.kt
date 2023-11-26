@@ -10,12 +10,9 @@ import com.kosti.palesoccerfieldadmin.R
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import com.google.firebase.firestore.ktx.firestore
