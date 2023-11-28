@@ -167,8 +167,9 @@ class BlockedUsersList : AppCompatActivity() {
                             document.id,
                             document["correo"].toString()
                         )
-
-                        userList.add(user)
+                        if(user.Id!=idUser){
+                            userList.add(user)
+                        }
                     }
                     if(isAll){
                         setupRecyclerView(showBlocked = false)

@@ -104,4 +104,6 @@
     <string name="todo">TODO</string>
     <string name="posiciones">Posiciones</string>
     <string name="loading_comments">Loading comments…</string>
+    <string name="apodo_tp">Apodo:</string>
+    <string name="nombre_tp">Nombre:</string>
 </resources>
