@@ -165,7 +165,8 @@ class BlockedUsersList : AppCompatActivity() {
                             document["apodo"].toString(),
                             document["uid"].toString(),
                             document.id,
-                            document["correo"].toString()
+                            document["correo"].toString(),
+                            document["telefono"].toString()
                         )
                         if(user.Id!=idUser){
                             userList.add(user)
@@ -192,7 +193,8 @@ class BlockedUsersList : AppCompatActivity() {
                         it["apodo"].toString(),
                         it["uid"].toString(),
                         it["id"].toString(),
-                        it["correo"].toString()
+                        it["correo"].toString(),
+                        it["telefono"].toString()
                     )
                 )
 

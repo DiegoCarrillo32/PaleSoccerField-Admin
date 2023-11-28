@@ -91,12 +91,14 @@ public class JugadoresDataModel() {
         uid: String,
         id: String,
         mail: String,
+        phone: String
     ) : this() {
         Name = nombre
         Nickname = nickname
         UID = uid
         Id = id
         Email = mail
+        Phone = phone
     }
     constructor(
         name: String,
