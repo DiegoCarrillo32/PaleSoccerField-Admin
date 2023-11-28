@@ -186,27 +186,31 @@ class BlockedUsersList : AppCompatActivity() {
     }
 
     private fun findBlockedUsers(id: String) {
-        FirebaseUtils().getDocumentById(playersNameCollection, id) { result ->
-            result.onSuccess {
-                listUsersBlockedFinded.add(
-                    JugadoresDataModel(
-                        it["nombre"].toString(),
-                        it["apodo"].toString(),
-                        it["uid"].toString(),
-                        it["id"].toString(),
-                        it["correo"].toString(),
-                        it["telefono"].toString()
+        try{
+            FirebaseUtils().getDocumentById(playersNameCollection, id) { result ->
+                result.onSuccess {
+                    listUsersBlockedFinded.add(
+                        JugadoresDataModel(
+                            it["nombre"].toString(),
+                            it["apodo"].toString(),
+                            it["uid"].toString(),
+                            it["id"].toString(),
+                            it["correo"].toString(),
+                            it["telefono"].toString()
+                        )
                     )
-                )
 
-                if (listUsersBlockedFinded.size == listUsersBlocked.size) {
+                    if (listUsersBlockedFinded.size == listUsersBlocked.size) {
+                        setupRecyclerView(showBlocked = true)
+                    }
+                }
+                result.onFailure {
+                    Log.d("UserNoFound", "User not found")
                     setupRecyclerView(showBlocked = true)
                 }
             }
-            result.onFailure {
-                Log.d("UserNoFound", "User not found")
-                setupRecyclerView(showBlocked = true)
-            }
+        }catch (e: Exception){
+            Log.e("TAGFirebase", "Unexpected error", e)
         }
     }
 

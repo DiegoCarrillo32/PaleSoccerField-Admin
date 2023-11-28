@@ -106,5 +106,5 @@
     <string name="loading_comments">Loading comments…</string>
     <string name="apodo_tp">Apodo:</string>
     <string name="nombre_tp">Nombre:</string>
-    <string name="cargando_usuarios">Cargando usuarios</string>
+    <string name="cargando_usuarios">No se han encontrado usuarios</string>
 </resources>
