@@ -89,7 +89,6 @@ class BlockedUsersList : AppCompatActivity() {
             }
         }
         toolbar.setNavigationOnClickListener { onBackPressed() }
-        // Llamar a getListBlockedUsers(idUser) después de inicializar el adaptador
         getListBlockedUsers(idUser)
     }
 
@@ -168,8 +167,10 @@ class BlockedUsersList : AppCompatActivity() {
                             document["correo"].toString(),
                             document["telefono"].toString()
                         )
-                        if(user.Id!=idUser){
-                            userList.add(user)
+                        if(user.Id!=idUser) {
+                            if(user.Id !in listUsersBlocked){
+                                userList.add(user)
+                            }
                         }
                     }
                     if(isAll){
