@@ -151,6 +151,7 @@ class FragmentEditAddSpecialEvent : BottomSheetDialogFragment() {
             } else {
                 AddToDb(btnNombre, btnDescription)
             }
+            btnAddES.isEnabled = false
         }
     }
 
