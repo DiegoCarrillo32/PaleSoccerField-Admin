@@ -38,12 +38,18 @@
         android:id="@+id/radioGroupFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/radioBlocked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/personas_bloqueadas"
             android:checked="true"/>
 
@@ -51,31 +57,27 @@
             android:id="@+id/radioAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/todas_las_personas" />
     </RadioGroup>
-
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewBlockedUsers"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/textViewNoBlockedUsers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/no_hay_personas_bloqueadas"
+        android:text="@string/cargando_usuarios"
         android:visibility="gone"
-    />
+        />
+
     <ProgressBar
         android:id="@+id/progressBarLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
-    />
+        />
 
     <ProgressBar
         android:id="@+id/radioProgressBar"
@@ -92,6 +94,20 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         android:text="@string/cargando" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_weight="1">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewBlockedUsers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+
 
 
 </LinearLayout>

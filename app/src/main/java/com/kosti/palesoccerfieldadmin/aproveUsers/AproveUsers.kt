@@ -62,6 +62,7 @@ class AproveUsers : AppCompatActivity() {
                         user["apodo"] == null ||
                         user["UID"] == null ||
                         user["correo"] == null ||
+                        user["telefono"] == null ||
                         user["id"] == null
                         ){
                         Toast.makeText(this, "Usuario con datos erroneos", Toast.LENGTH_LONG).show()
@@ -73,7 +74,8 @@ class AproveUsers : AppCompatActivity() {
                             user["apodo"].toString(),
                             user["UID"].toString(),
                             user["id"].toString(),
-                            user["correo"].toString()
+                            user["correo"].toString(),
+                            user["telefono"].toString()
                         )
                     )
                 }

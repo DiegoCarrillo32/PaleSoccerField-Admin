@@ -43,6 +43,8 @@ class AproveUserListAdapter(
             append(item.Nickname)
             append(" )")
         }
+        holder.userPhone.text = item.Phone
+        holder.userMail.text = item.Email
 
         val context = holder.itemView.context
         holder.btnAprove.setOnClickListener {
@@ -155,6 +157,8 @@ class AproveUserListAdapter(
         val userNickname: TextView = itemView.findViewById(R.id.tvUserNickname)
         val btnAprove: ImageButton = itemView.findViewById(R.id.acceptBtn)
         val btnDeny: ImageButton = itemView.findViewById(R.id.denyBtn)
+        var userPhone:TextView = itemView.findViewById(R.id.tv_user_Numero_aprobar)
+        val userMail:TextView = itemView.findViewById(R.id.tv_user_correo_aprobar)
     }
 
     fun showDialogClassifier() {

@@ -15,7 +15,6 @@ class BlockedUsersListAdapter(
     private var blockClickListener: (JugadoresDataModel) -> Unit
 ) : RecyclerView.Adapter<BlockedUsersListAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgProfile: ImageView = itemView.findViewById(R.id.user_img_Blocked_Users_list)
         val nameProfile: TextView = itemView.findViewById(R.id.user_name_Blocked_Users_list)
         val nickNameProfile: TextView = itemView.findViewById(R.id.user_nickname_Blocked_Users_list)
         val blockButton: ImageButton = itemView.findViewById(R.id.blockButton)
@@ -29,7 +28,6 @@ class BlockedUsersListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val userData = data[position]
 
-        holder.imgProfile.setImageResource(0)
         holder.nameProfile.text = userData.Name
         holder.nickNameProfile.text = userData.Nickname
 

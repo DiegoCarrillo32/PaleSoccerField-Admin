@@ -10,12 +10,9 @@ import com.kosti.palesoccerfieldadmin.R
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import com.kosti.palesoccerfieldadmin.models.JugadoresDataModel
 import com.kosti.palesoccerfieldadmin.utils.FirebaseUtils
 import com.google.firebase.firestore.ktx.firestore
@@ -92,7 +89,6 @@ class BlockedUsersList : AppCompatActivity() {
             }
         }
         toolbar.setNavigationOnClickListener { onBackPressed() }
-        // Llamar a getListBlockedUsers(idUser) después de inicializar el adaptador
         getListBlockedUsers(idUser)
     }
 
@@ -168,10 +164,14 @@ class BlockedUsersList : AppCompatActivity() {
                             document["apodo"].toString(),
                             document["uid"].toString(),
                             document.id,
-                            document["correo"].toString()
+                            document["correo"].toString(),
+                            document["telefono"].toString()
                         )
-
-                        userList.add(user)
+                        if(user.Id!=idUser) {
+                            if(user.Id !in listUsersBlocked){
+                                userList.add(user)
+                            }
+                        }
                     }
                     if(isAll){
                         setupRecyclerView(showBlocked = false)
@@ -186,26 +186,31 @@ class BlockedUsersList : AppCompatActivity() {
     }
 
     private fun findBlockedUsers(id: String) {
-        FirebaseUtils().getDocumentById(playersNameCollection, id) { result ->
-            result.onSuccess {
-                listUsersBlockedFinded.add(
-                    JugadoresDataModel(
-                        it["nombre"].toString(),
-                        it["apodo"].toString(),
-                        it["uid"].toString(),
-                        it["id"].toString(),
-                        it["correo"].toString()
+        try{
+            FirebaseUtils().getDocumentById(playersNameCollection, id) { result ->
+                result.onSuccess {
+                    listUsersBlockedFinded.add(
+                        JugadoresDataModel(
+                            it["nombre"].toString(),
+                            it["apodo"].toString(),
+                            it["uid"].toString(),
+                            it["id"].toString(),
+                            it["correo"].toString(),
+                            it["telefono"].toString()
+                        )
                     )
-                )
 
-                if (listUsersBlockedFinded.size == listUsersBlocked.size) {
+                    if (listUsersBlockedFinded.size == listUsersBlocked.size) {
+                        setupRecyclerView(showBlocked = true)
+                    }
+                }
+                result.onFailure {
+                    Log.d("UserNoFound", "User not found")
                     setupRecyclerView(showBlocked = true)
                 }
             }
-            result.onFailure {
-                Log.d("UserNoFound", "User not found")
-                setupRecyclerView(showBlocked = true)
-            }
+        }catch (e: Exception){
+            Log.e("TAGFirebase", "Unexpected error", e)
         }
     }
 

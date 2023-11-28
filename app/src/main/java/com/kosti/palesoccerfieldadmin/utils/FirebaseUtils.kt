@@ -158,14 +158,20 @@ class FirebaseUtils {
         db.collection(collectionName).document(idCollection)
             .get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    val documentData = document.data as HashMap<String, Any>
-                    documentData["id"] = document.id
-                    callback(Result.success(documentData))
-                } else {
-                    Log.d(TAG, "No such document")
-                    callback(Result.failure(Exception("No such document")))
+                try {
+                    val documentData = document.data as? HashMap<String, Any>
+                    if (documentData != null) {
+                        documentData["id"] = document.id
+                        callback(Result.success(documentData))
+                    } else {
+                        Log.d(TAG, "Document data is null")
+                        callback(Result.failure(Exception("Document data is null")))
+                    }
+                } catch (e: Exception) {
+                    Log.d(TAG, "Error converting document data", e)
+                    callback(Result.failure(e))
                 }
+
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "get failed with ", exception)

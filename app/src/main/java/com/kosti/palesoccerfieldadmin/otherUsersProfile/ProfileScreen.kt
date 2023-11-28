@@ -13,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kosti.palesoccerfieldadmin.R
@@ -51,8 +52,10 @@ class ProfileScreen : BottomSheetDialogFragment() {
     private var ratesList = listOf("Malo", "Bueno", "Regular")
     private var onDismissListener: OnDismissListener? = null
     private var didEditClassification: Boolean = false
+    private var didEditPositionsUser: Boolean = false
     private lateinit var  bottomSheetBehaviour: BottomSheetBehavior<View>;
     private lateinit var  btnMessage: ImageButton
+    private lateinit var viewFragment: View
 
 
 
@@ -77,10 +80,10 @@ class ProfileScreen : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_profile_screen, container, false)
-        spinnerPositions(view,)
-        spinnerClassification(view)
-        return view
+        viewFragment = inflater.inflate(R.layout.fragment_profile_screen, container, false)
+        spinnerPositions(viewFragment)
+        spinnerClassification(viewFragment)
+        return viewFragment
     }
 
 
@@ -252,6 +255,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
 
     }
 
+
     fun setOnDismissListener(listener: OnDismissListener) {
         onDismissListener = listener
     }
@@ -261,6 +265,10 @@ class ProfileScreen : BottomSheetDialogFragment() {
         if(didEditClassification){
             onDismissListener?.onDismissOnActivity()
             didEditClassification = false
+        }
+        if(didEditPositionsUser){
+            onDismissListener?.onDismissOnActivity()
+            didEditPositionsUser = false
         }
     }
 
@@ -272,6 +280,26 @@ class ProfileScreen : BottomSheetDialogFragment() {
         intent.putExtra("type", type)
         intent.putExtra("userId", id)
         startActivityForResult(intent, EditUserData.REQUEST_CODE_EDIT_FIELD)
+        didEditPositionsUser = true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == EditUserData.REQUEST_CODE_EDIT_FIELD && resultCode == AppCompatActivity.RESULT_OK) {
+            data?.let {
+                if (it.hasExtra("posiciones") && it.hasExtra("accion")) {
+                    val editedPositions = it.getStringArrayListExtra("posiciones")
+                    // Haz algo con las posiciones editadas
+                    // Por ejemplo, actualiza la lista en el fragment
+                    positions.clear()
+                    if (editedPositions != null) {
+                        positions.addAll(editedPositions)
+                    }
+                    spinnerPositions(viewFragment)
+                }
+            }
+        }
     }
 
 

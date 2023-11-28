@@ -4,33 +4,63 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp">
-
-    <ImageView
-        android:id="@+id/user_img_Blocked_Users_list"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:scaleType="centerCrop" />
+    android:padding="10dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
+    android:background="@drawable/border_background">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:orientation="vertical"
-        android:layout_marginStart="16dp">
-
-        <TextView
-            android:id="@+id/user_name_Blocked_Users_list"
-            android:layout_width="wrap_content"
+        android:layout_marginStart="1dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:layout_marginStart="1dp">
 
-        <TextView
-            android:id="@+id/user_nickname_Blocked_Users_list"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_user_name_Blocked_Users_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="0"
+                android:layout_marginEnd="5dp"
+                android:text="@string/nombre_tp"/>
+            <TextView
+                android:id="@+id/user_name_Blocked_Users_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:layout_marginStart="1dp">
+            <TextView
+                android:id="@+id/tv_user_nickname_Blocked_Users_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="0"
+                android:layout_marginEnd="5dp"
+                android:text="@string/apodo_tp"/>
+            <TextView
+                android:id="@+id/user_nickname_Blocked_Users_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:text="Diego Carrillo"/>
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Botón para desbloquear usuario -->
