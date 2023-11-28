@@ -283,14 +283,17 @@
                             android:layout_weight="1"
                             android:text="@string/classification" />
 
+                        
+
                         <Spinner
                             android:id="@+id/clasificacionSpinner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/SpinnerStyle"
+                            android:layout_width="224dp"
+                            android:layout_height="48dp"
                             android:layout_gravity="center"
-                            android:layout_weight="2"
-                            android:text="@string/classificationText"
-                            android:textAppearance="@style/profileAttributesText" />
+                            android:background="@drawable/custom_stroke_profile"
+                            android:dropDownSelector="@color/white"
+                            android:popupBackground="@color/white" />
 
                         <ImageButton
                             android:id="@+id/editClassBtn"

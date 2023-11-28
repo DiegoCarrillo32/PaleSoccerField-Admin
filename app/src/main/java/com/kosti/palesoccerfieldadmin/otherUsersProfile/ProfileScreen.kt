@@ -92,6 +92,7 @@ class ProfileScreen : BottomSheetDialogFragment() {
         val ageTV: TextView = view.findViewById(R.id.edadText)
         val phoneTV: TextView = view.findViewById(R.id.telefonoText)
         val classTV: Spinner = view.findViewById(R.id.clasificacionSpinner)
+
         val nicknameTV: TextView = view.findViewById(R.id.nicknameText)
         val editClasiBtn: ImageButton = view.findViewById(R.id.editClassBtn)
         val rateAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ratesList)
