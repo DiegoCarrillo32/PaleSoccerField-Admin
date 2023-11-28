@@ -163,6 +163,7 @@ class AddEditPromotion : BottomSheetDialogFragment() {
             } else {
                 AddToDb(btnName, btnDescription)
             }
+            btnAdd.isEnabled = false
 
 
         }

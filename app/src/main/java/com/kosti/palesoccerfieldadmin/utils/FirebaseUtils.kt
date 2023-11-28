@@ -31,8 +31,13 @@ class FirebaseUtils {
     }
 
     fun deleteImage(imageUrl: String) {
-        val imageRef = storage.storage.getReferenceFromUrl(imageUrl)
-        imageRef.delete()
+        try {
+            val imageRef = storage.storage.getReferenceFromUrl(imageUrl)
+            imageRef.delete()
+        } catch (e: Exception) {
+            Log.d(TAG, "Error deleting image", e)
+        }
+
     }
 
     fun readCollection(
